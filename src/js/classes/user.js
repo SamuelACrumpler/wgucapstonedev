@@ -1,6 +1,7 @@
 class user {
-	constructor(i, n) {
+	constructor(i, t, n) {
 		this._id = i;
+		this._type = t;
 		this._name = n;
 	}
 
@@ -10,6 +11,15 @@ class user {
 
 	set id(x) {
 		this._id = x;
+	}
+
+
+	get type() {
+		return this.type;
+	}
+
+	set type(x) {
+		this._id = type;
 	}
 
 

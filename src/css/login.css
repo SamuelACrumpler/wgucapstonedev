@@ -159,6 +159,20 @@ myauto {
 	bottom: -20%;
 	font-size: 13px;
 }
+
+.namelist > button {
+	margin: 0;
+	border-radius: 0;
+}
+
+
+.btn-group.special {
+	display: flex;
+}
+
+.special .btn {
+	flex: 1
+}
 /*  For list 
 ul {
 	text-align: left;

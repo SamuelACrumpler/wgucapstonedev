@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from './../routes/nav';
 
 
 class main extends Component {
@@ -10,11 +11,12 @@ class main extends Component {
 		super(props);
 
 		this.state = {
-			username: '',
-			password: '',
-			updated_date: '',
-			created_date: '',
-			error: ''
+			path: window.location.protocol + '//' + window.location.hostname,
+			crudState: '',
+			selected: '',
+			cUser: '',
+			users: [], //Need to use this instead of the dumb idea I was using
+			listdays: []
 		};
 
 	
@@ -22,10 +24,93 @@ class main extends Component {
 	}
 
 	componentDidMount() {
-		this.checkLoginSession();
+		//this.checkLoginSession();
+		const theData = [
+			{
+				num: '11',
+				app: 'Appointments: 00'
+			},
+
+			{
+				num: '22',
+				app: 'Appointments: 11'
+			},
+
+			{
+				num: '33',
+				app: 'Appointments: 22'
+			},
+
+			{
+				num: '44',
+				app: 'Appointments: 33'
+			},
+
+			{
+				num: '55',
+				app: 'Appointments: 44'
+			},
+
+			{
+				num: '66',
+				app: 'Appointments: 55'
+			},
+
+			{
+				num: '77',
+				app: 'Appointments: 66'
+			}
+		]
+
+		this.setState({listdays: theData})
 	}
 
+	logout() {
+		//reset login credidentals in local storage. Run checkLoginSession to boot user back to login page.
+	}
 
+	//[CRUD Functions] - User
+	saveUser = (e) => {
+		e.preventDefault();
+		const uid = this.state.user[this.state.selected]._id
+		const cuser = this.state.user[this.state.selected]._createdBy
+		const name = this.state.user[this.state.selected]._name
+		const type = this.state.user[this.state.selected].type
+		const password = this.state.user[this.state.selected]._password
+		const uUser = this.state.cUser;
+		const udate = new Date();
+		const cdate = this.state.user[this.state.selected]._createdDate
+
+		if (name === '') { console.log("Empty String"); return; }
+		else if (type === '') { console.log("Empty String"); return; }
+		else if (password === '') { console.log("Empty String"); return; }
+
+		switch (this.state.crudState) {
+			case 0: //create
+				//created then updated
+				axios.post(this.state.path + ':5000/user/', { name, type, password, cuser, uUser, cdate, udate })
+					.then((result) => {
+					}).finally(() => {
+						//call refresh function
+					});
+				break;
+			case 1: //update
+				axios.post(this.state.path + ':5000/user/' + this.state.list[this.state.selected]._id, { name, type, password, cuser, uUser, cdate, udate})
+					.then((result) => {
+					}).finally(() => {
+						//call refresh function
+					});
+				break;
+			case 2: //delete
+				axios.delete(this.state.path + ':5000/user/ ' + this.state.list[this.state.selected]._id)
+					.then((result) => {
+					}).finally(() => {
+						//call refresh function
+					});
+				break;
+		}
+
+	}
 
 
 	checkLoginSession() {
@@ -47,31 +132,7 @@ class main extends Component {
 	render() {
 		return (
 			<div>
-			<nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-				<div className="container">
-					<a className="navbar-brand" href="#">[Company Name] Scheduler</a>
-					<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-						<span className="navbar-toggler-icon"></span>
-					</button>
-					<div className="collapse navbar-collapse" id="navbarResponsive">
-						<ul className="navbar-nav ml-auto">
-							<li className="nav-item">
-								<a className="nav-link" href="#">Users
-								</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="#">Customers</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="#">Appointments</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="#">Reports</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
+				<Navbar/>
 				<div className="container">
 					<div className="row">
 						<div className="col-lg-3 border recent">Recent Appointments section</div>
@@ -88,7 +149,26 @@ class main extends Component {
 								<h5 className="col-sm p-1 text-center">Saturday</h5>
 								</div>
 							</header>
-							<div className="days week-1 row"> 
+							<div className="calendar-days row">
+								{
+									this.state.listdays.map((day, index) => (
+
+											<div className="square border" key={index}>
+												<div className="content">
+													<div className="table">
+														<div className="table-cell">
+															<h5 className="daynum">{day.num}</h5>
+															<p className="appnum">{day.app}</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										)
+									)
+
+								}
+
+
 								<div className="square border">
 									<div className="content">
 										<div className="table">
@@ -99,355 +179,9 @@ class main extends Component {
 										</div>
 									</div>
 								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-										 </div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-										 </div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
+				
 							</div>{/*Week-1 End */}
-							<div className="days week-2 row">
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>{/*week-2 end*/}
-							<div className="days week-2 row">
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>{/*week-3 end*/}
-							<div className="days week-2 row">
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>{/*week-4 end*/}
-							<div className="days week-2 row">
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell numbers">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>{/*week-5 end*/}
+							
 						</div>
 					</div>
 				</div>

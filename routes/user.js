@@ -57,6 +57,8 @@ router.get('/u/:username', async function (req, res, next) {
 
 /* Save entry into database */
 router.post('/', function (req, res, next) {
+	console.log("save attempted")
+
 	User.create(req.body, function (err, post) {
 		if (err) return next(err);
 		res.json(post);
@@ -71,10 +73,17 @@ router.put('/:id', function (req, res, next) {
 	});
 });
 
+/* Delete entry in database */
+router.delete('/:id', function (req, res, next) {
+	User.findByIdAndRemove(req.params.id, req.body, function (err, post) {
+		if (err) return next(err);
+		res.json(post);
+	});
+});
 
 
 /* Delete entry in database */
-router.delete('/:id', function (req, res, next) {
+router.get('/d/:id', function (req, res, next) {
 	User.findByIdAndRemove(req.params.id, req.body, function (err, post) {
 		if (err) return next(err);
 		res.json(post);
