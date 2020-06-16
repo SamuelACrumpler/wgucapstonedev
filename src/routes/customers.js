@@ -119,9 +119,10 @@ class customers extends Component {
 
 		axios.get(this.state.path + ':5000/customer/' + this.state.documents[i]._id)
 			.then((res) => {
-
+				console.log("t" + res.data.name)
 				this.setState({ edit: res.data });
 			}).finally(() => {
+				console.log("t2" + this.state.edit.name)
 
 				this.setState({
 					name: this.state.edit.name,
@@ -436,6 +437,9 @@ class customers extends Component {
 							</div>
 							<div>
 								cruUsers : {this.state.cUser}
+							</div>
+							<div>
+								cruUsers : {this.state.edit.name}
 							</div>
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">

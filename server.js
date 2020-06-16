@@ -14,6 +14,7 @@ app.use(express.static(path.join(__dirname, 'src')));
 
 var user = require("./routes/user");
 var customer = require("./routes/customer");
+var appointment = require("./routes/appointment");
 
 
 
@@ -24,6 +25,7 @@ app.use(bodyParser.urlencoded({ 'extended': 'false' }));
 
 app.use("/user", user);
 app.use("/customer", customer);
+app.use("/appointment", appointment);
 
 
 
