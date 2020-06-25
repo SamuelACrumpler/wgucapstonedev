@@ -39,12 +39,14 @@ class appointments extends Component {
 			selCust: '',
 			selCustId: '',
 			error: '',
-			test2: '',
+			test2: 2,
 			test: []
 		};
 
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onChange = this.onChange.bind(this);
+		this.onSelect = this.onSelect.bind(this);
+
 		this.onCancel = this.onCancel.bind(this);
 		this.onChecked = this.onChecked.bind(this);
 
@@ -63,12 +65,13 @@ class appointments extends Component {
 	componentDidMount() {
 		//this.checkLoginSession();
 		//this.setState({ test: ['admin', 'test', 'test', 'this is a really long name so get prepared for it!'] })
-		this.setState({
-			cUser: localStorage.getItem("currentUser"),
-			uid: localStorage.getItem("userId")
-		})
 		this.getAllDocuments();
 		this.getAllCustomers();
+		this.setState({
+			cUser: localStorage.getItem("currentUser"),
+			uid: localStorage.getItem("userId"),
+		})
+		
 
 	}
 
@@ -118,8 +121,6 @@ class appointments extends Component {
 			supply: '',
 			total: '',
 			hours: '',
-			//isHourly: '',
-			overlap: '',
 			notes: ''
 		});
 	}
@@ -132,7 +133,6 @@ class appointments extends Component {
 			supply: s,
 			total: to,
 			hours: h,
-			//isHourly: i,
 			type: ty,
 			description: d,
 		});
@@ -163,6 +163,9 @@ class appointments extends Component {
 				selCrud: 'option2'
 			});
 		}
+		if(this.state.custid === undefined){
+			document.getElementById('customer').selectedIndex = "0";
+		}
 
 		//needs to read from database and put in the information 
 
@@ -176,12 +179,13 @@ class appointments extends Component {
 				let edate = new Date(this.state.edit.etime);
 				let oldty = this.getTypeVal(this.state.type);
 				this.setState({
-					cid: this.state.edit.custid,
+					custid: this.state.edit.custid,
 					title: this.state.edit.title,
 					rate: this.state.edit.rate,
 					supply: this.state.edit.supply,
 					total: this.state.edit.total,
 					hours: this.state.edit.hours,
+					overlap: this.state.edit.overlap,
 					date: this.state.edit.stime.substring(0,this.state.edit.stime.indexOf('T')),
 					stime: sdate.getHours() + ":" + sdate.getMinutes(),
 					etime: edate.getHours() + ":" + edate.getMinutes(),
@@ -192,7 +196,7 @@ class appointments extends Component {
 					selectedIndex: i,
 					crudState: 2
 				});
-
+				console.log(this.state.edit.custid)
 				console.log("oldty: " + oldty);
 				console.log("ty: " + this.state.type); 
 
@@ -332,7 +336,7 @@ class appointments extends Component {
 		console.log("current select:" + event.target.name)
 		this.setState({
 			selCust: this.state.customers[event.target.value].name,
-			selCustId: this.state.customers[event.target.value]._id,
+			custid: this.state.customers[event.target.value]._id,
 
 		})
 
@@ -350,12 +354,24 @@ class appointments extends Component {
 		console.log("Submit")
 		this.setState({ error: '' })
 
+		const stime = new Date(this.state.date + " " + this.state.stime);
+		const etime = new Date(this.state.date + " " + this.state.etime);
+		
+		let	opening = new Date(this.state.date + " " + "06:00");
+		let	closing = new Date(this.state.date + " " + "20:00");
+		let	s = new Date(this.state.date + " " + this.state.stime);
+		let	e = new Date(this.state.date + " " + this.state.etime);
 		// Check username database first for similar username
 		if (this.state.title === '' && this.state.crudState !== 3) {
 			this.setState({ error: 'ERROR: Title was left blank.' })
 			document.getElementById("error").classList.remove('d-none');
 
 			return;
+		} else if (this.state.custid === '' && this.state.crudState !== 3) {
+			this.setState({ error: 'ERROR: Customer was not selected.' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+
 		} else if (this.state.date === undefined && this.state.crudState !== 3) {
 			this.setState({ error: 'ERROR: Date was not selected.' })
 			document.getElementById("error").classList.remove('d-none');
@@ -372,12 +388,12 @@ class appointments extends Component {
 			return;
 
 		}   else if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type !== 'cons' ) {
-			this.setState({ error: 'ERROR: Chaarge rate was left blank.' })
+			this.setState({ error: 'ERROR: Charge rate was left blank.' })
 			document.getElementById("error").classList.remove('d-none');
 			return;
 
 		} else if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type === 'spec') {
-			this.setState({ error: 'ERROR: Chaarge rate was left blank.' })
+			this.setState({ error: 'ERROR: Charge rate was left blank.' })
 			document.getElementById("error").classList.remove('d-none');
 			return;
 
@@ -386,6 +402,26 @@ class appointments extends Component {
 			document.getElementById("error").classList.remove('d-none');
 			return;
 
+		} else if (e.getHours() < s.getHours() && this.state.crudState !== 3) {
+			this.setState({ error: 'ERROR: Ending time must be higher than starting time. ' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+		} else if (s.getHours() < opening.getHours() && this.state.crudState !== 3){
+			this.setState({ error: 'ERROR: Starting time is lower than the opening time.' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+		} else if (s.getHours() > closing.getHours() && this.state.crudState !== 3){
+			this.setState({ error: 'ERROR: Starting time is higher than the closing time.' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+		}else if (e.getHours() < opening.getHours() && this.state.crudState !== 3){
+			this.setState({ error: 'ERROR: Ending time is lower than the opening time.' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+		} else if (e.getHours() > closing.getHours() && this.state.crudState !== 3){
+			this.setState({ error: 'ERROR: Opening time is higher than the closing time.' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
 		}
 
 		//Pull all appointments for the day, and  check if they overlap
@@ -438,42 +474,46 @@ class appointments extends Component {
 
 	}
 
+	onSelect(event) {
+		this.setState(
+			{ custid : event.target.value}
+		)
+	}
+
 	onChange(event) {
 		console.log("eventname: " + event.target.name);
 		console.log("eventvalue: " + event.target.value);
 	
 		const state = this.state
 		state[event.target.name] = event.target.value;
+		console.log(this.state)
 		this.setState(state);
-		return;
 		let s = '';
 		let e = '';
-		if (this.state.date !== '' && this.state.stime !== '') {
-			//this.setState({ stime : new Date(this.state.date + " " + this.state.stime) })
-			//s = new Date(this.state.date + " " + this.state.stime);
-		}
-		
-		if (this.state.date !== '' && this.state.etime !== '') {
-			//this.setState({ etime: new Date(this.state.date + " " + this.state.etime) })
-			//e = new Date(this.state.date + " " + this.state.etime);
-
-		}
+		let opening = '';
+		let closing = '';
 
 		if (this.state.date !== '' && this.state.stime !== '' && this.state.stime !== '') {
+			opening = new Date(this.state.date + " " + "06:00");
+			closing = new Date(this.state.date + " " + "20:00");
 			s = new Date(this.state.date + " " + this.state.stime);
 			e = new Date(this.state.date + " " + this.state.etime);
+			let e2 = (e.getHours()+e.getMinutes()/60);
+			let s2 = (s.getHours()+s.getMinutes()/60); 
+
 			if (e.getHours() < s.getHours()) {
-				this.setState({ error: 'ERROR: Ending time must be higher than starting time. ' })
-				document.getElementById("error").classList.remove('d-none');
+				// this.setState({ error: 'ERROR: Ending time must be higher than starting time. ' })
+				// document.getElementById("error").classList.remove('d-none');
 				return;
 			}
+
 			document.getElementById("error").classList.add('d-none');
 			if (this.state.supply !== '' && this.state.type === 'spec') {
-				let v = this.state.rate * (e.getHours() - s.getHours()) + parseFloat(this.state.supply);
-				this.setState({ total: v }) //should round these numbers for the total
+				let v = this.state.rate * (e2 - s2) + parseFloat(this.state.supply);
+				this.setState({ total: v.toFixed(2) }) //should round these numbers for the total
 			} else {
-				let v = this.state.rate * (e.getHours() - s.getHours());
-				this.setState({ total: v })
+				let v = this.state.rate * (e2 - s2);
+				this.setState({ total: v.toFixed(2) })
 			}
 			
 		}
@@ -518,8 +558,8 @@ class appointments extends Component {
 		//this.state.user[this.state.selected]._password
 
 		
-		const uid = this.state.uid
-		const cuid = this.state.cuid
+		const userid = this.state.uid
+		const custid = this.state.custid
 		const title = this.state.title
 		const rate = this.state.rate
 		const supply = this.state.supply
@@ -541,7 +581,7 @@ class appointments extends Component {
 			case 0: //create
 				//created then updated
 
-				axios.post(this.state.path + ':5000/appointment/', { uid, cuid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate })
+				axios.get(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate })
 					.then((result) => {
 					}).finally(() => {
 						//call refresh function
@@ -567,7 +607,7 @@ class appointments extends Component {
 						cdate = res.data.createdDate;
 					}).finally(() => {
 
-						axios.put(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id, { uid, cuid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate  })
+						axios.put(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id, { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate  })
 							.then(() => {
 							}).finally(() => {
 
@@ -674,7 +714,7 @@ class appointments extends Component {
 								type : {this.state.type + ""}
 							</div>
 							<div>
-								type : {this.state.test2 + ""}
+								customer : {this.state.custid + ""}
 							</div>
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">
@@ -725,14 +765,12 @@ class appointments extends Component {
 								<div className="input-group-prepend">
 									<span className="input-group-text" id="basic-addon3">Customer</span>
 								</div>
-								<select className="form-control" id="rating" name='rating' value={this.state.test2} onChange={this.onChange}>
+								<select className="form-control" id="customer" name='customer' value={this.state.custid} disabled={this.state.disabled} onChange={this.onSelect}>
+									<option value=''>Select a customer.</option>
 									{
 										this.state.customers.map((customers, index) => (
-											<option key={'customer' + index}>{customers.name}</option>
+											<option key={index} value={customers._id}>{customers.name}</option>
 										))
-
-
-
 									}
 								</select>
 
@@ -757,8 +795,8 @@ class appointments extends Component {
 							</div>
 
 							<div className="form-check">
-								<input type="checkbox" class="form-check-input" id="overlap" name="overlap" value={this.state.overlap} onClick={this.onChecked}/>
-									<label class="form-check-label" htmlFor="exampleCheck1">Allow Overlap</label>
+								<input type="checkbox" className="form-check-input" id="overlap" name="overlap" value={this.state.overlap} onClick={this.onChecked}/>
+								<label className="form-check-label" htmlFor="exampleCheck1">Allow Overlap</label>
 							</div>
 							<div className="input-group mb-3" id="rate">
 								<div className="input-group-prepend">
@@ -782,7 +820,7 @@ class appointments extends Component {
 							</div>
 
 							<h5>Notes</h5>
-							<textarea class="form-control" aria-label="With textarea" onChange={this.onChange} name="notes" value={this.state.notes}></textarea>
+							<textarea className="form-control" aria-label="With textarea" onChange={this.onChange} name="notes" value={this.state.notes}></textarea>
 
 							<button type="button" className="btn btn-primary" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-primary" onClick={this.onCancel}>{this.state.rbutton}</button>
 						</div>

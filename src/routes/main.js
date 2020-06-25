@@ -15,9 +15,14 @@ class main extends Component {
 			crudState: '',
 			selected: '',
 			cUser: '',
-			users: [], //Need to use this instead of the dumb idea I was using
-			listdays: []
+			year: '',
+			month: '',
+			users: [], 
+			listdays: [],
+			listapp: []
 		};
+
+		this.onClickDay = this.onClickDay.bind(this);
 
 	
 
@@ -25,92 +30,49 @@ class main extends Component {
 
 	componentDidMount() {
 		//this.checkLoginSession();
-		const theData = [
-			{
-				num: '11',
-				app: 'Appointments: 00'
-			},
 
-			{
-				num: '22',
-				app: 'Appointments: 11'
-			},
+		
+		let d = new Date();
+		console.log(d.getDate());
+		console.log(d.getFullYear());
+		console.log(d.getMonth());
+		this.setState({
+			year: d.getFullYear(),
+			month: d.getMonth()
+		})
+		this.loadDays(d.getFullYear(), d.getMonth());
+	}
 
-			{
-				num: '33',
-				app: 'Appointments: 22'
-			},
+	onClickDay(dn){
+		console.log('day: ' + dn);
 
-			{
-				num: '44',
-				app: 'Appointments: 33'
-			},
+		axios.get(this.state.path + ':5000/appointment/d/' + this.state.year + '/' + this.state.month + '/' + dn)
+			.then((res) => {
 
-			{
-				num: '55',
-				app: 'Appointments: 44'
-			},
+				this.setState({
+					
+					listapp : res.data
 
-			{
-				num: '66',
-				app: 'Appointments: 55'
-			},
+				})
+				console.log(this.state.listapp)
+			})
 
-			{
-				num: '77',
-				app: 'Appointments: 66'
-			}
-		]
+		axios.get(this.state.path + ':5000/appointment/m/' + this.state.year + '/' + this.state.month + '/' + dn)
+			.then((res) => {
 
-		this.setState({listdays: theData})
+				
+				console.log(res.data)
+			})
+					
+
+				
 	}
 
 	logout() {
 		//reset login credidentals in local storage. Run checkLoginSession to boot user back to login page.
 	}
 
-	//[CRUD Functions] - User
-	saveUser = (e) => {
-		e.preventDefault();
-		const uid = this.state.user[this.state.selected]._id
-		const cuser = this.state.user[this.state.selected]._createdBy
-		const name = this.state.user[this.state.selected]._name
-		const type = this.state.user[this.state.selected].type
-		const password = this.state.user[this.state.selected]._password
-		const uUser = this.state.cUser;
-		const udate = new Date();
-		const cdate = this.state.user[this.state.selected]._createdDate
 
-		if (name === '') { console.log("Empty String"); return; }
-		else if (type === '') { console.log("Empty String"); return; }
-		else if (password === '') { console.log("Empty String"); return; }
-
-		switch (this.state.crudState) {
-			case 0: //create
-				//created then updated
-				axios.post(this.state.path + ':5000/user/', { name, type, password, cuser, uUser, cdate, udate })
-					.then((result) => {
-					}).finally(() => {
-						//call refresh function
-					});
-				break;
-			case 1: //update
-				axios.post(this.state.path + ':5000/user/' + this.state.list[this.state.selected]._id, { name, type, password, cuser, uUser, cdate, udate})
-					.then((result) => {
-					}).finally(() => {
-						//call refresh function
-					});
-				break;
-			case 2: //delete
-				axios.delete(this.state.path + ':5000/user/ ' + this.state.list[this.state.selected]._id)
-					.then((result) => {
-					}).finally(() => {
-						//call refresh function
-					});
-				break;
-		}
-
-	}
 
 
 	checkLoginSession() {
@@ -123,6 +85,89 @@ class main extends Component {
 		console.log(this.state.user._id);
 		localStorage.setItem("userId", this.state.user._id);
 		localStorage.setItem("isLoggedIn", true);
+	}
+
+	loadDays(y, m){
+		console.log(y+"/"+m);
+		let date = new Date();
+		console.log(date);
+		date.setFullYear(y); date.setMonth(m);
+		console.log(date.getDay());
+		//copy date, set to first day of month, use getday to get the right value.
+		let firstday = new Date(y, m, 1).getDay(); //pulls the day, sunday, monday, etc.
+		let d = new Date(y, m, 0).getDate(); //Should get the number of days in the month
+		let days = [];
+		let count = 0;
+		console.log("day of week: " + firstday)
+
+		console.log("days: " + d)
+
+		// {
+		// 	num: '77',
+		// 	app: 'Appointments: 66'
+		// }
+		for (let i = 0; i < firstday; i++){
+			days.push({
+				'num': '',
+				'app': ''
+			})
+			count++
+			console.log(count)
+		}
+
+		for (let i=0; i < d; i++ ){
+			
+			days.push({
+				'num': i+1,
+				'app': 'Appointments: ' + i
+			})
+			count++
+
+		}
+
+		let d2 = 35-d;	
+		for (let i=0; i < d2-1; i++){
+			days.push({
+				'num': '',
+				'app': ''
+			})
+		}
+
+		console.log(days)
+
+		// axios.get(this.state.path + ':5000/appointment/m/' + this.state.year + '/' + this.state.month + '/' + dn)
+		// 			.then((res) => {
+
+						
+		// 			})
+		/*
+		//Search the entire month for results
+		//let cdate = ''
+		//Foreach
+			if (cdate === day.stime) [if the dates are the same]
+				count++
+			else if{}
+			cdate = day.stime
+			
+			i = cdate.getDate()+firstdays-1
+
+			days[i].app = count
+			
+
+		*/
+		this.setState({ listdays : days})
+
+	/*
+		Get first day
+		Get day name
+		get offset
+		run loop to fill the first slots with junk spaces
+			Might be easy enough to fill the previous days
+		run loop to fill actual days
+		run loop to fill the final days with junk spaces
+
+		
+	*/
 	}
 
 
@@ -153,7 +198,7 @@ class main extends Component {
 								{
 									this.state.listdays.map((day, index) => (
 
-											<div className="square border" key={index}>
+											<div className="square border" key={index} name={day.num} onClick={() => this.onClickDay(day.num)}>
 												<div className="content">
 													<div className="table">
 														<div className="table-cell">
@@ -169,16 +214,7 @@ class main extends Component {
 								}
 
 
-								<div className="square border">
-									<div className="content">
-										<div className="table">
-											<div className="table-cell">
-												<h5 className="daynum">11</h5>
-												<p className="appnum">Appointments: 00</p>
-											</div>
-										</div>
-									</div>
-								</div>
+							
 				
 							</div>{/*Week-1 End */}
 							
