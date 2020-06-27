@@ -173,6 +173,18 @@ myauto {
 .special .btn {
 	flex: 1
 }
+
+.filled-square {
+	background-color: lightblue;
+}
+
+.empty-square {
+	background-color: ghostwhite;
+}
+
+.no-day-square {
+	background-color: lightgrey;
+}
 /*  For list 
 ul {
 	text-align: left;

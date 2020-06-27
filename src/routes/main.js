@@ -38,9 +38,9 @@ class main extends Component {
 		console.log(d.getMonth());
 		this.setState({
 			year: d.getFullYear(),
-			month: d.getMonth()
+			month: d.getMonth()+1
 		})
-		this.loadDays(d.getFullYear(), d.getMonth());
+		this.loadDays(d.getFullYear(), d.getMonth()+1);
 	}
 
 	onClickDay(dn){
@@ -109,7 +109,8 @@ class main extends Component {
 		for (let i = 0; i < firstday; i++){
 			days.push({
 				'num': '',
-				'app': ''
+				'app': '',
+				'color': 'no-day-square'
 			})
 			count++
 			console.log(count)
@@ -119,7 +120,8 @@ class main extends Component {
 			
 			days.push({
 				'num': i+1,
-				'app': 'Appointments: ' + i
+				'app': '',
+				'color': 'empty-square'
 			})
 			count++
 
@@ -129,45 +131,61 @@ class main extends Component {
 		for (let i=0; i < d2-1; i++){
 			days.push({
 				'num': '',
-				'app': ''
+				'app': '',
+				'color': 'no-day-square'
 			})
 		}
 
 		console.log(days)
+		count = 0;
+		let month = [];
 
-		// axios.get(this.state.path + ':5000/appointment/m/' + this.state.year + '/' + this.state.month + '/' + dn)
-		// 			.then((res) => {
 
-						
-		// 			})
-		/*
-		//Search the entire month for results
-		//let cdate = ''
-		//Foreach
-			if (cdate === day.stime) [if the dates are the same]
-				count++
-			else if{}
-			cdate = day.stime
-			
-			i = cdate.getDate()+firstdays-1
+		axios.get(this.state.path + ':5000/appointment/m/' + y + '/' + m + '/' + 1)
+			.then((res) => {
+				month = res.data
+				console.log('----------------------------')
+				console.log(res.data)
+			}).finally(() => {
+				let results ={};
 
-			days[i].app = count
-			
+				for (let i=0; i< month.length; i++) {
+				// get the date
+					let curDate = new Date(month[i].stime);
+					let date = [curDate.getFullYear(),curDate.getMonth(),curDate.getDate()].join("-"); //creates yyyy-mm-dd
+					results[date] = results[date] || 0; //if results doens't exist, 
+					results[date]++;
+					//result key is date, value is number
+				}
+				// you can always convert it into an array of objects, if you must
+				for (let i in results) {
+				if (results.hasOwnProperty(i)) {
+					let tdate = new Date(i);
+					let ind = tdate.getDate()+firstday-1;
+					console.log(ind)
+					days[ind].app = 'Appointments: ' + results[i];
+					days[ind].color = 'filled-square'
 
-		*/
-		this.setState({ listdays : days})
 
-	/*
-		Get first day
-		Get day name
-		get offset
-		run loop to fill the first slots with junk spaces
-			Might be easy enough to fill the previous days
-		run loop to fill actual days
-		run loop to fill the final days with junk spaces
+					//rarr.push({date:i,counts:results[i]});
+				}
+				}
+				this.setState({ listdays : days})
 
+			})
 		
-	*/
+		
+			
+	
+	}
+
+	changeMonth(val){
+		const y = this.state.year; const m = parseInt(this.state.month);
+		
+		let date = new Date(y+'-'+(m+val)+'-1');
+		
+		this.loadDays(date.getFullYear(), date.getMonth())
+
 	}
 
 
@@ -182,7 +200,27 @@ class main extends Component {
 					<div className="row">
 						<div className="col-lg-3 border recent">Recent Appointments section</div>
 						<div className="col-lg-9 border border-left-0 calendar d-none d-md-block">
-							<h4 className="display-4 mb-4 text-center">Current Month</h4>
+							<div className="row p-0">
+								<div className="col-1 p-0">
+									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeMonth(-1)}>
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg" >
+											<path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+											<path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+										</svg>
+									</button>
+								</div>
+								<div className="col-10">
+									<h4 className="display-4 mb-4 text-center">Current Month</h4>
+								</div>
+								<div className="col-1 p-0">
+									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeMonth(1)}>
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+											<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+										</svg>
+									</button>	
+								</div>
+							</div>
 							<header>
 							<div className="row d-none d-md-flex p-1 bg-dark text-white">
 								<h5 className="col-sm p-1 text-center">Sunday</h5>
@@ -198,7 +236,7 @@ class main extends Component {
 								{
 									this.state.listdays.map((day, index) => (
 
-											<div className="square border" key={index} name={day.num} onClick={() => this.onClickDay(day.num)}>
+											<div className={day.color + " square border"} key={index} name={day.num} onClick={() => this.onClickDay(day.num)}>
 												<div className="content">
 													<div className="table">
 														<div className="table-cell">

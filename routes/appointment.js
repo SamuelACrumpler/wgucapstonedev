@@ -58,72 +58,39 @@ router.get('/u/:title', async function (req, res, next) {
 /* Get appointments by the date*/
 router.get('/d/:year/:month/:day', async function (req, res, next) {
 	console.log(req.params.year + ' ' + req.params.month + ' ' + req.params.day)
-	dss = req.params.year + '-' + req.params.month + '-' + req.params.day + ' 00:00'
-	//dse = req.params.year + '-' + req.params.month + '-' + req.params.day + ' 23:59' 
-	dts = new Date(dss);
-	////dte = new Date(dse);
-	//console.log(dts)
-	//console.log(dte)
-	//console.log('................................................')
-	let d = new Date();
-	d.setFullYear(req.params.year, req.params.month, req.params.day)
-	d.setHours(0); d.setMinutes(0)
-	//const stime = new Date(this.state.date + " " + this.state.stime);
-	//d.setMonth(req.params.month)
-	//d.setDate(req.params.day)
-	var date222 = new Date('6/1/2020 12:00:00 AM UTC');
-	var date223 = new Date('6/30/2020 11:59:59 PM UTC');
-	d.setHours(0);
-	let d2 = d;
-	d2.setDate(parseInt(req.params.day)+2);
-	console.log(d);
-	console.log(d.toISOString());
-	console.log(d2);
-	console.log(date222)
-	console.log(date223)
+	y = req.params.year; m = parseInt(req.params.month)+1;  d = parseInt(req.params.day);
+	s = (m+'/'+d+'/'+y+" 12:00:00 AM UTC")
+	sdate = new Date(s);
+	e = (m+'/'+d+'/'+y+" 11:59:59 PM UTC");
+	edate = new Date(e)
 
-	//{"created_on": {"$gte": new Date(2012, 7, 14), "$lt": new Date(2012, 7, 15)}})
+	console.log(sdate)
+	console.log(edate)
+	console.log(sdate.toISOString())
+	console.log(edate.toISOString());
 
-	Appointment.find({ stime: {"$gte": dts.toISOString(), "$lt": d2.toISOString()} }, function (err, post) {
+	Appointment.find({ stime: {"$gte": sdate.toISOString(), "$lt": edate.toISOString()} }, function (err, post) {
 		if (err) return next(err);
 		res.json(post);
 	});
 });
 
 router.get('/m/:year/:month/:day', async function (req, res, next) {
-	console.log('--------------------------------------------------')
-	console.log(req.params.year + ' ' + req.params.month)
-	let dss = req.params.year + '-' + req.params.month + '-' + req.params.day + ' 00:00' //sets the date for the first day
-	let dts = new Date(dss); //create the date
-	
-	
-	let d2 = new Date(dts.getFullYear(),dts.getMonth(), 0).getDate(); //Should get the number of days in the month
-	let dse = req.params.year + '-' + req.params.month + '-' + d2 + ' 23:59' //Set the final day and the last hour
-	
-	let dte = new Date(dse);
+	console.log('----------------------------------------')
+	console.log(req.params.year + ' ' + req.params.month + ' ' + req.params.day)
+	y = req.params.year; m = parseInt(req.params.month)+1;  d = parseInt(req.params.day);
+	s = (m+'/'+1+'/'+y+" 12:00:00 AM UTC")
+	sdate = new Date(s);
+	let fd = new Date(y, m, 0).getDate();
+	e = (m+'/'+fd+'/'+y+" 11:59:59 PM UTC");
+	edate = new Date(e)
 
-	dte.setDate(d2)
-	dts.setDate(1);
-	
-  	console.log(dts)
-	console.log(dts.toISOString());
-	
-
-	console.log(dte)
-	console.log(dte.toISOString());
-
-	let d = new Date();
-	d.setFullYear(req.params.year, req.params.month, req.params.day)
-	//const stime = new Date(this.state.date + " " + this.state.stime);
-	//d.setMonth(req.params.month)
-	//d.setDate(req.params.day)
-	d.setHours(0);
-	d2 = d;
-	d2.setDate(req.params.day+1);
-	console.log(d);
-	//{"created_on": {"$gte": new Date(2012, 7, 14), "$lt": new Date(2012, 7, 15)}})
-
-	Appointment.find({ stime: {"$gte": dte.toISOString(), "$lt": d2.toISOString()} }, function (err, post) {
+	console.log(sdate)
+	console.log(edate)
+	console.log(sdate.toISOString())
+	console.log(edate.toISOString());
+ 
+	Appointment.find({ stime: {"$gte": sdate.toISOString(), "$lt": edate.toISOString()} }, function (err, post) {
 		if (err) return next(err);
 		res.json(post);
 	});
