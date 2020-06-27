@@ -185,6 +185,21 @@ myauto {
 .no-day-square {
 	background-color: lightgrey;
 }
+
+.app-list-label {
+	border-color: grey;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+}
+
+.app-list-border{
+	border-bottom-style: dotted;
+	border-bottom-width: 1px;
+}
+
+.border {
+	border-color: darkgray!important;
+}
 /*  For list 
 ul {
 	text-align: left;

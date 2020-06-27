@@ -17,7 +17,9 @@ class main extends Component {
 			cUser: '',
 			year: '',
 			month: '',
-			users: [], 
+			monthName: '',
+			users: [],
+			listmonths: ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"], 
 			listdays: [],
 			listapp: []
 		};
@@ -33,14 +35,13 @@ class main extends Component {
 
 		
 		let d = new Date();
-		console.log(d.getDate());
-		console.log(d.getFullYear());
-		console.log(d.getMonth());
+		
 		this.setState({
 			year: d.getFullYear(),
-			month: d.getMonth()+1
+			month: d.getMonth(),
+			monthName: this.state.listmonths[d.getMonth()]
 		})
-		this.loadDays(d.getFullYear(), d.getMonth()+1);
+		this.loadDays(d.getFullYear(), d.getMonth());
 	}
 
 	onClickDay(dn){
@@ -88,18 +89,20 @@ class main extends Component {
 	}
 
 	loadDays(y, m){
-		console.log(y+"/"+m);
-		let date = new Date();
-		console.log(date);
-		date.setFullYear(y); date.setMonth(m);
+		let am = parseInt(m)+1
+		console.log(y+"-"+am);
+		
+		console.log(y+"-"+m);
+		let date = new Date((y+"-"+am+'-1'));
+		console.log(date)
 		console.log(date.getDay());
 		//copy date, set to first day of month, use getday to get the right value.
-		let firstday = new Date(y, m, 1).getDay(); //pulls the day, sunday, monday, etc.
-		let d = new Date(y, m, 0).getDate(); //Should get the number of days in the month
+		let firstday = date.getDay(); //pulls the day, sunday, monday, etc.
+		let d = new Date(y, am, 0).getDate(); //Should get the number of days in the month
 		let days = [];
 		let count = 0;
 		console.log("day of week: " + firstday)
-
+		console.log((parseInt(m)-1))
 		console.log("days: " + d)
 
 		// {
@@ -127,8 +130,8 @@ class main extends Component {
 
 		}
 
-		let d2 = 35-d;	
-		for (let i=0; i < d2-1; i++){
+		let d2 = 42-d-firstday;	
+		for (let i=0; i < d2; i++){
 			days.push({
 				'num': '',
 				'app': '',
@@ -141,7 +144,7 @@ class main extends Component {
 		let month = [];
 
 
-		axios.get(this.state.path + ':5000/appointment/m/' + y + '/' + m + '/' + 1)
+		axios.get(this.state.path + ':5000/appointment/m/' + y + '/' + am + '/' + 1)
 			.then((res) => {
 				month = res.data
 				console.log('----------------------------')
@@ -180,11 +183,24 @@ class main extends Component {
 	}
 
 	changeMonth(val){
-		const y = this.state.year; const m = parseInt(this.state.month);
+		let y = this.state.year; const m = parseInt(this.state.month)+1;
+		console.log(y+'-'+m+'-1')
+		let newdate = new Date(y+'-'+m+'-1')
+		console.log(newdate)
+		newdate.setMonth(newdate.getMonth()+val)
 		
-		let date = new Date(y+'-'+(m+val)+'-1');
-		
-		this.loadDays(date.getFullYear(), date.getMonth())
+
+		let date = new Date(y+'-'+(m+val+1)+'-1');
+		console.log('monthnum: ' + (m+val))
+		console.log(newdate)
+		this.setState(
+			{
+				year : newdate.getFullYear(),
+				month : newdate.getMonth(),
+				monthName : this.state.listmonths[newdate.getMonth()]
+			}
+		)
+		this.loadDays(newdate.getFullYear(), newdate.getMonth())
 
 	}
 
@@ -192,14 +208,26 @@ class main extends Component {
 	//https://codepen.io/chrisdpratt/pen/OOybam
 	//Configure the calendar header to disappear at a certain size, and only display the days
 	//day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted
+	//make the web friendly appointment display disappear, and the mobile friendly appear
+
+	//appointment class that becomes other appointments for different purposes.
+
 	render() {
 		return (
 			<div>
 				<Navbar/>
 				<div className="container">
-					<div className="row">
-						<div className="col-lg-3 border recent">Recent Appointments section</div>
-						<div className="col-lg-9 border border-left-0 calendar d-none d-md-block">
+					<div className="row p-0">
+						<div className="col-lg-3 border recent p-0 no-day-square">
+							<div className="app-list-border">
+								<h3 className="app-list-border filled-square m-0">Title</h3>
+								<div className="empty-square app-list-label">Customer: Bill Haverford</div>
+								<div className="empty-square app-list-label">Contracter: Alan Damby</div>
+								<div className="empty-square app-list-label">Address: 123 Easy Str</div>
+								<div className="empty-square app-list-label">Timeframe: 8:00PM - 9:00PM</div>
+							</div>
+						</div>
+						<div className="col-lg-9 border border-left-0 calendar ">
 							<div className="row p-0">
 								<div className="col-1 p-0">
 									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeMonth(-1)}>
@@ -210,7 +238,7 @@ class main extends Component {
 									</button>
 								</div>
 								<div className="col-10">
-									<h4 className="display-4 mb-4 text-center">Current Month</h4>
+								<h4 className="display-4 mb-4 text-center">{this.state.monthName + ' ' +this.state.year}</h4>
 								</div>
 								<div className="col-1 p-0">
 									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeMonth(1)}>
