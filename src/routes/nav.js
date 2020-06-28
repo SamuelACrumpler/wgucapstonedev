@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 class Navbar extends Component {
 	constructor() {
 		super();
+
+		//consider making navbar part of a state array based on users.
 	}
 
 	render() {
@@ -34,6 +36,9 @@ class Navbar extends Component {
 							</li>
 							<li className="nav-item">
 								<a className="nav-link" href="#">Search</a>
+							</li>
+							<li className="nav-item">
+								<a className="nav-link" href="#">Log Out</a>
 							</li>
 						</ul>
 					</div>

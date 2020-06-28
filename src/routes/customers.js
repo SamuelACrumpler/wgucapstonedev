@@ -317,7 +317,6 @@ class customers extends Component {
 		const udate = new Date();
 		let cdate = new Date();
 		console.log("test this mess: " + updatedBy)
-
 		switch (this.state.crudState) {
 			case 0: //create
 				//created then updated

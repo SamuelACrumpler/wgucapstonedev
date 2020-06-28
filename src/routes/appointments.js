@@ -117,6 +117,9 @@ class appointments extends Component {
 		this.setState({
 			cid: '',
 			title: '',
+			date: '',
+			stime: '',
+			etime: '',
 			rate: '',
 			supply: '',
 			total: '',
@@ -576,14 +579,16 @@ class appointments extends Component {
 		const udate = new Date();
 		let cdate = new Date();
 		console.log("test this mess: " + updatedBy)
+		console.log(this.state.crudState)
 
 		switch (this.state.crudState) {
 			case 0: //create
 				//created then updated
 
-				axios.get(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate })
+				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate })
 					.then((result) => {
 					}).finally(() => {
+						console.log("test to see if I got here.")
 						//call refresh function
 						this.getAllDocuments();
 						this.getAllCustomers();

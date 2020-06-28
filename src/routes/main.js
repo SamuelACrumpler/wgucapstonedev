@@ -21,6 +21,9 @@ class main extends Component {
 			users: [],
 			listmonths: ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"], 
 			listdays: [],
+			listcust: [],
+			listallapp: [],
+			listcust: {},
 			listapp: []
 		};
 
@@ -46,24 +49,59 @@ class main extends Component {
 
 	onClickDay(dn){
 		console.log('day: ' + dn);
+		console.log('month' + this.state.month)
+		console.log('year' + this.state.year)
+		console.log(new Date(this.state.year+'-'+(parseInt(this.state.month)+1)+'-'+dn))
+		let dc = this.state.year+""+this.state.month+""+dn
 
-		axios.get(this.state.path + ':5000/appointment/d/' + this.state.year + '/' + this.state.month + '/' + dn)
-			.then((res) => {
+		let tarr = [];
+		let tapp = [];
+		let t = [];
+		let i = 0
+		this.state.listallapp.forEach(app => {
+			let cd = new Date(app.stime)
+			console.log('------------------------------------------------------------------------------------------------------------------------------------')
+			console.log(cd.getFullYear()+''+cd.getMonth()+''+cd.getDate()) 
+			console.log(dc)
+			cd = (cd.getFullYear()+''+cd.getMonth()+''+cd.getDate())
+			if (cd == dc){
+				t.push(app)
+				console.log(app)
+			}
+			
+		});
 
-				this.setState({
-					
-					listapp : res.data
+		this.setState({ listapp : t})
+		// axios.get(this.state.path + ':5000/appointment/d/' + this.state.year + '/' + (parseInt(this.state.month)+1) + '/' + dn)
+		
+		// 	.then((res) => {
+		// 		tapp = res.data
 
-				})
-				console.log(this.state.listapp)
-			})
+		// 		res.data.forEach(app => {
+		// 			axios.get(this.state.path + ':5000/customer/' + app.custid)
+		// 			.then((res) => {
 
-		axios.get(this.state.path + ':5000/appointment/m/' + this.state.year + '/' + this.state.month + '/' + dn)
-			.then((res) => {
-
+		// 				tarr.push(res.data.name)
+		// 				console.log('name: '+ res.data.name)
+		// 				tapp[i].name = res.data.name 
+		// 			})
+		// 		});
+		// 		this.setState({listcust: tarr})
 				
-				console.log(res.data)
-			})
+		// 	}).finally(() =>{
+		// 		console.log('listtarr')
+		// 		console.log(tapp[0].title)
+		// 		console.log(this.state.listcust[0])
+
+		// 		this.setState({
+					
+		// 			listapp : tapp
+		
+
+		// 		})
+		// 		console.log("listapp")
+		// 		console.log(this.state.listapp)
+		// 	})
 					
 
 				
@@ -142,18 +180,28 @@ class main extends Component {
 		console.log(days)
 		count = 0;
 		let month = [];
+		let custs = [];
+		let custnames = [];
+		let test = 'dumb'
+	
+
+
 
 
 		axios.get(this.state.path + ':5000/appointment/m/' + y + '/' + am + '/' + 1)
 			.then((res) => {
+				this.setState({ listallapp: res.data})
 				month = res.data
-				console.log('----------------------------')
-				console.log(res.data)
+				
+				
+
 			}).finally(() => {
 				let results ={};
 
+
 				for (let i=0; i< month.length; i++) {
 				// get the date
+
 					let curDate = new Date(month[i].stime);
 					let date = [curDate.getFullYear(),curDate.getMonth(),curDate.getDate()].join("-"); //creates yyyy-mm-dd
 					results[date] = results[date] || 0; //if results doens't exist, 
@@ -169,11 +217,13 @@ class main extends Component {
 					days[ind].app = 'Appointments: ' + results[i];
 					days[ind].color = 'filled-square'
 
-
-					//rarr.push({date:i,counts:results[i]});
 				}
 				}
 				this.setState({ listdays : days})
+				this.setState({ listcust : custs})
+				console.log(this.state.listcust['test'])
+				console.log(this.state.listcust)
+				console.log(this.state.listcust["5ecb5fdaead3aa19b06b6814"])
 
 			})
 		
@@ -219,13 +269,20 @@ class main extends Component {
 				<div className="container">
 					<div className="row p-0">
 						<div className="col-lg-3 border recent p-0 no-day-square">
-							<div className="app-list-border">
-								<h3 className="app-list-border filled-square m-0">Title</h3>
-								<div className="empty-square app-list-label">Customer: Bill Haverford</div>
-								<div className="empty-square app-list-label">Contracter: Alan Damby</div>
-								<div className="empty-square app-list-label">Address: 123 Easy Str</div>
-								<div className="empty-square app-list-label">Timeframe: 8:00PM - 9:00PM</div>
-							</div>
+							{
+								this.state.listapp.map((app, index) => (
+									<div className="app-list-border">
+										<h3 className="app-list-border filled-square m-0">{app.title}</h3>
+										<div className="empty-square app-list-label">Customer: {this.state.listcust[index]}</div>
+										<div className="empty-square app-list-label">Contracter: Alan Damby</div>
+										<div className="empty-square app-list-label">Address: {app.address}</div>
+										<div className="empty-square app-list-label">Timeframe: {(new Date(app.stime)).toLocaleTimeString()} - {(new Date(app.etime)).toLocaleTimeString()}</div>
+									</div>
+									)
+								)
+								
+							}
+								
 						</div>
 						<div className="col-lg-9 border border-left-0 calendar ">
 							<div className="row p-0">

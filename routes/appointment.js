@@ -59,9 +59,9 @@ router.get('/u/:title', async function (req, res, next) {
 router.get('/d/:year/:month/:day', async function (req, res, next) {
 	console.log(req.params.year + ' ' + req.params.month + ' ' + req.params.day)
 	y = req.params.year; m = parseInt(req.params.month);  d = parseInt(req.params.day);
-	s = (m+'/'+d+'/'+y+" 12:00:00 AM UTC")
+	s = (m+'/'+d+'/'+y+" 12:00:00 AM")
 	sdate = new Date(s);
-	e = (m+'/'+d+'/'+y+" 11:59:59 PM UTC");
+	e = (m+'/'+d+'/'+y+" 11:59:59 PM");
 	edate = new Date(e)
 
 	console.log(sdate)
@@ -79,10 +79,10 @@ router.get('/m/:year/:month/:day', async function (req, res, next) {
 	console.log('----------------------------------------')
 	console.log(req.params.year + ' ' + req.params.month + ' ' + req.params.day)
 	y = req.params.year; m = parseInt(req.params.month);  d = parseInt(req.params.day);
-	s = (m+'/'+1+'/'+y+" 12:00:00 AM UTC")
+	s = (m+'/'+1+'/'+y+" 12:00:00 AM")
 	sdate = new Date(s);
 	let fd = new Date(y, m, 0).getDate();
-	e = (m+'/'+fd+'/'+y+" 11:59:59 PM UTC");
+	e = (m+'/'+fd+'/'+y+" 11:59:59 PM");
 	edate = new Date(e)
 
 	console.log(sdate)
