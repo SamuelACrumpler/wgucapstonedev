@@ -18,12 +18,19 @@ class main extends Component {
 			year: '',
 			month: '',
 			monthName: '',
+			title: '',
+			cust: '',
+			worker: '',
+			add: '',
+			stime: '',
+			etime: '',
+			index: 0,
 			users: [],
 			listmonths: ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"], 
 			listdays: [],
 			listcust: [],
+			listwork: [],
 			listallapp: [],
-			listcust: {},
 			listapp: []
 		};
 
@@ -70,40 +77,32 @@ class main extends Component {
 			}
 			
 		});
-
-		this.setState({ listapp : t})
-		// axios.get(this.state.path + ':5000/appointment/d/' + this.state.year + '/' + (parseInt(this.state.month)+1) + '/' + dn)
+	
 		
-		// 	.then((res) => {
-		// 		tapp = res.data
-
-		// 		res.data.forEach(app => {
-		// 			axios.get(this.state.path + ':5000/customer/' + app.custid)
-		// 			.then((res) => {
-
-		// 				tarr.push(res.data.name)
-		// 				console.log('name: '+ res.data.name)
-		// 				tapp[i].name = res.data.name 
-		// 			})
-		// 		});
-		// 		this.setState({listcust: tarr})
-				
-		// 	}).finally(() =>{
-		// 		console.log('listtarr')
-		// 		console.log(tapp[0].title)
-		// 		console.log(this.state.listcust[0])
-
-		// 		this.setState({
-					
-		// 			listapp : tapp
-		
-
-		// 		})
-		// 		console.log("listapp")
-		// 		console.log(this.state.listapp)
-		// 	})
-					
-
+		console.log('how long: '+t.length)
+		if(t.length){
+			this.setState({ listapp : t,
+					title: t[0].title,
+					cust : this.state.listcust[t[0].custid],
+					worker : this.state.listwork[t[0].userid],
+					//add worker section here
+					add : this.state.listcust['add:'+t[0].custid],
+					stime : t[0].stime,
+					etime : t[0].etime,
+					index : 0,
+			})
+		} else {
+			
+				this.setState({ listapp : [],
+					title: '',
+					cust : '',
+					worker : '',
+					add : '',
+					stime : '',
+					etime : '',
+					index : 0,
+			})
+		}
 				
 	}
 
@@ -180,7 +179,6 @@ class main extends Component {
 		console.log(days)
 		count = 0;
 		let month = [];
-		let custs = [];
 		let custnames = [];
 		let test = 'dumb'
 	
@@ -220,15 +218,49 @@ class main extends Component {
 				}
 				}
 				this.setState({ listdays : days})
-				this.setState({ listcust : custs})
-				console.log(this.state.listcust['test'])
-				console.log(this.state.listcust)
-				console.log(this.state.listcust["5ecb5fdaead3aa19b06b6814"])
+
+				let custs = {};
+
+				///Repeat for users, but for field workers only. Need to actually add field workers
+
+				axios.get(this.state.path + ':5000/customer/')
+					.then((res) => {
+						res.data.forEach(cust => {
+							custs[cust._id] = cust.name;
+							custs["add:" + cust._id] = cust.address;
+						});
+
+						this.setState({ listcust : custs})
+						console.log(this.state.listcust['5ecb538a9d80159f14099481'])
+						
+						
+		
+					})
+
+				let workers = {}
+				axios.get(this.state.path + ':5000/user/')
+					.then((res) => {
+						res.data.forEach(work => {
+							if(work.type === 'Field Worker'){
+								workers[work._id] = work.username;
+							}
+						});
+						workers['null'] = 'null';
+
+						this.setState({ listwork : workers})
+						console.log(this.state.listwork)
+
+						console.log(this.state.listwork['5ecb538a9d80159f14099481'])
+						
+						
+		
+					})
+					
 
 			})
 		
 		
-			
+		
 	
 	}
 
@@ -253,7 +285,27 @@ class main extends Component {
 		this.loadDays(newdate.getFullYear(), newdate.getMonth())
 
 	}
+	
+	changeApp(val){
+		if(this.state.index+val < 0){return}
+		if(this.state.index+val >= this.state.listapp.length ){return}
+		console.log(this.state.listwork[this.state.listapp[this.state.index+val].userid])
+		this.setState(
+			{
+				title: this.state.listapp[this.state.index+val].title,
+				cust : this.state.listcust[this.state.listapp[this.state.index+val].custid],
+				//add worker section here
+				worker : this.state.listwork[this.state.listapp[this.state.index+val].userid],
+				add : this.state.listcust['add:'+this.state.listapp[this.state.index+val].custid],
+				stime : this.state.listapp[this.state.index+val].stime,
+				etime : this.state.listapp[this.state.index+val].etime,
+				index : this.state.index+val,
 
+			}
+
+		)
+
+	}
 
 	//https://codepen.io/chrisdpratt/pen/OOybam
 	//Configure the calendar header to disappear at a certain size, and only display the days
@@ -268,20 +320,48 @@ class main extends Component {
 				<Navbar/>
 				<div className="container">
 					<div className="row p-0">
-						<div className="col-lg-3 border recent p-0 no-day-square">
+						<div className="col-lg-3 border recent p-0 no-day-square d-none d-lg-block">
 							{
 								this.state.listapp.map((app, index) => (
 									<div className="app-list-border">
-										<h3 className="app-list-border filled-square m-0">{app.title}</h3>
-										<div className="empty-square app-list-label">Customer: {this.state.listcust[index]}</div>
-										<div className="empty-square app-list-label">Contracter: Alan Damby</div>
-										<div className="empty-square app-list-label">Address: {app.address}</div>
+										<h3 className="app-list-border filled-square m-0">Title: {app.title}</h3>
+										<div className="empty-square app-list-label">Customer: {this.state.listcust[app.custid]}</div>
+										<div className="empty-square app-list-label">Contracter: {this.state.listwork[app.userid]}</div>
+										<div className="empty-square app-list-label">Address: {this.state.listcust['add:'+app.custid]}</div>
 										<div className="empty-square app-list-label">Timeframe: {(new Date(app.stime)).toLocaleTimeString()} - {(new Date(app.etime)).toLocaleTimeString()}</div>
 									</div>
 									)
 								)
 								
 							}
+								
+						</div>
+						<div className="col-lg-3 border recent no-day-square d-md-block d-lg-none  ">
+						<div className="row p-0">
+								<div className="col-1 p-0">
+									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeApp(-1)}>
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg" >
+											<path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
+											<path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+										</svg>
+									</button>
+								</div>
+								<div className="col-10 p-0">
+										<h3 className="app-list-border filled-square m-0">Title: {this.state.title}</h3>
+										<div className="empty-square app-list-label">Customer: {this.state.cust}</div>
+										<div className="empty-square app-list-label">Contracter: {this.state.worker}</div>
+										<div className="empty-square app-list-label">Address: {this.state.add}</div>
+										<div className="empty-square app-list-label">Timeframe: {(new Date(this.state.stime)).toLocaleTimeString()} - {(new Date(this.state.etime)).toLocaleTimeString()} </div>
+								</div>
+								<div className="col-1 p-0">
+									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeApp(1)}>
+										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+											<path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
+											<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
+										</svg>
+									</button>	
+								</div>
+							</div>
 								
 						</div>
 						<div className="col-lg-9 border border-left-0 calendar ">

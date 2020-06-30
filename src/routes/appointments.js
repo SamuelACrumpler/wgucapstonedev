@@ -36,6 +36,9 @@ class appointments extends Component {
 			header: 'Create New Appointmennt',
 			documents: [],
 			customers: [],
+			workers: [],
+			custid: [],
+			workerid: [],
 			selCust: '',
 			selCustId: '',
 			error: '',
@@ -67,6 +70,7 @@ class appointments extends Component {
 		//this.setState({ test: ['admin', 'test', 'test', 'this is a really long name so get prepared for it!'] })
 		this.getAllDocuments();
 		this.getAllCustomers();
+		this.getAllWorkers();
 		this.setState({
 			cUser: localStorage.getItem("currentUser"),
 			uid: localStorage.getItem("userId"),
@@ -115,6 +119,7 @@ class appointments extends Component {
 	}
 	inputReset() {
 		this.setState({
+			worker: '',
 			cid: '',
 			title: '',
 			date: '',
@@ -128,18 +133,6 @@ class appointments extends Component {
 		});
 	}
 
-	inputFill(c,t,r,s,to,h,ty,d) {
-		this.setState({
-			cid: c,
-			title: t,
-			rate: r,
-			supply: s,
-			total: to,
-			hours: h,
-			type: ty,
-			description: d,
-		});
-	}
 
 	roundMinutes(date) {
 
@@ -183,6 +176,7 @@ class appointments extends Component {
 				let oldty = this.getTypeVal(this.state.type);
 				this.setState({
 					custid: this.state.edit.custid,
+					workerid: this.state.edit.workerid,
 					title: this.state.edit.title,
 					rate: this.state.edit.rate,
 					supply: this.state.edit.supply,
@@ -478,9 +472,15 @@ class appointments extends Component {
 	}
 
 	onSelect(event) {
-		this.setState(
-			{ custid : event.target.value}
-		)
+		if(event.target.name === 'customer'){
+			this.setState(
+				{ custid : event.target.value}
+			)
+		} else if( event.target.name === 'worker'){
+			this.setState(
+				{ workerid : event.target.value}
+			)
+		}
 	}
 
 	onChange(event) {
@@ -555,13 +555,30 @@ class appointments extends Component {
 			});
 	}
 
+	getAllWorkers(){
+		let tempworkers = []
+		axios.get('http://localhost:5000/user/')
+			.then(res => {
+				
+				res.data.forEach(user => {
+					console.log(user.type);
+					if(user.type === "Field Worker"){
+						tempworkers.push(user)
+					}
+				});
+
+				this.setState({ workers: tempworkers });
+				console.log(this.state.workers)
+			});
+	}
+
 
 	crudUse() {
 
 		//this.state.user[this.state.selected]._password
 
 		
-		const userid = this.state.uid
+		const userid = this.state.workerid
 		const custid = this.state.custid
 		const title = this.state.title
 		const rate = this.state.rate
@@ -592,6 +609,7 @@ class appointments extends Component {
 						//call refresh function
 						this.getAllDocuments();
 						this.getAllCustomers();
+						this.getAllWorkers();
 					});
 
 				break;
@@ -619,6 +637,8 @@ class appointments extends Component {
 								//call refresh func
 								this.getAllDocuments();
 								this.getAllCustomers();
+								this.getAllWorkers();
+
 
 							});
 					});
@@ -632,6 +652,8 @@ class appointments extends Component {
 						//call refresh function
 						this.getAllDocuments();
 						this.getAllCustomers();
+						this.getAllWorkers();
+
 
 					});
 				break;
@@ -721,6 +743,9 @@ class appointments extends Component {
 							<div>
 								customer : {this.state.custid + ""}
 							</div>
+							<div>
+								worker : {this.state.workerid + ""}
+							</div>
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">
 									<input type="radio" name="options" id="option1" value="option1" onClick={this.handleCrudChange} /> New
@@ -780,6 +805,22 @@ class appointments extends Component {
 								</select>
 
 							</div>
+
+							<div className="input-group mb-3">
+								<div className="input-group-prepend">
+									<span className="input-group-text" id="basic-addon3">Field Worker</span>
+								</div>
+								<select className="form-control" id="worker" name='worker' value={this.state.workerid} disabled={this.state.disabled} onChange={this.onSelect}>
+									<option value=''>Select a worker.</option>
+									{
+										this.state.workers.map((worker, index) => (
+											<option key={index} value={worker._id}>{worker.username}</option>
+										))
+									}
+								</select>
+
+							</div>
+
 							<div className="input-group mb-3">
 								<div className="input-group-prepend">
 									<span className="input-group-text" id="basic-addon3" >Date</span>
