@@ -23,8 +23,8 @@ class appointments extends Component {
 			total: '',
 			hours: '',
 			overlap: false,
-			//isHourly: '',
 			type: 'rout',
+			tasks: '',
 			notes: '',
 			edit: '',
 			lbutton: 'Save',
@@ -39,6 +39,7 @@ class appointments extends Component {
 			workers: [],
 			custid: [],
 			workerid: [],
+			workername: '',
 			selCust: '',
 			selCustId: '',
 			error: '',
@@ -119,7 +120,8 @@ class appointments extends Component {
 	}
 	inputReset() {
 		this.setState({
-			worker: '',
+			workerid: '',
+			workername: '',
 			cid: '',
 			title: '',
 			date: '',
@@ -129,10 +131,18 @@ class appointments extends Component {
 			supply: '',
 			total: '',
 			hours: '',
+			tasks: '',
 			notes: ''
 		});
 	}
 
+	lzMinute(dt){
+		return (dt.getMinutes() < 10 ? '0' : '') + dt.getMinutes();
+	}
+
+	lzHour(dt){
+		return (dt.getHours() < 10 ? '0' : '') + dt.getHours();
+	}
 
 	roundMinutes(date) {
 
@@ -170,13 +180,15 @@ class appointments extends Component {
 			.then((res) => {
 
 				this.setState({ edit: res.data });
+
+
 			}).finally(() => {
 				let sdate = new Date(this.state.edit.stime);
 				let edate = new Date(this.state.edit.etime);
 				let oldty = this.getTypeVal(this.state.type);
 				this.setState({
 					custid: this.state.edit.custid,
-					workerid: this.state.edit.workerid,
+					workerid: this.state.edit.userid,
 					title: this.state.edit.title,
 					rate: this.state.edit.rate,
 					supply: this.state.edit.supply,
@@ -184,11 +196,11 @@ class appointments extends Component {
 					hours: this.state.edit.hours,
 					overlap: this.state.edit.overlap,
 					date: this.state.edit.stime.substring(0,this.state.edit.stime.indexOf('T')),
-					stime: sdate.getHours() + ":" + sdate.getMinutes(),
-					etime: edate.getHours() + ":" + edate.getMinutes(),
-					//isHourly: this.state.edit.isHourly,
+					stime: this.lzHour(sdate) + ":" + this.lzMinute(sdate),
+					etime: this.lzHour(edate) + ":" + this.lzMinute(edate),
 					type: this.state.edit.type,
-					notes: this.state.edit.description,
+					tasks: this.state.edit.tasks,
+					notes: this.state.edit.notes,
 					selectedName: "customer" + i,
 					selectedIndex: i,
 					crudState: 2
@@ -303,7 +315,8 @@ class appointments extends Component {
 		console.log("current select:" + event.target.value)
 
 		if (event.target.value === 'apptype1') {
-
+			document.getElementById("tasks").classList.remove('d-none');
+			document.getElementById("tasks-label").classList.remove('d-none');
 			document.getElementById("rate").classList.remove('d-none');
 			document.getElementById("supply").classList.add('d-none');
 			document.getElementById("total").classList.remove('d-none');
@@ -311,6 +324,8 @@ class appointments extends Component {
 			
 
 		} else if (event.target.value === 'apptype2') {
+			document.getElementById("tasks").classList.add('d-none');
+			document.getElementById("tasks-label").classList.add('d-none');
 			document.getElementById("rate").classList.add('d-none');
 			document.getElementById("supply").classList.add('d-none');
 			document.getElementById("total").classList.add('d-none');
@@ -319,6 +334,8 @@ class appointments extends Component {
 			this.setState({ type: 'cons' })
 
 		} else {
+			document.getElementById("tasks").classList.add('d-none');
+			document.getElementById("tasks-label").classList.add('d-none');
 			document.getElementById("rate").classList.remove('d-none');
 			document.getElementById("supply").classList.remove('d-none');
 			document.getElementById("total").classList.remove('d-none');
@@ -366,6 +383,11 @@ class appointments extends Component {
 			return;
 		} else if (this.state.custid === '' && this.state.crudState !== 3) {
 			this.setState({ error: 'ERROR: Customer was not selected.' })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+
+		}  else if (this.state.workerid === '' && this.state.crudState !== 3) {
+			this.setState({ error: 'ERROR: Field Worker was not selected.' })
 			document.getElementById("error").classList.remove('d-none');
 			return;
 
@@ -424,19 +446,62 @@ class appointments extends Component {
 		//Pull all appointments for the day, and  check if they overlap
 
 		/// Total = Charge Rate*(Hours(roundedup))
+		let eflag = false;
+		axios.get(this.state.path + ':5000/appointment/d/' + stime.getFullYear() + '/' + (parseInt(stime.getMonth())+1) + '/' + stime.getDate())
+			.then((res) => {
+				res.data.forEach(app => {
+					console.log(app.title)
+					console.log(new Date(app.stime).getHours())
 
-		//database section
-		this.crudUse();
+					console.log('----------------------------')
+					console.log(new Date(app.stime))
+					console.log(stime)
+					console.log(new Date(app.etime))
+					console.log('----------------------------')
 
-		//Success section
-		document.getElementById("error").classList.add('d-none');
+					console.log(app.etime)
+					/*
+						06:50		06:22
+					let stcomp = parseInt(stime.getHours()+''+stime.getMinutes())
 
-		this.inputReset();
+					*/
+					//create error flag, then make a check in the finally section to stop the process from completeing
+					console.log( stime >= new Date(app.stime) && stime <= new Date(app.etime))
+					console.log(this.state.workerid + " : " + app.userid)
+					if(stime >= new Date(app.stime) && stime <= new Date(app.etime) && this.state.workerid === app.userid && this.state.crudState !== 3 && this.state.overlap === false){
+						eflag = true;
+						console.log("error happened, but didn't cancel the process")
+						this.setState({ error: 'ERROR: Start time is overlapping with another appointment called: ' + app.title + "; Assigned to the currently selected worker"})
+						document.getElementById("error").classList.remove('d-none');
+						return; //this is working but it is not properly cancelling saving the information
+					}else if(etime >= new Date(app.stime) && etime <= new Date(app.etime) && this.state.workerid === app.userid && this.state.crudState !== 3 && this.state.overlap === false){
+						eflag = true;
+						console.log("error happened, but didn't cancel the process or works thatuinwaiknmtakln")
+						this.setState({ error: 'ERROR: End time is overlapping with another appointment called: ' + app.title + "; Assigned to the currently selected worker"})
+						document.getElementById("error").classList.remove('d-none');
+						return;
+					}
+				});
+				
+				
 
-		this.setState({
-			selectedName: this.state.edit.name
-		});
+			}).finally((res) => {
+				if(eflag === true){return;}
+				//database section
+				this.crudUse();
 
+				//Success section
+				document.getElementById("error").classList.add('d-none');
+
+				this.inputReset();
+
+				this.setState({
+					selectedName: this.state.edit.name
+				});
+
+
+
+			})
 
 	}
 
@@ -477,8 +542,12 @@ class appointments extends Component {
 				{ custid : event.target.value}
 			)
 		} else if( event.target.name === 'worker'){
+			console.log("name: " +  event.target.name)
+
+
 			this.setState(
-				{ workerid : event.target.value}
+				{ workerid : event.target.value
+				}
 			)
 		}
 	}
@@ -513,10 +582,14 @@ class appointments extends Component {
 			document.getElementById("error").classList.add('d-none');
 			if (this.state.supply !== '' && this.state.type === 'spec') {
 				let v = this.state.rate * (e2 - s2) + parseFloat(this.state.supply);
-				this.setState({ total: v.toFixed(2) }) //should round these numbers for the total
+				this.setState({ total: v.toFixed(2),
+					hours: (e2-s2).toFixed(1)
+				}) //should round these numbers for the total
 			} else {
 				let v = this.state.rate * (e2 - s2);
-				this.setState({ total: v.toFixed(2) })
+				this.setState({ total: v.toFixed(2), 
+					hours: (e2-s2).toFixed(2)
+				})
 			}
 			
 		}
@@ -577,8 +650,7 @@ class appointments extends Component {
 
 		//this.state.user[this.state.selected]._password
 
-		
-		const userid = this.state.workerid
+		const userid = this.state.workerid;
 		const custid = this.state.custid
 		const title = this.state.title
 		const rate = this.state.rate
@@ -590,6 +662,7 @@ class appointments extends Component {
 		const etime = new Date(this.state.date + " " + this.state.etime);
 		const overlap = this.state.overlap
 		const type = this.state.type
+		const tasks = this.state.tasks
 		const notes = this.state.notes
 		let createdBy = this.state.cUser;
 		const updatedBy = this.state.cUser;
@@ -602,7 +675,7 @@ class appointments extends Component {
 			case 0: //create
 				//created then updated
 
-				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate })
+				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, tasks, notes, stime, etime, createdBy, updatedBy, cdate, udate })
 					.then((result) => {
 					}).finally(() => {
 						console.log("test to see if I got here.")
@@ -746,6 +819,12 @@ class appointments extends Component {
 							<div>
 								worker : {this.state.workerid + ""}
 							</div>
+							<div>
+								tasks : {this.state.tasks + ""}
+							</div>
+							<div>
+								hours : {this.state.hours + ""}
+							</div>
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">
 									<input type="radio" name="options" id="option1" value="option1" onClick={this.handleCrudChange} /> New
@@ -814,7 +893,7 @@ class appointments extends Component {
 									<option value=''>Select a worker.</option>
 									{
 										this.state.workers.map((worker, index) => (
-											<option key={index} value={worker._id}>{worker.username}</option>
+											<option key={index}  value={worker._id}>{worker.username}</option>
 										))
 									}
 								</select>
@@ -844,6 +923,7 @@ class appointments extends Component {
 								<input type="checkbox" className="form-check-input" id="overlap" name="overlap" value={this.state.overlap} onClick={this.onChecked}/>
 								<label className="form-check-label" htmlFor="exampleCheck1">Allow Overlap</label>
 							</div>
+
 							<div className="input-group mb-3" id="rate">
 								<div className="input-group-prepend">
 									<span className="input-group-text" id="basic-addon3">Charge Rate</span>
@@ -864,6 +944,9 @@ class appointments extends Component {
 								</div>
 								<input type="number" name="total" value={this.state.total} onChange={this.onChange} disabled={this.state.disabled} className="form-control" id="basic-url" aria-describedby="basic-addon3" />
 							</div>
+
+							<h5 id="tasks-label">Tasks to complete: (Separate with commas)</h5>
+							<textarea className="form-control" aria-label="With textarea" onChange={this.onChange} id="tasks" name="tasks" value={this.state.tasks}></textarea>
 
 							<h5>Notes</h5>
 							<textarea className="form-control" aria-label="With textarea" onChange={this.onChange} name="notes" value={this.state.notes}></textarea>

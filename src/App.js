@@ -6,6 +6,10 @@ import main from './routes/main';
 import users from './routes/users';
 import customers from './routes/customers';
 import appointments from './routes/appointments';
+import reports from './routes/reports';
+import search from './routes/search';
+
+
 
 
 
@@ -21,6 +25,8 @@ function App() {
 				<Route path="/users" component={users} />
 				<Route path="/customers" component={customers} />
 				<Route path="/appointments" component={appointments} />
+				<Route path="/reports" component={reports} />
+				<Route path="/search" component={search} />
 
 				</Switch>
 			</main>

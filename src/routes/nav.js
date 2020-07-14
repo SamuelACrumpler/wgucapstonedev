@@ -5,6 +5,11 @@ class Navbar extends Component {
 		super();
 
 		//consider making navbar part of a state array based on users.
+		//Map out the appropriate options
+	}
+
+	onLogout(){
+		console.log("This will log you out.")
 	}
 
 	render() {
@@ -32,13 +37,13 @@ class Navbar extends Component {
 								<a className="nav-link" href="/appointments">Appointments</a>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link" href="#">Reports</a>
+								<a className="nav-link" href="/reports">Reports</a>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link" href="#">Search</a>
+								<a className="nav-link" href="/search">Search</a>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link" href="#">Log Out</a>
+								<a className="nav-link" href="#" onClick={this.onLogout}>Log Out</a>
 							</li>
 						</ul>
 					</div>

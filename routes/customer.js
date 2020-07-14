@@ -48,6 +48,21 @@ router.get('/u/:username', async function (req, res, next) {
 	});
 });
 
+/* Get user by name*/
+router.get('/s/:name', function (req, res, next) {
+	console.log("performing name search");
+
+	Customer.find(
+		{ "name": { "$regex": req.params.name, "$options": "i" } },
+		function(err,post) { 
+			if (err) return next(err);
+		res.json(post);
+		} 
+	);
+	
+
+});
+
 /* Save entry into database */
 router.post('/', function (req, res, next) {
 	Customer.create(req.body, function (err, post) {

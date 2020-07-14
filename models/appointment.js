@@ -13,6 +13,7 @@ var appointmentSchema = new mongoose.Schema({
 	hours: Number,
 	overlap: String,
 	type: String,
+	tasks: String,
 	notes: String,
 	stime: { type: Date, default: Date.now },
 	etime: { type: Date, default: Date.now },

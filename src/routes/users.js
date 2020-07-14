@@ -399,7 +399,8 @@ class users extends Component {
 								this.state.users.map((user, index) => (
 									
 										<label id={'lbluser' + index} className="btn btn-secondary w-100">
-											<input type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange} />{user.username}
+											<button className="btn btn-secondary" type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange} >{user.username} </button>
+											
 									</label>
 								)
 								)

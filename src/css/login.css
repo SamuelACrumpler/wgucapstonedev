@@ -200,6 +200,10 @@ myauto {
 .border {
 	border-color: darkgray!important;
 }
+
+.btn-group-vertical {
+	display: block!important;
+}
 /*  For list 
 ul {
 	text-align: left;

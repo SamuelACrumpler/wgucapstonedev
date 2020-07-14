@@ -55,6 +55,21 @@ router.get('/u/:title', async function (req, res, next) {
 	});
 });
 
+/* Get appointment by title*/
+router.get('/s/:title', function (req, res, next) {
+	console.log("performing name search");
+
+	Appointment.find(
+		{ "title": { "$regex": req.params.title, "$options": "i" } },
+		function(err,post) { 
+			if (err) return next(err);
+		res.json(post);
+		} 
+	);
+	
+
+});
+
 /* Get appointments by the date*/
 router.get('/d/:year/:month/:day', async function (req, res, next) {
 	console.log(req.params.year + ' ' + req.params.month + ' ' + req.params.day)
@@ -83,6 +98,27 @@ router.get('/m/:year/:month/:day', async function (req, res, next) {
 	sdate = new Date(s);
 	let fd = new Date(y, m, 0).getDate();
 	e = (m+'/'+fd+'/'+y+" 11:59:59 PM");
+	edate = new Date(e)
+
+	console.log(sdate)
+	console.log(edate)
+	console.log(sdate.toISOString())
+	console.log(edate.toISOString());
+ 
+	Appointment.find({ stime: {"$gte": sdate.toISOString(), "$lt": edate.toISOString()} }, function (err, post) {
+		if (err) return next(err);
+		res.json(post);
+	});
+});
+
+router.get('/y/:year/', async function (req, res, next) {
+	console.log('----------------------------------------')
+	console.log(req.params.year)
+	y = req.params.year; m = parseInt(req.params.month);  d = parseInt(req.params.day);
+	s = (1+'/'+1+'/'+y+" 12:00:00 AM")
+	sdate = new Date(s);
+	let fd = new Date(y+1, 0, 0).getDate();
+	e = (12+'/'+31+'/'+y+" 11:59:59 PM");
 	edate = new Date(e)
 
 	console.log(sdate)

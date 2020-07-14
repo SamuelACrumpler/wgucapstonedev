@@ -61,10 +61,7 @@ class main extends Component {
 		console.log(new Date(this.state.year+'-'+(parseInt(this.state.month)+1)+'-'+dn))
 		let dc = this.state.year+""+this.state.month+""+dn
 
-		let tarr = [];
-		let tapp = [];
 		let t = [];
-		let i = 0
 		this.state.listallapp.forEach(app => {
 			let cd = new Date(app.stime)
 			console.log('------------------------------------------------------------------------------------------------------------------------------------')

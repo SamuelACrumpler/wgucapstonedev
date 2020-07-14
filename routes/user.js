@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var User = require('../models/user.js');
+const { Redirect } = require('react-router-dom');
 
 /* Get all users in the database. Products contains all results found */
 router.get('/', function (req, res, next) {
@@ -45,6 +46,23 @@ router.get('/:id', function (req, res, next) {
 		res.json(post);
 	});
 });
+
+/* Get user by name*/
+router.get('/s/:name', function (req, res, next) {
+	console.log("performing name search");
+
+	User.find(
+		{ "username": { "$regex": req.params.name, "$options": "i" } },
+		function(err,post) { 
+			if (err) return next(err);
+		res.json(post);
+		} 
+	);
+	
+
+});
+
+
 
 /* Get user by id*/
 router.get('/u/:username', async function (req, res, next) {
