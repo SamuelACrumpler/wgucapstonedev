@@ -217,29 +217,40 @@ class customers extends Component {
 	onSubmit() {
 		console.log("Submit")
 		this.setState({ error: '' })
-
-		// Check username database first for similar username
-		if (this.state.user === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Username was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-
-			return;
-		} else if (this.state.pass === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Password was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.cPass === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Confirm Password was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Passwords do not match.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
+		try{
+			if (this.state.name === '' && this.state.crudState !== 3) throw "ERROR: Name was left blank."
+			if (this.state.address === '' && this.state.crudState !== 3) throw "ERROR: Address was left blank."
+			if (this.state.city === '' && this.state.crudState !== 3) throw "ERROR: City was left blank."
+			if (this.state.zip === '' && this.state.crudState !== 3) throw "ERROR: Zip was left blank."
+			if (this.state.phone === '' && this.state.crudState !== 3) throw "ERROR: Phone number was left blank."
 		}
+		catch(err){
+			this.setState({ error: err })
+			document.getElementById("error").classList.remove('d-none');
+			return;
+		}
+		// Check username database first for similar username
+		// if (this.state.user === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Username was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+
+		// 	return;
+		// } else if (this.state.pass === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Password was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.cPass === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Confirm Password was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Passwords do not match.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// }
 
 		//database section
 		this.crudUse();
@@ -316,7 +327,6 @@ class customers extends Component {
 		const updatedBy = this.state.cUser;
 		const udate = new Date();
 		let cdate = new Date();
-		console.log("test this mess: " + updatedBy)
 		switch (this.state.crudState) {
 			case 0: //create
 				//created then updated

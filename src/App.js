@@ -19,16 +19,18 @@ function App() {
 		
 			
 			<main className="main full-height">
-				<Switch>
-				<Route path="/" component={login} exact />
-				<Route path="/main" component={main} />
-				<Route path="/users" component={users} />
-				<Route path="/customers" component={customers} />
-				<Route path="/appointments" component={appointments} />
-				<Route path="/reports" component={reports} />
-				<Route path="/search" component={search} />
+				<BrowserRouter>
+					<Switch>
+						<Route path="/" component={login} exact />
+						<Route path="/main" component={main} />
+						<Route path="/users" component={users} />
+						<Route path="/customers" component={customers} />
+						<Route path="/appointments" component={appointments} />
+						<Route path="/reports" component={reports} />
+						<Route path="/search" component={search} />
 
-				</Switch>
+					</Switch>
+				</BrowserRouter>
 			</main>
 
 	);

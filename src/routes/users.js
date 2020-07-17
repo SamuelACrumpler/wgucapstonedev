@@ -187,27 +187,40 @@ class users extends Component {
 		this.setState({ error: '' })
 
 		// Check username database first for similar username
-		if (this.state.user === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Username was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
+		// if (this.state.user === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Username was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
 
-			return;
-		} else if (this.state.pass === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Password was left blank.' })
+		// 	return;
+		// } else if (this.state.pass === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Password was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.cPass === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Confirm Password was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Passwords do not match.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } 
+		
+		try{
+			if (this.state.user === '' && this.state.crudState !== 3) throw "ERROR: Username was left blank."
+			if (this.state.pass === '' && this.state.crudState !== 3) throw "ERROR: Password was left blank."
+			if (this.state.cPass === '' && this.state.crudState !== 3) throw "ERROR: Confirm Password was left blank."
+			if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) throw "ERROR: Passwords do not match."
+		}
+		catch(err){
+			this.setState({ error: err })
 			document.getElementById("error").classList.remove('d-none');
 			return;
-
-		} else if (this.state.cPass === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Confirm Password was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Passwords do not match.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		}  
+		}
+		
 
 		//database section
 		this.crudUse();
@@ -399,9 +412,11 @@ class users extends Component {
 								this.state.users.map((user, index) => (
 									
 										<label id={'lbluser' + index} className="btn btn-secondary w-100">
-											<button className="btn btn-secondary" type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange} >{user.username} </button>
-											
+											<input  type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange}  />
+											<div>{user.username}</div>
 									</label>
+
+									
 								)
 								)
 
@@ -409,22 +424,7 @@ class users extends Component {
 							</div>
 						</div>
 						<div className="col-lg-9 border calendar ">
-							<div>
-								Selected option is : {this.state.selCrud}
-							</div>
-							<div>
-								Selected user is : {this.state.selectedName}
-
-							</div>
-							<div>
-								type is : {this.state.type}
-							</div>
-							<div>
-								crudstate : {this.state.crudState}
-							</div>
-							<div>
-								cruUsers : {this.state.cUser}
-							</div>
+							
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">
 									<input type="radio" name="options" id="option1" value="option1" checked={this.state.selCrud === 'option1'} onClick={this.handleCrudChange} /> New
@@ -441,7 +441,7 @@ class users extends Component {
 
 							
 							<h5 className="text-center">{this.state.header}</h5>
-							<div class="alert alert-danger d-none" id="error" role="alert">
+							<div className="alert alert-danger d-none" id="error" role="alert">
 								{this.state.error}
 							</div>
 							<div className="input-group mb-3">

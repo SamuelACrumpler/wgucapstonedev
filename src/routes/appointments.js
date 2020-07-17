@@ -376,72 +376,96 @@ class appointments extends Component {
 		let	s = new Date(this.state.date + " " + this.state.stime);
 		let	e = new Date(this.state.date + " " + this.state.etime);
 		// Check username database first for similar username
-		if (this.state.title === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Title was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
 
-			return;
-		} else if (this.state.custid === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Customer was not selected.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
 
-		}  else if (this.state.workerid === '' && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Field Worker was not selected.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.date === undefined && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Date was not selected.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.stime === undefined && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Start time was not selected.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.etime === undefined && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: End time was not selected.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		}   else if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type !== 'cons' ) {
-			this.setState({ error: 'ERROR: Charge rate was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type === 'spec') {
-			this.setState({ error: 'ERROR: Charge rate was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (this.state.total === '' && this.state.crudState !== 3 && this.state.type !== 'cons') {
-			this.setState({ error: 'ERROR: Total was left blank.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-
-		} else if (e.getHours() < s.getHours() && this.state.crudState !== 3) {
-			this.setState({ error: 'ERROR: Ending time must be higher than starting time. ' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-		} else if (s.getHours() < opening.getHours() && this.state.crudState !== 3){
-			this.setState({ error: 'ERROR: Starting time is lower than the opening time.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-		} else if (s.getHours() > closing.getHours() && this.state.crudState !== 3){
-			this.setState({ error: 'ERROR: Starting time is higher than the closing time.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-		}else if (e.getHours() < opening.getHours() && this.state.crudState !== 3){
-			this.setState({ error: 'ERROR: Ending time is lower than the opening time.' })
-			document.getElementById("error").classList.remove('d-none');
-			return;
-		} else if (e.getHours() > closing.getHours() && this.state.crudState !== 3){
-			this.setState({ error: 'ERROR: Opening time is higher than the closing time.' })
+		try{
+			if (this.state.title === '' && this.state.crudState !== 3) throw "ERROR: Title was left blank."
+			if (this.state.custid === '' && this.state.crudState !== 3) throw "ERROR: Customer was not selected."
+			if (this.state.workerid === '' && this.state.crudState !== 3) throw "ERROR: Field Worker was not selected."
+			if (this.state.date === '' && this.state.crudState !== 3) throw "ERROR: Date was not selected."
+			if (this.state.stime === '' && this.state.crudState !== 3) throw "ERROR: Start time was not selected."
+			if (this.state.etime === '' && this.state.crudState !== 3) throw "ERROR: End time was not selected."
+			if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type !== 'cons') throw "ERROR: Charge rate was left blank." 
+			if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type === 'spec')	throw "ERROR: Charge rate was left blank." 
+			if (this.state.total === '' && this.state.crudState !== 3 && this.state.type !== 'cons') throw "ERROR: Total rate was left blank." 
+			if (e.getHours() < s.getHours() && this.state.crudState !== 3) throw "ERROR: Ending time must be higher than starting time. "
+			if (s.getHours() < opening.getHours() && this.state.crudState !== 3) throw "ERROR: Starting time is lower than the opening time."
+			if (s.getHours() > closing.getHours() && this.state.crudState !== 3) throw "ERROR: Starting time is higher than the closing time."
+			if (e.getHours() < opening.getHours() && this.state.crudState !== 3) throw "ERROR: Ending time is lower than the opening time."
+			if (e.getHours() > closing.getHours() && this.state.crudState !== 3) throw "ERROR: Opening time is higher than the closing time."
+		}
+		catch(err){
+			this.setState({ error: err })
 			document.getElementById("error").classList.remove('d-none');
 			return;
 		}
+
+		// if (this.state.title === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Title was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+
+		// 	return;
+		// } else if (this.state.custid === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Customer was not selected.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// }  else if (this.state.workerid === '' && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Field Worker was not selected.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.date === undefined && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Date was not selected.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.stime === undefined && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Start time was not selected.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.etime === undefined && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: End time was not selected.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// }   else if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type !== 'cons' ) {
+		// 	this.setState({ error: 'ERROR: Charge rate was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type === 'spec') {
+		// 	this.setState({ error: 'ERROR: Charge rate was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (this.state.total === '' && this.state.crudState !== 3 && this.state.type !== 'cons') {
+		// 	this.setState({ error: 'ERROR: Total was left blank.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+
+		// } else if (e.getHours() < s.getHours() && this.state.crudState !== 3) {
+		// 	this.setState({ error: 'ERROR: Ending time must be higher than starting time. ' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+		// } else if (s.getHours() < opening.getHours() && this.state.crudState !== 3){
+		// 	this.setState({ error: 'ERROR: Starting time is lower than the opening time.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+		// } else if (s.getHours() > closing.getHours() && this.state.crudState !== 3){
+		// 	this.setState({ error: 'ERROR: Starting time is higher than the closing time.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+		// }else if (e.getHours() < opening.getHours() && this.state.crudState !== 3){
+		// 	this.setState({ error: 'ERROR: Ending time is lower than the opening time.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+		// } else if (e.getHours() > closing.getHours() && this.state.crudState !== 3){
+		// 	this.setState({ error: 'ERROR: Opening time is higher than the closing time.' })
+		// 	document.getElementById("error").classList.remove('d-none');
+		// 	return;
+		// }
 
 		//Pull all appointments for the day, and  check if they overlap
 
