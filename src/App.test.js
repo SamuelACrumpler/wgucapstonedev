@@ -1,22 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
- 
+import Adapter from 'enzyme-adapter-react-16';
+import { shallow, configure } from 'enzyme';
+
 import App from './App';
+configure({adapter: new Adapter()});
 
-import renderer from 'react-test-renderer';
-
-// describe('Counter', () => {
-//   test('snapshot renders', () => {
-//     const component = renderer.create(<App />);
-//     let tree = component.toJSON();
-//     expect(tree).toMatchSnapshot();
-//   });
-// });
-
-describe('Examining the syntax of Jest tests', () => {
-   
-  it('sums numbers', () => {
-      expect(1 + 2).toEqual(3);
-      expect(2 + 2).toEqual(4);
-   });
+describe('First React component test with Enzyme', () => {
+   it('renders without crashing', () => {
+      shallow(<App />);
+    });
 });

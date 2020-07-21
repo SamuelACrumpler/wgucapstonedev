@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './../css/login.css';
 
 
 class login extends Component {
@@ -41,7 +40,7 @@ class login extends Component {
 		this.setState(state);
 	}
 
-	onSubmit = (e) => {
+	onSubmit(e) {
 		e.preventDefault();
 
 		axios.get(this.state.path + ':5000/user/u/' + this.state.username)

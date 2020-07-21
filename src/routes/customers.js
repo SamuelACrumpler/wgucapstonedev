@@ -215,7 +215,6 @@ class customers extends Component {
 	}
 
 	onSubmit() {
-		console.log("Submit")
 		this.setState({ error: '' })
 		try{
 			if (this.state.name === '' && this.state.crudState !== 3) throw "ERROR: Name was left blank."
@@ -226,38 +225,21 @@ class customers extends Component {
 		}
 		catch(err){
 			this.setState({ error: err })
-			document.getElementById("error").classList.remove('d-none');
+			if(document.getElementById("error") !== null){
+				document.getElementById("error").classList.remove('d-none');
+			}
 			return;
 		}
-		// Check username database first for similar username
-		// if (this.state.user === '' && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Username was left blank.' })
-		// 	document.getElementById("error").classList.remove('d-none');
 
-		// 	return;
-		// } else if (this.state.pass === '' && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Password was left blank.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-		// 	return;
-
-		// } else if (this.state.cPass === '' && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Confirm Password was left blank.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-		// 	return;
-
-		// } else if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Passwords do not match.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-		// 	return;
-
-		// }
 
 		//database section
 		this.crudUse();
 
 		//Success section
-		document.getElementById("error").classList.add('d-none');
-
+		if(document.getElementById("error") !== null){
+			document.getElementById("error").classList.add('d-none');
+		}
+		
 		this.inputReset();
 
 		this.setState({

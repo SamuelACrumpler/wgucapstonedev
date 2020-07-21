@@ -111,6 +111,30 @@ class users extends Component {
 		
 	}
 
+	handleTestReset(){
+		let check = ""
+		let flag = false
+		axios.get(this.state.path + ':5000/user/u/TestDataDeleteMe')
+					.then(res => {
+						if (res.data !== null) {// as long as something is there
+							check = res.data._id;
+						} else {
+							flag = true;
+						}
+
+					}).finally(() => { 
+						if(flag === true){return}
+						axios.delete(this.state.path + ':5000/user/' + check)
+							.then(() => {
+
+							}).finally(() => {
+								//call refresh function
+								this.getAllUsers();
+
+							});
+					})
+		}
+
 	handleCrudChange(event) {
 		//consider clearing focus class from all options to solve that odd issue with save being stuck
 		console.log("current select:" + event.target.value)
@@ -183,32 +207,8 @@ class users extends Component {
 	}
 
 	onSubmit() {
-		console.log("Submit")
 		this.setState({ error: '' })
-
-		// Check username database first for similar username
-		// if (this.state.user === '' && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Username was left blank.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-
-		// 	return;
-		// } else if (this.state.pass === '' && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Password was left blank.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-		// 	return;
-
-		// } else if (this.state.cPass === '' && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Confirm Password was left blank.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-		// 	return;
-
-		// } else if (this.state.cPass !== this.state.pass && this.state.crudState !== 3) {
-		// 	this.setState({ error: 'ERROR: Passwords do not match.' })
-		// 	document.getElementById("error").classList.remove('d-none');
-		// 	return;
-
-		// } 
-		
+	
 		try{
 			if (this.state.user === '' && this.state.crudState !== 3) throw "ERROR: Username was left blank."
 			if (this.state.pass === '' && this.state.crudState !== 3) throw "ERROR: Password was left blank."
@@ -217,7 +217,12 @@ class users extends Component {
 		}
 		catch(err){
 			this.setState({ error: err })
-			document.getElementById("error").classList.remove('d-none');
+			console.log(this.state.user)
+			console.log(this.state.error)
+			if (document.getElementById("error") !== null) {
+				// .. it exists
+				document.getElementById("error").classList.remove('d-none');
+			}
 			return;
 		}
 		
@@ -226,7 +231,9 @@ class users extends Component {
 		this.crudUse();
 
 		//Success section
-		document.getElementById("error").classList.add('d-none');
+		if (document.getElementById("error") !== null) {
+			document.getElementById("error").classList.add('d-none');
+		}
 		this.setState({
 			user: this.state.editUser.username,
 			type: this.state.editUser.type,
@@ -238,7 +245,7 @@ class users extends Component {
 
 	}
 
-	onCancel(event) {
+	onCancel() {
 		console.log("Cancel called: lbl" + this.state.selectedName);
 		if (this.state.selectedName !== '') {
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('focus');
@@ -265,7 +272,7 @@ class users extends Component {
 			cPass: '',
 			selectedName: ''
 		});
-
+		console.log(document.getElementById("error"))
 		document.getElementById("error").classList.add('d-none');
 
 	}

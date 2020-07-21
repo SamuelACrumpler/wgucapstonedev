@@ -1,0 +1,355 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyComponent should render my component 1`] = `
+<div>
+  <nav
+    className="navbar navbar-expand-lg navbar-dark bg-dark static-top"
+  >
+    <div
+      className="container"
+    >
+      <a
+        className="navbar-brand"
+        href="#"
+      >
+        [Company Name] Scheduler
+      </a>
+      <button
+        aria-controls="navbarResponsive"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        className="navbar-toggler"
+        data-target="#navbarResponsive"
+        data-toggle="collapse"
+        type="button"
+      >
+        <span
+          className="navbar-toggler-icon"
+        />
+      </button>
+      <div
+        className="collapse navbar-collapse"
+        id="navbarResponsive"
+      >
+        <ul
+          className="navbar-nav ml-auto"
+        >
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="/main"
+            >
+              Main
+            </a>
+          </li>
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="/users"
+            >
+              Users
+            </a>
+          </li>
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="/customers"
+            >
+              Customers
+            </a>
+          </li>
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="/appointments"
+            >
+              Appointments
+            </a>
+          </li>
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="/reports"
+            >
+              Reports
+            </a>
+          </li>
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="/search"
+            >
+              Search
+            </a>
+          </li>
+          <li
+            className="nav-item"
+          >
+            <a
+              className="nav-link"
+              href="#"
+              onClick={[Function]}
+            >
+              Log Out
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div
+    className="container"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="col-lg-3 border d-none d-lg-block recent "
+      >
+        <div
+          className="row btn-group btn-group-toggle btn-group-special btn-group-vertical"
+          data-toggle="buttons"
+        />
+      </div>
+      <div
+        className="col-lg-9 border calendar "
+      >
+        <div
+          className="btn-group btn-group-toggle w-100"
+          data-toggle="buttons"
+        >
+          <label
+            className="btn btn-secondary active"
+            id="lbloption1"
+          >
+            <input
+              checked={true}
+              id="option1"
+              name="options"
+              onClick={[Function]}
+              type="radio"
+              value="option1"
+            />
+             New
+          </label>
+          <label
+            className="btn btn-secondary"
+            id="lbloption2"
+          >
+            <input
+              checked={false}
+              id="option2"
+              name="options"
+              onClick={[Function]}
+              type="radio"
+              value="option2"
+            />
+             Save
+          </label>
+          <label
+            className="btn btn-secondary"
+            id="lbloption3"
+          >
+            <input
+              checked={false}
+              id="option3"
+              name="options"
+              onClick={[Function]}
+              type="radio"
+              value="option3"
+            />
+             Delete
+          </label>
+        </div>
+        <h5
+          className="text-center"
+        >
+          Create New User
+        </h5>
+        <div
+          className="alert alert-danger d-none"
+          id="error"
+          role="alert"
+        >
+          
+        </div>
+        <div
+          className="input-group mb-3"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text"
+              id="basic-addon3"
+            >
+              Username
+            </span>
+          </div>
+          <input
+            aria-describedby="basic-addon3"
+            className="form-control"
+            disabled={false}
+            id="basic-url"
+            name="user"
+            onChange={[Function]}
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="input-group mb-3"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text"
+              id="basic-addon3"
+            >
+              Permission Type
+            </span>
+          </div>
+          <select
+            className="form-control"
+            disabled={false}
+            id="type"
+            name="type"
+            onChange={[Function]}
+            value="Admin"
+          >
+            <option>
+              Admin
+            </option>
+            <option>
+              Dispatcher
+            </option>
+            <option>
+              Field Worker
+            </option>
+          </select>
+        </div>
+        <div
+          className="input-group mb-3"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text"
+              id="basic-addon3"
+            >
+              Password
+            </span>
+          </div>
+          <input
+            aria-describedby="basic-addon3"
+            className="form-control"
+            disabled={false}
+            id="basic-url"
+            name="pass"
+            onChange={[Function]}
+            type="password"
+            value=""
+          />
+        </div>
+        <div
+          className="input-group mb-3"
+        >
+          <div
+            className="input-group-prepend"
+          >
+            <span
+              className="input-group-text"
+              id="basic-addon3"
+            >
+              Confirm Password
+            </span>
+          </div>
+          <input
+            aria-describedby="basic-addon3"
+            className="form-control"
+            disabled={false}
+            id="basic-url"
+            name="cPass"
+            onChange={[Function]}
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          className="btn btn-primary"
+          onClick={[Function]}
+          type="button"
+        >
+          Save
+        </button>
+         
+        <button
+          className="btn btn-primary"
+          onClick={[Function]}
+          type="button"
+        >
+          Cancel
+        </button>
+      </div>
+      <div
+        className="col border user d-lg-none "
+      >
+        <div
+          className="row namelist"
+        >
+          <button
+            className="btn btn-secondary btn-lg btn-block"
+            type="button"
+          >
+            admin
+          </button>
+        </div>
+        <div
+          className="row namelist"
+        >
+          <button
+            className="btn btn-secondary btn-lg btn-block"
+            type="button"
+          >
+            test
+          </button>
+        </div>
+        <div
+          className="row namelist"
+        >
+          <button
+            className="btn btn-secondary btn-lg btn-block"
+            type="button"
+          >
+            test
+          </button>
+        </div>
+        <div
+          className="row namelist"
+        >
+          <button
+            className="btn btn-secondary btn-lg btn-block"
+            type="button"
+          >
+            this is a really long name so get prepared for it!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
