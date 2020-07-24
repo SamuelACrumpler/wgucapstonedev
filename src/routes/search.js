@@ -1,10 +1,5 @@
-/*
-    Load all titles and names
-    onChange for the search bar, check for things that contain the search string
-    use localStorage to store the value
-    OnJump, go to a page, and load the data from that page.
 
-*/
+
 import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './../routes/nav';
@@ -36,7 +31,13 @@ class search extends Component {
 		//Map out the appropriate options
     }
 
-  
+    componentDidMount() {
+		//this.checkLoginSession();
+		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
+			this.props.history.push('/')
+		}
+
+	}
 
     onSubmit(){
         console.log(this.state.search)
@@ -142,7 +143,7 @@ class search extends Component {
                     </div>
                     <div className="row border">
                         <div className="col-lg">
-                        <table className="table table-striped">
+                        <table className="table table-striped table-fix">
                                 <thead className="thead-dark">
                                     <tr>
                                     {
@@ -163,8 +164,9 @@ class search extends Component {
                                 <tbody id="tbluse" className="empty-square all-apps "> 
                                     {
                                         this.state.tbluse.map((data, index) => (
+                                            
                                         <tr>    
-                                            <th scope='col' key={index}>User: {data.username}</th>
+                                            <th scope='col' key={index}> {"User: " +data.username}</th>
                                             <td>{data.createdBy}</td>
                                             <td>{data.updatedBy}</td>
                                             <td>{data.updatedDate}</td>

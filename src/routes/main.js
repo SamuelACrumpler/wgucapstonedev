@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './../routes/nav';
 
@@ -43,6 +41,9 @@ class main extends Component {
 	componentDidMount() {
 		//this.checkLoginSession();
 
+		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn")) {
+			this.props.history.push('/')
+		}
 		
 		let d = new Date();
 		
@@ -82,7 +83,6 @@ class main extends Component {
 					title: t[0].title,
 					cust : this.state.listcust[t[0].custid],
 					worker : this.state.listwork[t[0].userid],
-					//add worker section here
 					add : this.state.listcust['add:'+t[0].custid],
 					stime : t[0].stime,
 					etime : t[0].etime,
@@ -102,12 +102,6 @@ class main extends Component {
 		}
 				
 	}
-
-	logout() {
-		//reset login credidentals in local storage. Run checkLoginSession to boot user back to login page.
-	}
-
-
 
 
 	checkLoginSession() {

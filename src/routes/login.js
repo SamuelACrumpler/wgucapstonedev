@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -27,7 +25,7 @@ class login extends Component {
 	//First Run check. If there is no users. Add the following  admin/admin as user/pass
 
 	componentDidMount() {
-		//this.checkLoginSession();
+		this.checkLoginSession();
 		//this.dropCheck();
 		this.checkUserCount();
 	}
@@ -49,42 +47,31 @@ class login extends Component {
 				console.log(this.state.user); //pulls the user if it exists
 			}).finally(() => {
 
-				if (this.state.username === "") {
-					this.setState({ error: 'Username is empty' });
-					return;
-				}
-				if (this.state.password === "") {
-					this.setState({ error: 'Password is empty' });
-					return;
-				}
 
-
-				if (this.state.user === null) {
-					this.setState({ error: 'Username or password is incorrect' });
+				try{
+					if (this.state.username === '' ) throw "ERROR: Username was left blank."
+					if (this.state.password === '' ) throw "ERROR: Password was left blank."
+					if (this.state.user === null ) throw "ERROR: Username or password is incorrect."
+					if (this.state.user.password !== this.state.password ) throw "ERROR: Username or password is incorrect."
+					
+				}
+				catch(err){
+					this.setState({ error: err })
+					if (document.getElementById("error") !== null) {
+						document.getElementById("error").classList.remove('d-none');
+					}
 					return;
 				}
-				else if (this.state.user.password !== this.state.password) {
-					this.setState({ error: 'Username or password is incorrect' });
-					return;
-				}
+				
 
 				this.createLoginSession();
 
 				this.props.history.push("/main")
 
 			});
+			
 
 	}
-
-	dropCheck() {
-		axios.delete(this.state.path + ':5000/user/deleteall')
-			.then(res => {
-				console.log("Ihatethis: " + res);
-			});
-
-	};
-
-	
 
 
 	checkUserCount() {
@@ -110,7 +97,6 @@ class login extends Component {
 
 					axios.post('http://localhost:5000/user', { username, password, updatedBy, createdBy, updatedDate, createdDate })
 						.then((result) => {
-							this.props.history.push("/")
 						});
 				}
 			});
@@ -118,14 +104,18 @@ class login extends Component {
 
 
 	checkLoginSession() {
-		if (localStorage.getItem("isLoggedIn") === 'true') {
+		if (localStorage.getItem("isLoggedIn") === 'false'  || !localStorage.getItem("isLoggedIn")) {
+			this.props.history.push("/")
+		} else if(localStorage.getItem("isLoggedIn") === 'true'){
 			this.props.history.push("/main")
+
 		}
 	}
 
 	createLoginSession() {
 		console.log(this.state.user._id);
 		localStorage.setItem("userId", this.state.user._id);
+		localStorage.setItem("userType", this.state.user.type);
 		localStorage.setItem("isLoggedIn", true);
 	}
 

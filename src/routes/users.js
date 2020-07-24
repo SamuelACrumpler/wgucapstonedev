@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './../routes/nav';
 
@@ -46,7 +44,10 @@ class users extends Component {
 
 	componentDidMount() {
 		//this.checkLoginSession();
-		this.setState({ test: ['admin', 'test', 'test', 'this is a really long name so get prepared for it!'] })
+		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin") {
+			this.props.history.push('/')
+		}
+
 		this.setState({ cUser: localStorage.getItem("currentUser")})
 		this.getAllUsers();
 		console.log("user")
@@ -217,10 +218,7 @@ class users extends Component {
 		}
 		catch(err){
 			this.setState({ error: err })
-			console.log(this.state.user)
-			console.log(this.state.error)
 			if (document.getElementById("error") !== null) {
-				// .. it exists
 				document.getElementById("error").classList.remove('d-none');
 			}
 			return;
@@ -297,7 +295,6 @@ class users extends Component {
 
 	crudUse() {
 
-		//this.state.user[this.state.selected]._password
 		const uid = ''
 		const cuser = ''
 		const username = this.state.user
@@ -308,9 +305,6 @@ class users extends Component {
 		const udate = new Date();
 		const cdate = new Date();
 		console.log("test this mess: " + updatedBy)
-		//if (username === '') { console.log("Empty String"); return; }
-		//else if (type === '') { console.log("Empty String Type"); return; }
-		//else if (password === '') { console.log("Empty String"); return; }
 		
 		switch (this.state.crudState) {
 			case 0: //create
@@ -388,22 +382,6 @@ class users extends Component {
 	}
 
 
-	//https://codepen.io/chrisdpratt/pen/OOybam
-	//Configure the calendar header to disappear at a certain size, and only display the days
-	//day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted
-
-
-	// foreach in getusers
-	// put in array
-	// map array
-
-
-	// Create submit form
-	// Create error section
-	// Write save
-	// Write read
-	// Write edit
-	// Write delete
 
 	render() {
 		return (

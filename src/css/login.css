@@ -149,6 +149,15 @@ myauto {
 	vertical-align: middle;
 }
 
+.table-fix th{
+	overflow-wrap: anywhere;
+}
+
+
+.overflow{
+	overflow-wrap: anywhere;
+}
+
 .daynum {
 	position: absolute;
 	top: 0;

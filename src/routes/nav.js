@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
-
+//import history from './history'
+import { useHistory } from "react-router-dom";
 class Navbar extends Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			
+		}
 
 		//consider making navbar part of a state array based on users.
 		//Map out the appropriate options
 	}
+	
+	//admin see all
+	//dispatchers cannot see users section
+	//field workers can only see appointments
 
 	onLogout(){
 		console.log("This will log you out.")
+		localStorage.setItem("isLoggedIn", false) 
+		localStorage.setItem("userId", '') 
+		localStorage.setItem("userType", '') 
+
 	}
 
 	render() {
@@ -43,7 +56,7 @@ class Navbar extends Component {
 								<a className="nav-link" href="/search">Search</a>
 							</li>
 							<li className="nav-item">
-								<a className="nav-link" href="#" onClick={this.onLogout}>Log Out</a>
+								<a className="nav-link" href="" onClick={this.onLogout}>Log Out</a>
 							</li>
 						</ul>
 					</div>

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './../routes/nav';
 
@@ -49,7 +47,10 @@ class customers extends Component {
 
 	componentDidMount() {
 		//this.checkLoginSession();
-		this.setState({ test: ['admin', 'test', 'test', 'this is a really long name so get prepared for it!'] })
+		console.log(localStorage.getItem("userType") === "")
+		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
+			this.props.history.push('/')
+		}
 		this.setState({
 			cUser: localStorage.getItem("currentUser"),
 			uid: localStorage.getItem("userId")
@@ -239,7 +240,7 @@ class customers extends Component {
 		if(document.getElementById("error") !== null){
 			document.getElementById("error").classList.add('d-none');
 		}
-		
+
 		this.inputReset();
 
 		this.setState({

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './../routes/nav';
 
@@ -67,8 +65,11 @@ class appointments extends Component {
 	}
 
 	componentDidMount() {
-		//this.checkLoginSession();
-		//this.setState({ test: ['admin', 'test', 'test', 'this is a really long name so get prepared for it!'] })
+
+		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
+			this.props.history.push('/')
+		}
+
 		this.getAllDocuments();
 		this.getAllCustomers();
 		this.getAllWorkers();
@@ -78,10 +79,6 @@ class appointments extends Component {
 		})
 		
 
-	}
-
-	logout() {
-		//reset login credidentals in local storage. Run checkLoginSession to boot user back to login page.
 	}
 
 	crudRefresh(o, n) {
@@ -153,8 +150,6 @@ class appointments extends Component {
 	}
 
 	handleEditChange(event) {
-		console.log("current select:" + event.target.value)
-		console.log("current select2:" + event.target.value)
 		let i = event.target.value;
 
 
@@ -205,9 +200,6 @@ class appointments extends Component {
 					selectedIndex: i,
 					crudState: 2
 				});
-				console.log(this.state.edit.custid)
-				console.log("oldty: " + oldty);
-				console.log("ty: " + this.state.type); 
 
 				this.typeRefresh(oldty, this.getTypeVal(this.state.type))
 
@@ -238,23 +230,14 @@ class appointments extends Component {
 	}
 
 	handleCrudChange(event) {
-		//consider clearing focus class from all options to solve that odd issue with save being stuck
-		console.log("current select:" + event.target.value)
 
 		if (event.target.value === 'option1') {
 
-			console.log('save time')
 			document.getElementById("error").classList.add('d-none');
 
 			this.inputReset();
 
 			this.setState({
-				//name: '',
-				//address: '',
-				//address2: '',
-				//city: '',
-				//zip: '',
-				//phone: '',
 				lbutton: 'Save',
 				selectedName: '',
 				selectedIndex: -1,
@@ -275,7 +258,6 @@ class appointments extends Component {
 				return;
 			}
 
-			console.log('save time')
 			this.setState({
 				lbutton: 'Save',
 				disabled: false,
@@ -296,7 +278,6 @@ class appointments extends Component {
 				return;
 			}
 
-			console.log('sdel time')
 			this.setState({
 				lbutton: 'Delete',
 				disabled: true,
@@ -311,8 +292,6 @@ class appointments extends Component {
 	}
 
 	handleAppChange(event) {
-		//consider clearing focus class from all options to solve that odd issue with save being stuck
-		console.log("current select:" + event.target.value)
 
 		if (event.target.value === 'apptype1') {
 			document.getElementById("tasks").classList.remove('d-none');
@@ -347,7 +326,6 @@ class appointments extends Component {
 	}
 
 	handleCustomerChange(event) {
-		console.log("current select:" + event.target.name)
 		this.setState({
 			selCust: this.state.customers[event.target.value].name,
 			custid: this.state.customers[event.target.value]._id,
@@ -357,7 +335,6 @@ class appointments extends Component {
 	}
 
 	onChecked() {
-		console.log("cheked: " + this.state.overlap)
 		if (this.state.overlap === false)
 			this.setState({ overlap: true })
 		if (this.state.overlap === true)
@@ -407,17 +384,13 @@ class appointments extends Component {
 				res.data.forEach(app => {
 					
 					//create error flag, then make a check in the finally section to stop the process from completeing
-					console.log( stime >= new Date(app.stime) && stime <= new Date(app.etime))
-					console.log(this.state.workerid + " : " + app.userid)
 					if(stime >= new Date(app.stime) && stime <= new Date(app.etime) && this.state.workerid === app.userid && this.state.crudState !== 3 && this.state.overlap === false){
 						eflag = true;
-						console.log("error happened, but didn't cancel the process")
 						this.setState({ error: 'ERROR: Start time is overlapping with another appointment called: ' + app.title + "; Assigned to the currently selected worker"})
 						document.getElementById("error").classList.remove('d-none');
 						return; //this is working but it is not properly cancelling saving the information
 					}else if(etime >= new Date(app.stime) && etime <= new Date(app.etime) && this.state.workerid === app.userid && this.state.crudState !== 3 && this.state.overlap === false){
 						eflag = true;
-						console.log("error happened, but didn't cancel the process or works thatuinwaiknmtakln")
 						this.setState({ error: 'ERROR: End time is overlapping with another appointment called: ' + app.title + "; Assigned to the currently selected worker"})
 						document.getElementById("error").classList.remove('d-none');
 						return;
@@ -447,7 +420,6 @@ class appointments extends Component {
 	}
 
 	onCancel(event) {
-		console.log("Cancel called: lbl" + this.state.selectedName);
 		if (this.state.selectedName !== '') {
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('focus');
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('active');
@@ -483,7 +455,6 @@ class appointments extends Component {
 				{ custid : event.target.value}
 			)
 		} else if( event.target.name === 'worker'){
-			console.log("name: " +  event.target.name)
 
 
 			this.setState(
@@ -494,12 +465,9 @@ class appointments extends Component {
 	}
 
 	onChange(event) {
-		console.log("eventname: " + event.target.name);
-		console.log("eventvalue: " + event.target.value);
 	
 		const state = this.state
 		state[event.target.name] = event.target.value;
-		console.log(this.state)
 		this.setState(state);
 		let s = '';
 		let e = '';
@@ -535,23 +503,7 @@ class appointments extends Component {
 			
 		}
 
-		
-
-		//if (this.state.stime !== '' && this.state.etime !== '' && this.state.rate !== '') {
-		//	//error check. etime must be higher than stime
-		//	//let s = this.roundMinutes(this.state.stime)
-		//	//let e = this.roundMinutes(this.state.etime)
-		//	if (e.getHours() > s.getHours()) { //end hours greater than start hours
-		//		let v = this.state.rate * (e.getHours() - s.getHours());
-		//		this.setState({ total: v })
-		//	} else if (e.getHours() < s.getHours()) {
-				
-
-		//	}
-		//	//round stime
-		//	//round etime
-			
-		//}
+	
 	}
 
 	//[CRUD Functions] - User
@@ -575,21 +527,18 @@ class appointments extends Component {
 			.then(res => {
 				
 				res.data.forEach(user => {
-					console.log(user.type);
 					if(user.type === "Field Worker"){
 						tempworkers.push(user)
 					}
 				});
 
 				this.setState({ workers: tempworkers });
-				console.log(this.state.workers)
 			});
 	}
 
 
 	crudUse() {
 
-		//this.state.user[this.state.selected]._password
 
 		const userid = this.state.workerid;
 		const custid = this.state.custid
@@ -598,7 +547,6 @@ class appointments extends Component {
 		const supply = this.state.supply
 		const total = this.state.total
 		const hours = this.state.hours
-		//const isHourly = this.state.isHourly
 		const stime = new Date(this.state.date + " " + this.state.stime);
 		const etime = new Date(this.state.date + " " + this.state.etime);
 		const overlap = this.state.overlap
@@ -609,8 +557,6 @@ class appointments extends Component {
 		const updatedBy = this.state.cUser;
 		const udate = new Date();
 		let cdate = new Date();
-		console.log("test this mess: " + updatedBy)
-		console.log(this.state.crudState)
 
 		switch (this.state.crudState) {
 			case 0: //create
@@ -619,7 +565,6 @@ class appointments extends Component {
 				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, tasks, notes, stime, etime, createdBy, updatedBy, cdate, udate })
 					.then((result) => {
 					}).finally(() => {
-						console.log("test to see if I got here.")
 						//call refresh function
 						this.getAllDocuments();
 						this.getAllCustomers();

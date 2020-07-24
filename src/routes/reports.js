@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import { appointment, routapp, consapp, specapp} from './../js/classes/appointment';
+import { appointment, routapp, specapp} from './../js/classes/appointment';
 import axios from 'axios';
 import Navbar from './../routes/nav';
 
@@ -36,6 +34,10 @@ class reports extends Component {
     }
     
     componentDidMount(){
+        if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin") {
+			this.props.history.push('/')
+		}
+
         let all = ["Month", "Appointments", "Sum", "Average", "Routine Jobs", "Consultations", "Special Orders"]
         this.setState({
             categories: all
@@ -120,45 +122,6 @@ class reports extends Component {
         });
     }
 
-        // console.log("date test" + new Date(app.stime))
-                    // switch (app.indexMonth()){
-                    //     case 0:
-                    //         if()
-                    //         break;
-                    //     case 1:
-
-                    //         break;
-                    //     case 2:
-
-                    //         break; 
-                    //     case 3:
-
-                    //         break;   
-                    //     case 4:
-
-                    //         break;
-                    //     case 5:
-
-                    //         break;
-                    //     case 6:
-
-                    //         break;  
-                    //     case 7:
-
-                    //         break;   
-                    //     case 8:
-
-                    //         break;
-                    //     case 9:
-
-                    //         break;   
-                    //     case 10:
-
-                    //         break; 
-                    //     case 11:
-
-                    //         break;            
-                    // }
 
     getAllApps(i){
 
@@ -231,13 +194,7 @@ class reports extends Component {
     */
     }
 
-    // getAllCusts(){
-    //     //ignore for now
-    // }
-
-    // getAllUsers(){
-    //     //ignore for now
-    // }
+ 
 
     changeYear(i){
         this.getAllApps(this.state.year+i);
@@ -415,17 +372,6 @@ class reports extends Component {
         console.log(this.state.tblall)
     }
 
-    loadLabor(){
-
-    }
-
-    loadCons(){
-
-    }
-
-    loadSpec(){
-
-    }
 
 	render() {
 		return (
@@ -473,89 +419,92 @@ class reports extends Component {
 									</button>	
 								</div>
 							</div>
-                            <table className="table table-striped">
-                                <thead className="thead-dark">
-                                    <tr>
-                                    {
-                                        this.state.categories.map((header, index) => (
-                                        <th scope="col" key={index}>{header}</th>
+							<div className="col-lg ">
+
+                                <table className="table table-striped table-fix">
+                                    <thead className="thead-dark">
+                                        <tr>
+                                        {
+                                            this.state.categories.map((header, index) => (
+                                            <th scope="col" key={index}>{header}</th>
+                                                )
                                             )
-                                        )
 
-                                    }
-
-                                    </tr>
-
-                                    
-                                </thead>
-                                <tbody id="tblall" className="empty-square all-apps"> 
-                                    {
-                                        this.state.tblall.map((data, index) => (
-                                        <tr>    
-                                            <th scope="col" key={index}>{this.getMonthName(index)}</th>
-                                            <td>{data.count}</td>
-                                            <td>{data.sum}</td>
-                                            <td>{data.avg}</td>
-                                            <td>{data.rout}</td>
-                                            <td>{data.cons}</td>
-                                            <td>{data.spec}</td>
+                                        }
 
                                         </tr>
+
+                                        
+                                    </thead>
+                                    <tbody id="tblall" className="empty-square all-apps"> 
+                                        {
+                                            this.state.tblall.map((data, index) => (
+                                            <tr>    
+                                                <th scope="col" key={index}>{this.getMonthName(index)}</th>
+                                                <td>{data.count}</td>
+                                                <td>{data.sum}</td>
+                                                <td>{data.avg}</td>
+                                                <td>{data.rout}</td>
+                                                <td>{data.cons}</td>
+                                                <td>{data.spec}</td>
+
+                                            </tr>
+                                                )
                                             )
-                                        )
 
-                                    }
-                                </tbody>
+                                        }
+                                    </tbody>
 
-                                <tbody id="tblrou" className="empty-square all-apps d-none"> 
-                                    {
-                                        this.state.tblrou.map((data, index) => (
-                                        <tr>    
-                                            <th scope="col" key={index}>{this.getMonthName(index)}</th>
-                                            <td>{data.count}</td>
-                                            <td>{data.sum}</td>
-                                            <td>{data.avg}</td>
-                                            <td>{data.tasks}</td>
-                                            <td>{data.avgtasks}</td>
+                                    <tbody id="tblrou" className="empty-square all-apps d-none"> 
+                                        {
+                                            this.state.tblrou.map((data, index) => (
+                                            <tr>    
+                                                <th scope="col" key={index}>{this.getMonthName(index)}</th>
+                                                <td>{data.count}</td>
+                                                <td>{data.sum}</td>
+                                                <td>{data.avg}</td>
+                                                <td>{data.tasks}</td>
+                                                <td>{data.avgtasks}</td>
 
-                                        </tr>
+                                            </tr>
+                                                )
                                             )
-                                        )
 
-                                    }
-                                </tbody>
+                                        }
+                                    </tbody>
 
-                                <tbody id="tblcon" className="empty-square all-apps d-none"> 
-                                    {
-                                        this.state.tblcon.map((data, index) => (
-                                        <tr>    
-                                            <th scope="col" key={index}>{this.getMonthName(index)}</th>
-                                            <td>{data.count}</td>
-                                        </tr>
+                                    <tbody id="tblcon" className="empty-square all-apps d-none"> 
+                                        {
+                                            this.state.tblcon.map((data, index) => (
+                                            <tr>    
+                                                <th scope="col" key={index}>{this.getMonthName(index)}</th>
+                                                <td>{data.count}</td>
+                                            </tr>
+                                                )
                                             )
-                                        )
 
-                                    }
-                                </tbody>
+                                        }
+                                    </tbody>
 
-                                <tbody id="tblspe" className="empty-square all-apps d-none"> 
-                                    {
-                                        this.state.tblspe.map((data, index) => (
-                                        <tr>    
-                                            <th scope="col" key={index}>{this.getMonthName(index)}</th>
-                                            <td>{data.count}</td>
-                                            <td>{data.sum}</td>
-                                            <td>{data.avg}</td>
-                                            <td>{data.sup}</td>
-                                            <td>{data.supavg}</td>
+                                    <tbody id="tblspe" className="empty-square all-apps d-none"> 
+                                        {
+                                            this.state.tblspe.map((data, index) => (
+                                            <tr>    
+                                                <th scope="col" key={index}>{this.getMonthName(index)}</th>
+                                                <td>{data.count}</td>
+                                                <td>{data.sum}</td>
+                                                <td>{data.avg}</td>
+                                                <td>{data.sup}</td>
+                                                <td>{data.supavg}</td>
 
-                                        </tr>
+                                            </tr>
+                                                )
                                             )
-                                        )
 
-                                    }
-                                </tbody>
-                            </table>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
