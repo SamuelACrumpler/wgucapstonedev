@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './../routes/nav';
+import Top from './../routes/top';
+
 
 
 class customers extends Component {
@@ -46,10 +48,10 @@ class customers extends Component {
 	}
 
 	componentDidMount() {
-		//this.checkLoginSession();
 		console.log(localStorage.getItem("userType") === "")
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
-			this.props.history.push('/')
+			if(this.props.history !== undefined){this.props.history.push('/')}
+
 		}
 		this.setState({
 			cUser: localStorage.getItem("currentUser"),
@@ -58,9 +60,6 @@ class customers extends Component {
 		this.getAllDocuments();
 	}
 
-	logout() {
-		//reset login credidentals in local storage. Run checkLoginSession to boot user back to login page.
-	}
 
 	crudRefresh(o, n) {
 		document.getElementById("lbloption" + o).classList.remove('focus');
@@ -98,8 +97,6 @@ class customers extends Component {
 
 
 	handleEditChange(event) {
-		console.log("current select:" + event.target.value)
-		console.log("current select2:" + event.target.value)
 		let i = event.target.value;
 
 
@@ -114,9 +111,6 @@ class customers extends Component {
 				selCrud: 'option2'
 			});
 		}
-
-		//needs to read from database and put in the information 
-
 
 		axios.get(this.state.path + ':5000/customer/' + this.state.documents[i]._id)
 			.then((res) => {
@@ -139,27 +133,18 @@ class customers extends Component {
 
 			});
 
-
 	}
 
 	handleCrudChange(event) {
-		//consider clearing focus class from all options to solve that odd issue with save being stuck
-		console.log("current select:" + event.target.value)
 
 		if (event.target.value === 'option1') {
 
-			console.log('save time')
 			document.getElementById("error").classList.add('d-none');
 
 			this.inputReset();
 
 			this.setState({
-				//name: '',
-				//address: '',
-				//address2: '',
-				//city: '',
-				//zip: '',
-				//phone: '',
+	
 				lbutton: 'Save',
 				selectedName: '',
 				selectedIndex: -1,
@@ -232,7 +217,6 @@ class customers extends Component {
 			return;
 		}
 
-
 		//database section
 		this.crudUse();
 
@@ -269,7 +253,6 @@ class customers extends Component {
 			});
 		}
 
-
 		this.inputReset();
 
 
@@ -282,7 +265,6 @@ class customers extends Component {
 	}
 
 	onChange(event) {
-		console.log("eventname: " + event.target.name);
 		const state = this.state
 		state[event.target.name] = event.target.value;
 		this.setState(state);
@@ -298,7 +280,6 @@ class customers extends Component {
 
 	crudUse() {
 
-		//this.state.user[this.state.selected]._password
 		const uid = this.state.uid
 		const name = this.state.name
 		const address = this.state.address
@@ -377,34 +358,15 @@ class customers extends Component {
 		localStorage.setItem("isLoggedIn", true);
 	}
 
-
-	//https://codepen.io/chrisdpratt/pen/OOybam
-	//Configure the calendar header to disappear at a certain size, and only display the days
-	//day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted
-
-
-	// foreach in getusers
-	// put in array
-	// map array
-
-
-	// Create submit form
-	// Create error section
-	// Write save
-	// Write read
-	// Write edit
-	// Write delete
-
 	render() {
 		return (
-
-
 			<div>
 				<Navbar />
+				<Top />
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-3 border d-none d-lg-block recent ">
-							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical" data-toggle="buttons">
+						<div className="col-lg-3 border d-none d-lg-block recent height-cap">
+							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical force-scroll" data-toggle="buttons">
 								{
 									this.state.documents.map((document, index) => (
 
@@ -418,21 +380,6 @@ class customers extends Component {
 							</div>
 						</div>
 						<div className="col-lg-9 border input-col ">
-							<div>
-								Selected option is : {this.state.selCrud}
-							</div>
-							<div>
-								Selected user is : {this.state.selectedName}
-							</div>
-							<div>
-								crudstate : {this.state.crudState}
-							</div>
-							<div>
-								cruUsers : {this.state.cUser}
-							</div>
-							<div>
-								cruUsers : {this.state.edit.name}
-							</div>
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">
 									<input type="radio" name="options" id="option1" value="option1"  onClick={this.handleCrudChange} /> New
@@ -504,10 +451,10 @@ class customers extends Component {
 								this.state.documents.map((document, index) => (
 
 
-									<div className="row namelist" key={index}>
-										<button type="button" className="btn btn-secondary btn-lg btn-block">{document.name}</button>
-									</div>
-								)
+										<div className="row namelist" key={index}>
+											<button type="button" className="btn btn-secondary btn-lg btn-block">{document.name}</button>
+										</div>
+									)
 								)
 
 							}

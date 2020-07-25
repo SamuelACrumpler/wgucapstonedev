@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
-//import history from './history'
-import { useHistory } from "react-router-dom";
 class Navbar extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			admin : [{title: 'Main', link: '/main'},{title: 'Users', link: '/users'},{title: 'Customers', link: '/customers'},{title: 'Appointments', link: '/appointments'},{title: 'Reports', link: '/reports'},{title: 'Search', link: '/search'}],
+			dispatcher : [{title: 'Main', link: '/main'},{title: 'Customers', link: '/customers'},{title: 'Appointments', link: '/appointments'}],
+			worker : [{title: 'Main', link: '/main'}],
+			list : []
+
 			
+
 		}
 
 		//consider making navbar part of a state array based on users.
 		//Map out the appropriate options
+	}
+
+	componentDidMount() {
+		console.log(this.state.admin)
+		if(localStorage.getItem('userType') === 'Admin'){
+			this.setState({list : this.state.admin})
+		} else if (localStorage.getItem('userType') === 'Dispatcher'){
+			this.setState({list : this.state.dispatcher})
+		} else {
+			this.setState({list : this.state.worker})
+		}
 	}
 	
 	//admin see all
@@ -35,26 +50,23 @@ class Navbar extends Component {
 					</button>
 					<div className="collapse navbar-collapse" id="navbarResponsive">
 						<ul className="navbar-nav ml-auto">
-							<li className="nav-item">
-								<a className="nav-link" href="/main">Main
-								</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="/users">Users
-								</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="/customers">Customers</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="/appointments">Appointments</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="/reports">Reports</a>
-							</li>
-							<li className="nav-item">
-								<a className="nav-link" href="/search">Search</a>
-							</li>
+
+							{
+								this.state.list.map((list, index) => (
+
+
+							
+
+										<li className="nav-item" key={index}>
+											<a className="nav-link" href={list.link}>{list.title}</a>
+									
+										</li>
+									)
+								)
+
+							}
+
+					
 							<li className="nav-item">
 								<a className="nav-link" href="" onClick={this.onLogout}>Log Out</a>
 							</li>

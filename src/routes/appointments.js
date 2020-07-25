@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './../routes/nav';
+import Top from './../routes/top';
 
 
 class appointments extends Component {
@@ -67,7 +68,8 @@ class appointments extends Component {
 	componentDidMount() {
 
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
-			this.props.history.push('/')
+			if(this.props.history !== undefined){this.props.history.push('/')}
+
 		}
 
 		this.getAllDocuments();
@@ -167,9 +169,6 @@ class appointments extends Component {
 		if(this.state.custid === undefined){
 			document.getElementById('customer').selectedIndex = "0";
 		}
-
-		//needs to read from database and put in the information 
-
 
 		axios.get(this.state.path + ':5000/appointment/' + this.state.documents[i]._id)
 			.then((res) => {
@@ -351,7 +350,6 @@ class appointments extends Component {
 		let	closing = new Date(this.state.date + " " + "20:00");
 		let	s = new Date(this.state.date + " " + this.state.stime);
 		let	e = new Date(this.state.date + " " + this.state.etime);
-		// Check username database first for similar username
 
 		try{
 			if (this.state.title === '' && this.state.crudState !== 3) throw "ERROR: Title was left blank."
@@ -361,7 +359,6 @@ class appointments extends Component {
 			if (this.state.stime === undefined && this.state.crudState !== 3) throw "ERROR: Start time was not selected."
 			if (this.state.etime === undefined && this.state.crudState !== 3) throw "ERROR: End time was not selected."
 			if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type !== 'cons') throw "ERROR: Charge rate was left blank." 
-			//if (this.state.rate === '' && this.state.crudState !== 3 && this.state.type === 'spec')	throw "ERROR: Charge rate was left blank." 
 			if (this.state.total === '' && this.state.crudState !== 3 && this.state.type !== 'cons') throw "ERROR: Total rate was left blank." 
 			if (e.getHours() < s.getHours() && this.state.crudState !== 3) throw "ERROR: Ending time must be higher than starting time. "
 			if (s.getHours() < opening.getHours() && this.state.crudState !== 3) throw "ERROR: Starting time is lower than the opening time."
@@ -383,12 +380,11 @@ class appointments extends Component {
 			.then((res) => {
 				res.data.forEach(app => {
 					
-					//create error flag, then make a check in the finally section to stop the process from completeing
 					if(stime >= new Date(app.stime) && stime <= new Date(app.etime) && this.state.workerid === app.userid && this.state.crudState !== 3 && this.state.overlap === false){
 						eflag = true;
 						this.setState({ error: 'ERROR: Start time is overlapping with another appointment called: ' + app.title + "; Assigned to the currently selected worker"})
 						document.getElementById("error").classList.remove('d-none');
-						return; //this is working but it is not properly cancelling saving the information
+						return; 
 					}else if(etime >= new Date(app.stime) && etime <= new Date(app.etime) && this.state.workerid === app.userid && this.state.crudState !== 3 && this.state.overlap === false){
 						eflag = true;
 						this.setState({ error: 'ERROR: End time is overlapping with another appointment called: ' + app.title + "; Assigned to the currently selected worker"})
@@ -483,8 +479,6 @@ class appointments extends Component {
 			let s2 = (s.getHours()+s.getMinutes()/60); 
 
 			if (e.getHours() < s.getHours()) {
-				// this.setState({ error: 'ERROR: Ending time must be higher than starting time. ' })
-				// document.getElementById("error").classList.remove('d-none');
 				return;
 			}
 
@@ -493,7 +487,7 @@ class appointments extends Component {
 				let v = this.state.rate * (e2 - s2) + parseFloat(this.state.supply);
 				this.setState({ total: v.toFixed(2),
 					hours: (e2-s2).toFixed(1)
-				}) //should round these numbers for the total
+				}) 
 			} else {
 				let v = this.state.rate * (e2 - s2);
 				this.setState({ total: v.toFixed(2), 
@@ -622,18 +616,6 @@ class appointments extends Component {
 	}
 
 
-	checkLoginSession() {
-		if (localStorage.getItem("isLoggedIn") === 'true') {
-			this.props.history.push("/Main")
-		}
-	}
-
-	createLoginSession() {
-		console.log(this.state.user._id);
-		localStorage.setItem("userId", this.state.user._id);
-		localStorage.setItem("isLoggedIn", true);
-	}
-
 
 	
 	render() {
@@ -642,10 +624,11 @@ class appointments extends Component {
 
 			<div>
 				<Navbar />
+				<Top />
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-3 border d-none d-lg-block recent ">
-							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical" data-toggle="buttons">
+						<div className="col-lg-3 border d-none d-lg-block recent height-cap">
+							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical force-scroll" data-toggle="buttons">
 								{
 									this.state.documents.map((document, index) => (
 
@@ -659,42 +642,7 @@ class appointments extends Component {
 							</div>
 						</div>
 						<div className="col-lg-9 border input-col ">
-							<div>
-								Selected option is : {this.state.selCrud}
-							</div>
-							<div>
-								Selected user is : {this.state.selectedName}
-							</div>
-							<div>
-								crudstate : {this.state.crudState}
-							</div>
-							<div>
-								cruUsers : {this.state.cUser}
-							</div>
-							<div>
-								date : {this.state.date+""}
-							</div>
-							<div>
-								stime : {this.state.stime+""}
-							</div>
-							<div>
-								overlap : {this.state.overlap+""}
-							</div>
-							<div>
-								type : {this.state.type + ""}
-							</div>
-							<div>
-								customer : {this.state.custid + ""}
-							</div>
-							<div>
-								worker : {this.state.workerid + ""}
-							</div>
-							<div>
-								tasks : {this.state.tasks + ""}
-							</div>
-							<div>
-								hours : {this.state.hours + ""}
-							</div>
+						
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
 								<label id="lbloption1" className="btn btn-secondary active">
 									<input type="radio" name="options" id="option1" value="option1" onClick={this.handleCrudChange} /> New
@@ -825,18 +773,20 @@ class appointments extends Component {
 						</div>
 
 						<div className="col border user d-lg-none ">
-							{
-								this.state.documents.map((document, index) => (
+							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical" data-toggle="buttons">
+								{
+									this.state.documents.map((document, index) => (
 
+										<label key={'customer' + index} id={'lbluser' + index} className="btn btn-secondary w-100">
+											<input type="radio" name="user" id={'user' + index} value={index} onClick={this.handleEditChange} />{document.title}
+										</label>
 
-									<div className="row namelist" key={index}>
-										<button type="button" className="btn btn-secondary btn-lg btn-block">{document.name}</button>
-									</div>
-								)
-								)
+										
+									)
+									)
 
-							}
-
+								}
+							</div>
 						</div>
 					</div>
 				</div>

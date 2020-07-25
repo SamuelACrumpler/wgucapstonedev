@@ -115,6 +115,7 @@ class login extends Component {
 	createLoginSession() {
 		console.log(this.state.user._id);
 		localStorage.setItem("userId", this.state.user._id);
+		localStorage.setItem("username", this.state.user.username);
 		localStorage.setItem("userType", this.state.user.type);
 		localStorage.setItem("isLoggedIn", true);
 	}

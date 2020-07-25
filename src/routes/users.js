@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './../routes/nav';
+import Top from './../routes/top';
+
 
 
 class users extends Component {
@@ -12,7 +14,6 @@ class users extends Component {
 			path: window.location.protocol + '//' + window.location.hostname,
 			crudState: 0,
 			selected: '',
-			cUser: '',
 			user: '',
 			type: 'Admin',
 			pass: '',
@@ -27,7 +28,7 @@ class users extends Component {
 			header: 'Create New User',
 			users: [],
 			error: '',
-			test: []
+			runtest: false
 		};
 
 		this.onSubmit = this.onSubmit.bind(this);
@@ -43,19 +44,18 @@ class users extends Component {
 	}
 
 	componentDidMount() {
-		//this.checkLoginSession();
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin") {
-			this.props.history.push('/')
+			if(this.props.history !== undefined){this.props.history.push('/')}
 		}
+		console.log(localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin")
+		console.log(this.state.runtest)
+		console.log(this.props.history)
 
 		this.setState({ cUser: localStorage.getItem("currentUser")})
 		this.getAllUsers();
 		console.log("user")
 	}
 
-	logout() {
-		//reset login credidentals in local storage. Run checkLoginSession to boot user back to login page.
-	}
 
 	crudRefresh(o,n) {
 		document.getElementById("lbloption"+o).classList.remove('focus');
@@ -137,7 +137,6 @@ class users extends Component {
 		}
 
 	handleCrudChange(event) {
-		//consider clearing focus class from all options to solve that odd issue with save being stuck
 		console.log("current select:" + event.target.value)
 
 		if (event.target.value === 'option1') {
@@ -295,15 +294,13 @@ class users extends Component {
 
 	crudUse() {
 
-		const uid = ''
-		const cuser = ''
 		const username = this.state.user
 		const type = this.state.type
 		const password = this.state.pass
-		const createdBy = this.state.cUser;
-		const updatedBy = this.state.cUser;
-		const udate = new Date();
-		const cdate = new Date();
+		let createdBy = localStorage.getItem("username")
+		const updatedBy = localStorage.getItem("username")
+		const updatedDate = new Date();
+		let createdDate = new Date();
 		console.log("test this mess: " + updatedBy)
 		
 		switch (this.state.crudState) {
@@ -318,14 +315,13 @@ class users extends Component {
 						}
 
 					}).finally(() => {
-						console.log('What is in here?: ' + check)
 						if (check === username) {// as long as something is there
 							this.setState({ error: "Username already exists." });
 							document.getElementById("error").classList.remove('d-none');
 							return;
 						}
 						
-						axios.post(this.state.path + ':5000/user/', { username, type, password, createdBy, updatedBy, cdate, udate })
+						axios.post(this.state.path + ':5000/user/', { username, type, password, createdBy, updatedBy, createdDate, updatedDate })
 							.then((result) => {
 							}).finally(() => {
 								//call refresh function
@@ -344,9 +340,10 @@ class users extends Component {
 					})
 				break;
 			case 2: //update
-
+					createdBy = this.state.editUser.createdBy
+					createdDate = this.state.editUser.createdDate
 				
-				axios.put(this.state.path + ':5000/user/' + this.state.users[this.state.selectedIndex]._id, { username, type, password, createdBy, updatedBy, cdate, udate })
+				axios.put(this.state.path + ':5000/user/' + this.state.users[this.state.selectedIndex]._id, { username, type, password, createdBy, updatedBy, createdDate, updatedDate })
 					.then(() => {
 					}).finally(() => {
 						//call refresh func
@@ -369,30 +366,17 @@ class users extends Component {
 	}
 
 
-	checkLoginSession() {
-		if (localStorage.getItem("isLoggedIn") === 'true') {
-			this.props.history.push("/Main")
-		}
-	}
-
-	createLoginSession() {
-		console.log(this.state.user._id);
-		localStorage.setItem("userId", this.state.user._id);
-		localStorage.setItem("isLoggedIn", true);
-	}
-
-
-
 	render() {
 		return (
 
 
 			<div>
 				<Navbar />
+				<Top />
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-3 border d-none d-lg-block recent ">
-							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical" data-toggle="buttons">
+						<div className="col-lg-3 border d-none d-lg-block recent height-cap">
+							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical force-scroll" data-toggle="buttons">
 							{
 								this.state.users.map((user, index) => (
 									
@@ -465,17 +449,21 @@ class users extends Component {
 							</div>
 					
 						<div className="col border user d-lg-none ">
-							{
-								this.state.test.map((user, index) => (
+							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical" data-toggle="buttons">
+								{
+									this.state.users.map((user, index) => (
+										
+											<label id={'lbluser' + index} className="btn btn-secondary w-100">
+												<input  type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange}  />
+												<div>{user.username}</div>
+										</label>
 
+										
+									)
+									)
 
-									<div className="row namelist" key={index}>
-										<button type="button" className="btn btn-secondary btn-lg btn-block">{user}</button>
-									</div>
-								)
-								)
-
-							}
+								}
+							</div>
 
 							</div>
 					</div>

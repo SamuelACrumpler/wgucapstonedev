@@ -10,11 +10,13 @@ import Users from './Users';
 
 const wrapper = shallow(<Users />);
 const instance = wrapper.instance();
+
 instance.handleTestReset()
 
 
 describe("Error Check: Username", () => {
   it("Trigger the username error", () => {
+     wrapper.setState({ runtest: "ihatethis" });
 
     const instance = wrapper.instance();
     instance.onSubmit()

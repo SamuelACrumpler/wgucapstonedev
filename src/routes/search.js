@@ -13,7 +13,7 @@ class search extends Component {
 			crudState: '',
 			selected: '',
             cUser: '',
-            categories: ['Name/Title',  'Created by', 'Updated By','Created Date', 'Updated Date'],
+            categories: [{title:'Name/Title',class: "" },  {title:'Created by', class:"" }, {title: 'Updated By', class: ""}, {title: 'Created Date', class: ""}, {title: 'Updated Date', class: ""}],
             year: new Date().getFullYear(),
             search: '',
         
@@ -81,21 +81,33 @@ class search extends Component {
                 document.getElementById("tbluse").classList.remove('d-none');
                 document.getElementById("tblcus").classList.remove('d-none');
                 document.getElementById("tblapp").classList.remove('d-none');
+                document.getElementById("tblusem").classList.remove('d-none');
+                document.getElementById("tblcusm").classList.remove('d-none');
+                document.getElementById("tblappm").classList.remove('d-none');
                 break;
             case 'option2':
                 document.getElementById("tbluse").classList.remove('d-none');
                 document.getElementById("tblcus").classList.add('d-none');
                 document.getElementById("tblapp").classList.add('d-none');
+                document.getElementById("tblusem").classList.remove('d-none');
+                document.getElementById("tblcusm").classList.add('d-none');
+                document.getElementById("tblappm").classList.add('d-none');
                 break;
             case 'option3':
                 document.getElementById("tbluse").classList.add('d-none');
                 document.getElementById("tblcus").classList.remove('d-none');
                 document.getElementById("tblapp").classList.add('d-none');
+                document.getElementById("tblusem").classList.add('d-none');
+                document.getElementById("tblcusm").classList.remove('d-none');
+                document.getElementById("tblappm").classList.add('d-none');
                 break;
             case 'option4':
                 document.getElementById("tbluse").classList.add('d-none');
                 document.getElementById("tblcus").classList.add('d-none');
                 document.getElementById("tblapp").classList.remove('d-none');
+                document.getElementById("tblusem").classList.add('d-none');
+                document.getElementById("tblcusm").classList.add('d-none');
+                document.getElementById("tblappm").classList.remove('d-none');
                 break;
         }
     }
@@ -142,54 +154,46 @@ class search extends Component {
                         </div>
                     </div>
                     <div className="row border">
-                        <div className="col-lg">
+                        <div className="col-lg d-none d-md-block">
                         <table className="table table-striped table-fix">
                                 <thead className="thead-dark">
                                     <tr>
                                     {
                                         this.state.categories.map((header, index) => (
-                                        <th scope="col" key={index}>{header}</th>
+                                        <th scope="col" key={index} className={header.class}>{header.title}</th>
                                             )
                                         )
 
                                     }
-
                                     </tr>
-
-                                    
                                 </thead>
-                                
-                                
-                                
                                 <tbody id="tbluse" className="empty-square all-apps "> 
                                     {
                                         this.state.tbluse.map((data, index) => (
-                                            
-                                        <tr>    
-                                            <th scope='col' key={index}> {"User: " +data.username}</th>
-                                            <td>{data.createdBy}</td>
-                                            <td>{data.updatedBy}</td>
-                                            <td>{data.updatedDate}</td>
-                                            <td>{data.createdDate}</td>
+                                            <tr>    
+                                                <th scope='col' key={index}> {"User: " +data.username}</th>
+                                                <td >{data.createdBy}</td>
+                                                <td >{data.updatedBy}</td>
+                                                <td >{data.updatedDate}</td>
+                                                <td >{data.createdDate}</td>
 
-                                        </tr>
+                                            </tr>
                                             )
                                         )
-
                                     }
                                 </tbody>
 
                                 <tbody id="tblcus" className="empty-square all-apps "> 
                                     {
-                                        this.state.tblcus.map((data, index) => (
-                                        <tr>    
-                                            <th scope='col' key={index}>Customer: {data.name}</th>
-                                            <td>{data.createdBy}</td>
-                                            <td>{data.updatedBy}</td>
-                                            <td>{data.updatedDate}</td>
-                                            <td>{data.createdDate}</td>
+                                            this.state.tblcus.map((data, index) => (
+                                            <tr>    
+                                                <th scope='col' key={index}>Customer: {data.name}</th>
+                                                <td>{data.createdBy}</td>
+                                                <td>{data.updatedBy}</td>
+                                                <td>{data.updatedDate}</td>
+                                                <td>{data.createdDate}</td>
 
-                                        </tr>
+                                            </tr>
                                             )
                                         )
 
@@ -209,7 +213,59 @@ class search extends Component {
                                         </tr>
                                             )
                                         )
+                                    }
+                                </tbody>
+                        </table>
+                        </div>
+                        <div className="col-lg d-none d-sm-block d-md-none">
+                        <table className="table table-striped table-fix">
+                                <thead className="thead-dark">
+                                    <tr>
+                  
+                                    <th scope="col">Name/Title</th>
+                                    <th scope="col">CreatedBy</th>
 
+                                    </tr>
+                                </thead>
+                                <tbody id="tblusem" className="empty-square all-apps "> 
+                                    {
+                                        this.state.tbluse.map((data, index) => (
+                                            <tr>    
+                                                <th scope='col' key={index}> {"User: " +data.username}</th>
+                                                <td >{data.createdBy}</td>
+                                     
+
+                                            </tr>
+                                            )
+                                        )
+                                    }
+                                </tbody>
+
+                                <tbody id="tblcusm" className="empty-square all-apps "> 
+                                    {
+                                            this.state.tblcus.map((data, index) => (
+                                            <tr>    
+                                                <th scope='col' key={index}>Customer: {data.name}</th>
+                                                <td>{data.createdBy}</td>
+                                       
+                                            </tr>
+                                            )
+                                        )
+
+                                    }
+                                </tbody>
+
+                                <tbody id="tblappm" className="empty-square all-apps "> 
+                                    {
+                                        this.state.tblapp.map((data, index) => (
+                                        <tr>    
+                                            <th scope='col' key={index}>Appointment: {data.title}</th>
+                                            <td>{data.createdBy}</td>
+                                          
+
+                                        </tr>
+                                            )
+                                        )
                                     }
                                 </tbody>
                         </table>

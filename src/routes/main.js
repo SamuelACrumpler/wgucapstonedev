@@ -34,12 +34,9 @@ class main extends Component {
 
 		this.onClickDay = this.onClickDay.bind(this);
 
-	
-
 	}
 
 	componentDidMount() {
-		//this.checkLoginSession();
 
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn")) {
 			this.props.history.push('/')
@@ -56,18 +53,11 @@ class main extends Component {
 	}
 
 	onClickDay(dn){
-		console.log('day: ' + dn);
-		console.log('month' + this.state.month)
-		console.log('year' + this.state.year)
-		console.log(new Date(this.state.year+'-'+(parseInt(this.state.month)+1)+'-'+dn))
 		let dc = this.state.year+""+this.state.month+""+dn
 
 		let t = [];
 		this.state.listallapp.forEach(app => {
 			let cd = new Date(app.stime)
-			console.log('------------------------------------------------------------------------------------------------------------------------------------')
-			console.log(cd.getFullYear()+''+cd.getMonth()+''+cd.getDate()) 
-			console.log(dc)
 			cd = (cd.getFullYear()+''+cd.getMonth()+''+cd.getDate())
 			if (cd == dc){
 				t.push(app)
@@ -124,19 +114,15 @@ class main extends Component {
 		let date = new Date((y+"-"+am+'-1'));
 		console.log(date)
 		console.log(date.getDay());
-		//copy date, set to first day of month, use getday to get the right value.
-		let firstday = date.getDay(); //pulls the day, sunday, monday, etc.
-		let d = new Date(y, am, 0).getDate(); //Should get the number of days in the month
+		let firstday = date.getDay(); 
+		let d = new Date(y, am, 0).getDate();
 		let days = [];
 		let count = 0;
 		console.log("day of week: " + firstday)
 		console.log((parseInt(m)-1))
 		console.log("days: " + d)
 
-		// {
-		// 	num: '77',
-		// 	app: 'Appointments: 66'
-		// }
+
 		for (let i = 0; i < firstday; i++){
 			days.push({
 				'num': '',
@@ -170,8 +156,6 @@ class main extends Component {
 		console.log(days)
 		count = 0;
 		let month = [];
-		let custnames = [];
-		let test = 'dumb'
 	
 
 
@@ -189,15 +173,12 @@ class main extends Component {
 
 
 				for (let i=0; i< month.length; i++) {
-				// get the date
 
 					let curDate = new Date(month[i].stime);
 					let date = [curDate.getFullYear(),curDate.getMonth(),curDate.getDate()].join("-"); //creates yyyy-mm-dd
 					results[date] = results[date] || 0; //if results doens't exist, 
 					results[date]++;
-					//result key is date, value is number
 				}
-				// you can always convert it into an array of objects, if you must
 				for (let i in results) {
 				if (results.hasOwnProperty(i)) {
 					let tdate = new Date(i);
@@ -212,7 +193,6 @@ class main extends Component {
 
 				let custs = {};
 
-				///Repeat for users, but for field workers only. Need to actually add field workers
 
 				axios.get(this.state.path + ':5000/customer/')
 					.then((res) => {
@@ -249,10 +229,6 @@ class main extends Component {
 					
 
 			})
-		
-		
-		
-	
 	}
 
 	changeMonth(val){
@@ -285,7 +261,6 @@ class main extends Component {
 			{
 				title: this.state.listapp[this.state.index+val].title,
 				cust : this.state.listcust[this.state.listapp[this.state.index+val].custid],
-				//add worker section here
 				worker : this.state.listwork[this.state.listapp[this.state.index+val].userid],
 				add : this.state.listcust['add:'+this.state.listapp[this.state.index+val].custid],
 				stime : this.state.listapp[this.state.index+val].stime,
@@ -297,13 +272,6 @@ class main extends Component {
 		)
 
 	}
-
-	//https://codepen.io/chrisdpratt/pen/OOybam
-	//Configure the calendar header to disappear at a certain size, and only display the days
-	//day col-sm p-2 border border-left-0 border-top-0 text-truncate d-none d-sm-inline-block bg-light text-muted
-	//make the web friendly appointment display disappear, and the mobile friendly appear
-
-	//appointment class that becomes other appointments for different purposes.
 
 	render() {
 		return (
@@ -410,7 +378,7 @@ class main extends Component {
 
 							
 				
-							</div>{/*Week-1 End */}
+							</div>
 							
 						</div>
 					</div>

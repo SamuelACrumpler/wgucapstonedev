@@ -29,8 +29,6 @@ class reports extends Component {
 		this.handleTypeChange = this.handleTypeChange.bind(this);
 
 
-		//consider making navbar part of a state array based on users.
-		//Map out the appropriate options
     }
     
     componentDidMount(){
@@ -47,9 +45,6 @@ class reports extends Component {
 
 
     handleTypeChange(event){
-        console.log(event.target.value)
-        // let cat = []
-        // ["Month", "Appointments", "Sum", "Average", "Routine Jobs", "Consultations", "Special Orders"]
         
         switch (event.target.value){
             case "tblall":
@@ -130,12 +125,6 @@ class reports extends Component {
         let specs = []
 
 
-        // for(let i = 0; i <= 11; i++ ){
-        //     let obj = {};
-        //     obj.count = 0;
-        //     obj.sum = 0;
-        //     obj.avg = 0;
-        // }
 
         axios.get('http://localhost:5000/appointment/y/' + i)
         .then(res => {
@@ -176,29 +165,13 @@ class reports extends Component {
 
         });
             
-             /*
-            array of objects
-                {
-                    monthname: jan,
-                    appsum: 20,
-                }
-             
-            Pull all applications
-            Sort into their respective types
 
-            repeat this process for each month, and also fill out each year
-
-            sum will add all totals
-            average: sum/numberofapps
-
-    */
     }
 
  
 
     changeYear(i){
         this.getAllApps(this.state.year+i);
-        console.log(i)
         this.setState({
             year: this.state.year + i
         })
@@ -292,8 +265,6 @@ class reports extends Component {
         
 
         }
-        console.log(table)
-        console.log(this.state.list)
         this.state.listrout.forEach(app => {
             console.log(app._stime)
             console.log(app.indexMonth())
@@ -379,27 +350,10 @@ class reports extends Component {
 				<Navbar />
 				<div className="container">
 					<div className="row">
-                        <div className="col-lg-3 border d-none d-lg-block recent p-0">
-                            <div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical w-100 m-0 " data-toggle="buttons">
-
-                                <label className="btn btn-secondary w-100">
-                                    <input type="radio" name="type" id="allApps" value='tblall' onClick={this.handleTypeChange} /> All Appointments
-                                </label>
-                                <label className="btn btn-secondary w-100">
-                                    <input type="radio" name="type" id="allLabor" value='tblrou' onClick={this.handleTypeChange} /> All Labor
-                                </label>
-                                <label className="btn btn-secondary w-100">
-                                    <input type="radio" name="type" id="allCons" value='tblcon' onClick={this.handleTypeChange} /> All Consultations
-                                </label>
-                                <label className="btn btn-secondary w-100">
-                                    <input type="radio" name="type" id="allSpec" value='tblspe' onClick={this.handleTypeChange} /> All Special Orders
-                                </label>
-			
-							</div>
-                        </div>
-                        <div className="col-lg-9 border input-col p-0 h-100">
+                        
+                        <div className="col-lg border input-col p-0 h-100">
                         <div className="row">
-								<div className="col-1 ">
+								<div className="col-2 ">
 									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeYear(-1)}>
 										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg" >
 											<path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
@@ -407,10 +361,10 @@ class reports extends Component {
 										</svg>
 									</button>
 								</div>
-								<div className="col-10">
+								<div className="col-8">
                                 <h4 className="display-4 mb-4 text-center">Current Year: {this.state.year}</h4>
 								</div>
-								<div className="col-1 ">
+								<div className="col-2 ">
 									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeYear(1)}>
 										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 											<path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
@@ -419,6 +373,24 @@ class reports extends Component {
 									</button>	
 								</div>
 							</div>
+                            <div className="col-lg border  recent p-0">
+                                <div className="btn-group btn-group-toggle w-100 w-100 m-0 " data-toggle="buttons">
+
+                                    <label className="btn btn-secondary w-100 active">
+                                        <input type="radio" name="type" id="allApps" value='tblall' onClick={this.handleTypeChange} /> All Appointments
+                                    </label>
+                                    <label className="btn btn-secondary w-100">
+                                        <input type="radio" name="type" id="allLabor" value='tblrou' onClick={this.handleTypeChange} /> All Labor
+                                    </label>
+                                    <label className="btn btn-secondary w-100">
+                                        <input type="radio" name="type" id="allCons" value='tblcon' onClick={this.handleTypeChange} /> All Consultations
+                                    </label>
+                                    <label className="btn btn-secondary w-100">
+                                        <input type="radio" name="type" id="allSpec" value='tblspe' onClick={this.handleTypeChange} /> All Special Orders
+                                    </label>
+                
+                                </div>
+                            </div>
 							<div className="col-lg ">
 
                                 <table className="table table-striped table-fix">
