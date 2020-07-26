@@ -146,12 +146,7 @@ class reports extends Component {
                         break;
                 }
 
-                console.log(routs)
-                console.log('-------------------')
-                console.log(cons)
-                console.log('-------------------')
-                console.log(specs)
-                
+             
             });
          
             this.setState({

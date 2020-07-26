@@ -1,10 +1,8 @@
 import React from 'react';
-//import Adapter from 'enzyme-adapter-react-15';
 import Adapter from 'enzyme-adapter-react-16';
 import { shallow, configure } from 'enzyme';
 
 configure({adapter: new Adapter()});
-//import renderer from 'react-test-renderer';
 import Customers from './customers';
 
 

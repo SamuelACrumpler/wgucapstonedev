@@ -75,11 +75,6 @@ class appointments extends Component {
 		this.getAllDocuments();
 		this.getAllCustomers();
 		this.getAllWorkers();
-		this.setState({
-			cUser: localStorage.getItem("currentUser"),
-			uid: localStorage.getItem("userId"),
-		})
-		
 
 	}
 
@@ -505,6 +500,68 @@ class appointments extends Component {
 		axios.get('http://localhost:5000/appointment/')
 			.then(res => {
 				this.setState({ documents: res.data });
+			}).finally(() => {
+				if(localStorage.getItem("docid")){
+					let i = this.state.documents.findIndex(i => i._id === localStorage.getItem("docid"))
+					console.log(localStorage.getItem("docid"))
+
+					axios.get(this.state.path + ':5000/appointment/' + localStorage.getItem("docid"))
+						.then((res) => {
+		
+							this.setState({ edit: res.data });
+						}).finally(() =>{
+							let sdate = new Date(this.state.edit.stime);
+							let edate = new Date(this.state.edit.etime);
+							let oldty = this.getTypeVal(this.state.type);
+							this.setState({
+								custid: this.state.edit.custid,
+								workerid: this.state.edit.userid,
+								title: this.state.edit.title,
+								rate: this.state.edit.rate,
+								supply: this.state.edit.supply,
+								total: this.state.edit.total,
+								hours: this.state.edit.hours,
+								overlap: this.state.edit.overlap,
+								date: this.state.edit.stime.substring(0,this.state.edit.stime.indexOf('T')),
+								stime: this.lzHour(sdate) + ":" + this.lzMinute(sdate),
+								etime: this.lzHour(edate) + ":" + this.lzMinute(edate),
+								type: this.state.edit.type,
+								tasks: this.state.edit.tasks,
+								notes: this.state.edit.notes,
+								selectedName: "customer" + i,
+								selectedIndex: i,
+								crudState: 2
+							});
+
+							this.typeRefresh(oldty, this.getTypeVal(this.state.type))
+
+							switch (this.state.type) {
+								case "rout":
+									document.getElementById("rate").classList.remove('d-none');
+									document.getElementById("supply").classList.add('d-none');
+									document.getElementById("total").classList.remove('d-none');
+									break;
+								case "cons":
+									document.getElementById("rate").classList.add('d-none');
+									document.getElementById("supply").classList.add('d-none');
+									document.getElementById("total").classList.add('d-none');
+									break;
+								case "spec":
+									document.getElementById("rate").classList.remove('d-none');
+									document.getElementById("supply").classList.remove('d-none');
+									document.getElementById("total").classList.remove('d-none');
+									break;
+							}
+
+							document.getElementById("lbloption"+1).classList.remove('focus');
+							document.getElementById("lbloption"+1).classList.remove('active');
+							document.getElementById("lbloption"+2).classList.add('focus');
+							document.getElementById("lbloption"+2).classList.add('active');
+						})
+						localStorage.removeItem("docid")
+					
+				}
+
 			});
 	}
 
@@ -547,16 +604,16 @@ class appointments extends Component {
 		const type = this.state.type
 		const tasks = this.state.tasks
 		const notes = this.state.notes
-		let createdBy = this.state.cUser;
-		const updatedBy = this.state.cUser;
-		const udate = new Date();
-		let cdate = new Date();
+		let createdBy = localStorage.getItem("username")
+		const updatedBy = localStorage.getItem("username")
+		const updatedDate = new Date();
+		let createdDate = new Date();
 
 		switch (this.state.crudState) {
 			case 0: //create
 				//created then updated
 
-				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, tasks, notes, stime, etime, createdBy, updatedBy, cdate, udate })
+				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, tasks, notes, stime, etime, createdBy, updatedBy, createdDate, updatedDate })
 					.then((result) => {
 					}).finally(() => {
 						//call refresh function
@@ -580,10 +637,10 @@ class appointments extends Component {
 					.then((res) => {
 
 						createdBy = res.data.createdBy;
-						cdate = res.data.createdDate;
+						createdDate = res.data.createdDate;
 					}).finally(() => {
 
-						axios.put(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id, { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, cdate, udate  })
+						axios.put(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id, { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, createdDate, updatedDate  })
 							.then(() => {
 							}).finally(() => {
 

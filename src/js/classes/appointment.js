@@ -42,7 +42,7 @@ class routapp extends appointment {
 
     getTaskCount(){
         console.log(this._tasks);
-        if(this._tasks === undefined){return;}
+        if(this._tasks === undefined || this._tasks === ""){return;}
         return this._tasks.split(",").length;
     }
 }

@@ -47,13 +47,10 @@ class users extends Component {
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin") {
 			if(this.props.history !== undefined){this.props.history.push('/')}
 		}
-		console.log(localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin")
-		console.log(this.state.runtest)
-		console.log(this.props.history)
 
-		this.setState({ cUser: localStorage.getItem("currentUser")})
+		
+
 		this.getAllUsers();
-		console.log("user")
 	}
 
 
@@ -71,8 +68,6 @@ class users extends Component {
 
 
 	handleUserChange(event) {
-		console.log("current select:" + event.target.value)
-		console.log("current select2:" + event.target.value)
 		let i = event.target.value;
 	
 
@@ -232,7 +227,7 @@ class users extends Component {
 			document.getElementById("error").classList.add('d-none');
 		}
 		this.setState({
-			user: this.state.editUser.username,
+			user: '',
 			type: this.state.editUser.type,
 			pass: '',
 			cPass: '',
@@ -289,6 +284,34 @@ class users extends Component {
 		axios.get('http://localhost:5000/user/')
 			.then(res => {
 				this.setState({ users: res.data });
+			}).finally(()=>{
+				if(localStorage.getItem("docid")){
+					console.log(this.state.users.findIndex(i => i._id === localStorage.getItem("docid")))
+					let i = this.state.users.findIndex(i => i._id === localStorage.getItem("docid"))
+					console.log(localStorage.getItem("docid"))
+					axios.get(this.state.path + ':5000/user/' + localStorage.getItem("docid"))
+							.then((res) => {
+								this.setState({ editUser: res.data });
+							}).finally(()=>{
+								this.setState({
+									user: this.state.editUser.username,
+									type: this.state.editUser.type,
+									pass: '',
+									cPass: '',
+									selectedName: this.state.editUser.username,
+									crudState: 2,
+									selectedIndex: i
+								});
+								console.log("test: " + this.state.selectedIndex)
+								document.getElementById("lbloption"+1).classList.remove('focus');
+								document.getElementById("lbloption"+1).classList.remove('active');
+								document.getElementById("lbloption"+2).classList.add('focus');
+								document.getElementById("lbloption"+2).classList.add('active');
+						})
+		
+					localStorage.removeItem("docid")
+		
+				}
 			});
 	}
 

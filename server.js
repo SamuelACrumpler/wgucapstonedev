@@ -6,7 +6,9 @@ const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb+srv://scrump:8855df1fb2@cluster0-gmugj.mongodb.net/test?retryWrites=true&w=majority', {promiseLibrary: require('bluebird') })
+///3wn0PY0lcSPadEZj
+
+mongoose.connect('mongodb+srv://wgucap:wgucapstone@wgucapstone.hyufr.mongodb.net/wgucapstone?retryWrites=true&w=majority', {promiseLibrary: require('bluebird') })
 	.then(() => console.log('connection succesful'))
 	.catch((err) => console.error(err));
 

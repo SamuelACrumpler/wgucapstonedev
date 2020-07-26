@@ -13,12 +13,10 @@ class Navbar extends Component {
 
 		}
 
-		//consider making navbar part of a state array based on users.
-		//Map out the appropriate options
+	
 	}
 
 	componentDidMount() {
-		console.log(this.state.admin)
 		if(localStorage.getItem('userType') === 'Admin'){
 			this.setState({list : this.state.admin})
 		} else if (localStorage.getItem('userType') === 'Dispatcher'){
@@ -28,12 +26,9 @@ class Navbar extends Component {
 		}
 	}
 	
-	//admin see all
-	//dispatchers cannot see users section
-	//field workers can only see appointments
+	
 
 	onLogout(){
-		console.log("This will log you out.")
 		localStorage.setItem("isLoggedIn", false) 
 		localStorage.setItem("userId", '') 
 		localStorage.setItem("userType", '') 

@@ -1,10 +1,8 @@
 import React from 'react';
-//import Adapter from 'enzyme-adapter-react-15';
 import Adapter from 'enzyme-adapter-react-16';
 import { shallow, configure } from 'enzyme';
 
 configure({adapter: new Adapter()});
-//import renderer from 'react-test-renderer';
 import Appointments from './appointments';
 
 
@@ -120,18 +118,6 @@ describe("Error Check: Worker", () => {
   
     });
   });
-
-//   describe("Error Check: Start Time Too High", () => {
-//     it("Trigger the start time too low error", () => {
-  
-//       wrapper.setState({  stime: '21:00' });
-//       const instance = wrapper.instance();
-//       instance.onSubmit()
-  
-//       expect(wrapper.state('error')).toEqual("ERROR: Starting time is higher than the opening time.")
-  
-//     });
-//   });
 
   describe("Error Check: End Time Too High", () => {
     it("Trigger the end time too high error", () => {

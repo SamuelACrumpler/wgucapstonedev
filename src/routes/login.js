@@ -87,15 +87,16 @@ class login extends Component {
 					this.setState({ created_date: Date.now })
 
 
-					const username = "admin";
+					const username = "Admin";
+					const type = "Admin"
 					const password = "admin";
-					const updatedBy = "admin";
-					const createdBy = "admin";
+					const updatedBy = "Admin";
+					const createdBy = "Admin";
 					const updatedDate = new Date();
 					const createdDate = new Date();
 
 
-					axios.post('http://localhost:5000/user', { username, password, updatedBy, createdBy, updatedDate, createdDate })
+					axios.post('http://localhost:5000/user', { username, type, password, updatedBy, createdBy, updatedDate, createdDate })
 						.then((result) => {
 						});
 				}

@@ -37,7 +37,12 @@ class search extends Component {
 			this.props.history.push('/')
 		}
 
-	}
+    }
+    
+    loadData(event){
+    
+        localStorage.setItem("docid",event.target.name)
+    }
 
     onSubmit(){
         console.log(this.state.search)
@@ -171,11 +176,11 @@ class search extends Component {
                                     {
                                         this.state.tbluse.map((data, index) => (
                                             <tr>    
-                                                <th scope='col' key={index}> {"User: " +data.username}</th>
+                                                <th scope='col' key={index}><a className="" href="/users" onClick={this.loadData} name={data._id}> {"User: " +data.username}</a></th>
                                                 <td >{data.createdBy}</td>
                                                 <td >{data.updatedBy}</td>
-                                                <td >{data.updatedDate}</td>
                                                 <td >{data.createdDate}</td>
+                                                <td >{data.updatedDate}</td>
 
                                             </tr>
                                             )
@@ -187,11 +192,11 @@ class search extends Component {
                                     {
                                             this.state.tblcus.map((data, index) => (
                                             <tr>    
-                                                <th scope='col' key={index}>Customer: {data.name}</th>
+                                                <th scope='col' key={index}><a className="" href="/customers" onClick={this.loadData} name={data._id}> Customer: {data.name}</a></th>
                                                 <td>{data.createdBy}</td>
                                                 <td>{data.updatedBy}</td>
-                                                <td>{data.updatedDate}</td>
                                                 <td>{data.createdDate}</td>
+                                                <td>{data.updatedDate}</td>
 
                                             </tr>
                                             )
@@ -204,11 +209,11 @@ class search extends Component {
                                     {
                                         this.state.tblapp.map((data, index) => (
                                         <tr>    
-                                            <th scope='col' key={index}>Appointment: {data.title}</th>
+                                            <th scope='col' key={index}><a className="" href="/appointments" onClick={this.loadData} name={data._id}> Appointment: {data.title}</a></th>
                                             <td>{data.createdBy}</td>
                                             <td>{data.updatedBy}</td>
-                                            <td>{data.updatedDate}</td>
                                             <td>{data.createdDate}</td>
+                                            <td>{data.updatedDate}</td>
 
                                         </tr>
                                             )
@@ -231,7 +236,7 @@ class search extends Component {
                                     {
                                         this.state.tbluse.map((data, index) => (
                                             <tr>    
-                                                <th scope='col' key={index}> {"User: " +data.username}</th>
+                                                <th scope='col' key={index}><a className="" href="/users" onClick={this.loadData} name={data._id}> {"User: " +data.username}</a></th>
                                                 <td >{data.createdBy}</td>
                                      
 
@@ -245,7 +250,7 @@ class search extends Component {
                                     {
                                             this.state.tblcus.map((data, index) => (
                                             <tr>    
-                                                <th scope='col' key={index}>Customer: {data.name}</th>
+                                                <th scope='col' key={index}><a className="" href="/customers" onClick={this.loadData} name={data._id}> Customer: {data.name}</a></th>
                                                 <td>{data.createdBy}</td>
                                        
                                             </tr>

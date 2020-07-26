@@ -53,6 +53,9 @@ class customers extends Component {
 			if(this.props.history !== undefined){this.props.history.push('/')}
 
 		}
+
+		
+
 		this.setState({
 			cUser: localStorage.getItem("currentUser"),
 			uid: localStorage.getItem("userId")
@@ -275,6 +278,36 @@ class customers extends Component {
 		axios.get('http://localhost:5000/customer/')
 			.then(res => {
 				this.setState({ documents: res.data });
+			}).finally(() => {
+				if(localStorage.getItem("docid")){
+					let i = this.state.documents.findIndex(i => i._id === localStorage.getItem("docid"))
+					console.log(localStorage.getItem("docid"))
+
+					axios.get(this.state.path + ':5000/customer/' + localStorage.getItem("docid"))
+						.then((res) => {
+		
+							this.setState({ edit: res.data });
+						}).finally(() =>{
+							this.setState({
+								name: this.state.edit.name,
+								address: this.state.edit.address,
+								address2: this.state.edit.address2,
+								city: this.state.edit.city,
+								zip: this.state.edit.zip,
+								phone: this.state.edit.phone,
+								crudState: 2,
+								selectedName: "customer" + i,
+								selectedIndex: i
+							});
+
+							document.getElementById("lbloption"+1).classList.remove('focus');
+							document.getElementById("lbloption"+1).classList.remove('active');
+							document.getElementById("lbloption"+2).classList.add('focus');
+							document.getElementById("lbloption"+2).classList.add('active');
+						})
+						localStorage.removeItem("docid")
+					
+				}
 			});
 	}
 
@@ -287,15 +320,15 @@ class customers extends Component {
 		const city = this.state.city
 		const zip = this.state.zip
 		const phone = this.state.phone
-		let createdBy = this.state.cUser;
-		const updatedBy = this.state.cUser;
-		const udate = new Date();
-		let cdate = new Date();
+		let createdBy = localStorage.getItem("username")
+		const updatedBy = localStorage.getItem("username")
+		const updatedDate = new Date();
+		let createdDate = new Date();
 		switch (this.state.crudState) {
 			case 0: //create
 				//created then updated
 
-				axios.post(this.state.path + ':5000/customer/', { uid, name, address, address2, city, zip, phone, createdBy, updatedBy, cdate, udate })
+				axios.post(this.state.path + ':5000/customer/', { uid, name, address, address2, city, zip, phone, createdBy, updatedBy, createdDate, updatedDate })
 					.then((result) => {
 					}).finally(() => {
 						//call refresh function
@@ -317,10 +350,10 @@ class customers extends Component {
 					.then((res) => {
 
 						createdBy = res.data.createdBy;
-						cdate = res.data.createdDate;
+						createdDate = res.data.createdDate;
 					}).finally(() => {
 
-						axios.put(this.state.path + ':5000/customer/' + this.state.documents[this.state.selectedIndex]._id, {uid, name, address, address2, city, zip, phone, createdBy, updatedBy, cdate, udate })
+						axios.put(this.state.path + ':5000/customer/' + this.state.documents[this.state.selectedIndex]._id, {uid, name, address, address2, city, zip, phone, createdBy, updatedBy, createdDate, updatedDate })
 							.then(() => {
 							}).finally(() => {
 
@@ -346,17 +379,6 @@ class customers extends Component {
 	}
 
 
-	checkLoginSession() {
-		if (localStorage.getItem("isLoggedIn") === 'true') {
-			this.props.history.push("/Main")
-		}
-	}
-
-	createLoginSession() {
-		console.log(this.state.user._id);
-		localStorage.setItem("userId", this.state.user._id);
-		localStorage.setItem("isLoggedIn", true);
-	}
 
 	render() {
 		return (
