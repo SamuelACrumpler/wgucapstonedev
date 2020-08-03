@@ -20,11 +20,11 @@ class customer {
 	}
 
 	get uid() {
-		return this._id;
+		return this._uid;
 	}
 
 	set uid(x) {
-		this._id = x;
+		this._uid = x;
 	}
 
 	get name() {

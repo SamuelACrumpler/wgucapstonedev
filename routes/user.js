@@ -6,7 +6,6 @@ const { Redirect } = require('react-router-dom');
 
 /* Get all users in the database. Products contains all results found */
 router.get('/', function (req, res, next) {
-	console.log("This was tried");
 
 	User.find(function (err, products) {
 		if (err) return next(err);
@@ -40,7 +39,6 @@ router.get('/test', function (req, res, next) {
 
 /* Get user by id*/
 router.get('/:id', function (req, res, next) {
-	console.log("This was tried");
 	User.findById(req.params.id, function (err, post) {
 		if (err) return next(err);
 		res.json(post);

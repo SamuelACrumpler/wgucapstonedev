@@ -8,14 +8,13 @@ import customers from './routes/customers';
 import appointments from './routes/appointments';
 import reports from './routes/reports';
 import search from './routes/search';
-import history from './routes/history';
 
 
 function App() {
 	return (
 			<main className="main full-height">
 				<BrowserRouter>
-					<Switch>
+					
 						<Route path="/" component={withRouter(login)} exact />
 						<Route path="/main" component={withRouter(main)} />
 						<Route path="/users" component={withRouter(users)} />
@@ -24,7 +23,6 @@ function App() {
 						<Route path="/reports" component={withRouter(reports)} />
 						<Route path="/search" component={withRouter(search)} />
 
-					</Switch>
 				</BrowserRouter>
 			</main>
 

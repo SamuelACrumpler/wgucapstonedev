@@ -66,7 +66,6 @@ class appointments extends Component {
 	}
 
 	componentDidMount() {
-
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
 			if(this.props.history !== undefined){this.props.history.push('/')}
 
@@ -497,13 +496,12 @@ class appointments extends Component {
 
 	//[CRUD Functions] - User
 	getAllDocuments() {
-		axios.get('http://localhost:5000/appointment/')
+		axios.get(this.state.path + ':5000/appointment/' )
 			.then(res => {
 				this.setState({ documents: res.data });
 			}).finally(() => {
 				if(localStorage.getItem("docid")){
 					let i = this.state.documents.findIndex(i => i._id === localStorage.getItem("docid"))
-					console.log(localStorage.getItem("docid"))
 
 					axios.get(this.state.path + ':5000/appointment/' + localStorage.getItem("docid"))
 						.then((res) => {
@@ -566,7 +564,7 @@ class appointments extends Component {
 	}
 
 	getAllCustomers() {
-		axios.get('http://localhost:5000/customer/')
+		axios.get(this.state.path + ':5000/customer/')
 			.then(res => {
 				this.setState({ customers: res.data });
 			});
@@ -574,7 +572,7 @@ class appointments extends Component {
 
 	getAllWorkers(){
 		let tempworkers = []
-		axios.get('http://localhost:5000/user/')
+		axios.get(this.state.path + ':5000/user/')
 			.then(res => {
 				
 				res.data.forEach(user => {

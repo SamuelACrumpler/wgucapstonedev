@@ -5,7 +5,6 @@ var Customer = require('../models/customer.js');
 
 /* Get all users in the database. Products contains all results found */
 router.get('/', function (req, res, next) {
-	console.log("This was tried");
 
 	Customer.find(function (err, products) {
 		if (err) return next(err);
@@ -16,10 +15,7 @@ router.get('/', function (req, res, next) {
 router.get('/count', function (req, res, next) {
 	console.log("Running Count");
 
-	//User.count(function (err, products) {
-	//	if (err) return next(err);
-	//	res.json(products);
-	//});
+	
 
 	User.estimatedDocumentCount(function (err, count) {
 		if (err) return next(err);
@@ -32,7 +28,6 @@ router.get('/count', function (req, res, next) {
 
 /* Get user by id*/
 router.get('/:id', function (req, res, next) {
-	console.log("This was tried");
 	Customer.findById(req.params.id, function (err, post) {
 		if (err) return next(err);
 		res.json(post);

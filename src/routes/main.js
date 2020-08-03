@@ -67,7 +67,6 @@ class main extends Component {
 		});
 	
 		
-		console.log('how long: '+t.length)
 		if(t.length){
 			this.setState({ listapp : t,
 					title: t[0].title,

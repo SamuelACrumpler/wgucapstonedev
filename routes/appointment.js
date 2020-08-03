@@ -5,7 +5,6 @@ var Appointment = require('../models/appointment.js');
 
 /* Get all appointments in the database. Products contains all results found */
 router.get('/', function (req, res, next) {
-	console.log("This was tried");
 
 	Appointment.find(function (err, products) {
 		if (err) return next(err);
@@ -14,7 +13,6 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/count', function (req, res, next) {
-	console.log("Running Count");
 
 	//Appointment.count(function (err, products) {
 	//	if (err) return next(err);
@@ -30,8 +28,6 @@ router.get('/count', function (req, res, next) {
 });
 
 router.get('/test', function (req, res, next) {
-	console.log("Running Count");
-
 	Appointment.collection.drop();
 	res.json("it worked");
 
@@ -39,7 +35,6 @@ router.get('/test', function (req, res, next) {
 
 /* Get appointment by id*/
 router.get('/:id', function (req, res, next) {
-	console.log("This was tried");
 	Appointment.findById(req.params.id, function (err, post) {
 		if (err) return next(err);
 		res.json(post);

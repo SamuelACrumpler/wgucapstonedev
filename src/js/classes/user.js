@@ -33,6 +33,7 @@ class user {
 
 	print() {
 		console.log("_id:" + this._id);
+		console.log("_type:" + this._type);
 		console.log("_name:" + this._name);
 	}
 }

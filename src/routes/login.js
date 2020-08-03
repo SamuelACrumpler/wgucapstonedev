@@ -22,17 +22,14 @@ class login extends Component {
 
 	}
 
-	//First Run check. If there is no users. Add the following  admin/admin as user/pass
 
 	componentDidMount() {
 		this.checkLoginSession();
-		//this.dropCheck();
 		this.checkUserCount();
 	}
 
 
 	onChange(event) {
-		console.log("eventname: " + event.target.name);
 		const state = this.state
 		state[event.target.name] = event.target.value;
 		this.setState(state);
@@ -75,12 +72,14 @@ class login extends Component {
 
 
 	checkUserCount() {
+		let count = 0;
 		axios.get(this.state.path + ':5000/user/count')
 			.then(res => {
 				this.setState({ count: res.data });
-				console.log("user count: " + this.state.count); //pulls the user if it exists
+				count = res.data
+				console.log("user count: " + count); //pulls the user if it exists
 			}).finally(() => {
-				if (this.state.count <= 0) {
+				if (count <= 0) {
 					//logic here for creating user;
 
 					this.setState({ updated_date: Date.now })
@@ -96,7 +95,7 @@ class login extends Component {
 					const createdDate = new Date();
 
 
-					axios.post('http://localhost:5000/user', { username, type, password, updatedBy, createdBy, updatedDate, createdDate })
+					axios.post(this.state.path + ':5000/user', { username, type, password, updatedBy, createdBy, updatedDate, createdDate })
 						.then((result) => {
 						});
 				}

@@ -92,7 +92,7 @@ class reports extends Component {
     }
 
     getCurrentYear(){
-        axios.get('http://localhost:5000/appointment/y/' + this.state.year)
+        axios.get(this.state.path + ':5000/appointment/y/' + this.state.year)
         .then(res => {
             res.data.forEach(app => {
                 console.log("  ---" + new Date(app.stime).getFullYear())
@@ -126,7 +126,7 @@ class reports extends Component {
 
 
 
-        axios.get('http://localhost:5000/appointment/y/' + i)
+        axios.get(this.state.path + ':5000/appointment/y/' + i)
         .then(res => {
             res.data.forEach(app => {
                 let newapp = {};

@@ -281,7 +281,7 @@ class users extends Component {
 		//this.setState({ users: [] })
 
 
-		axios.get('http://localhost:5000/user/')
+		axios.get(this.state.path + ':5000/user/')
 			.then(res => {
 				this.setState({ users: res.data });
 			}).finally(()=>{
@@ -302,7 +302,6 @@ class users extends Component {
 									crudState: 2,
 									selectedIndex: i
 								});
-								console.log("test: " + this.state.selectedIndex)
 								document.getElementById("lbloption"+1).classList.remove('focus');
 								document.getElementById("lbloption"+1).classList.remove('active');
 								document.getElementById("lbloption"+2).classList.add('focus');
@@ -324,7 +323,6 @@ class users extends Component {
 		const updatedBy = localStorage.getItem("username")
 		const updatedDate = new Date();
 		let createdDate = new Date();
-		console.log("test this mess: " + updatedBy)
 		
 		switch (this.state.crudState) {
 			case 0: //create

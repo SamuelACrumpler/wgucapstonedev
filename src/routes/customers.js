@@ -48,7 +48,6 @@ class customers extends Component {
 	}
 
 	componentDidMount() {
-		console.log(localStorage.getItem("userType") === "")
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") === "Field Worker") {
 			if(this.props.history !== undefined){this.props.history.push('/')}
 
@@ -117,10 +116,8 @@ class customers extends Component {
 
 		axios.get(this.state.path + ':5000/customer/' + this.state.documents[i]._id)
 			.then((res) => {
-				console.log("t" + res.data.name)
 				this.setState({ edit: res.data });
 			}).finally(() => {
-				console.log("t2" + this.state.edit.name)
 
 				this.setState({
 					name: this.state.edit.name,
@@ -168,7 +165,6 @@ class customers extends Component {
 				return;
 			}
 
-			console.log('save time')
 			this.setState({
 				lbutton: 'Save',
 				disabled: false,
@@ -189,7 +185,6 @@ class customers extends Component {
 				return;
 			}
 
-			console.log('sdel time')
 			this.setState({
 				lbutton: 'Delete',
 				disabled: true,
@@ -238,7 +233,6 @@ class customers extends Component {
 	}
 
 	onCancel(event) {
-		console.log("Cancel called: lbl" + this.state.selectedName);
 		if (this.state.selectedName !== '') {
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('focus');
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('active');
@@ -275,13 +269,12 @@ class customers extends Component {
 
 	//[CRUD Functions] - User
 	getAllDocuments() {
-		axios.get('http://localhost:5000/customer/')
+		axios.get(this.state.path + ':5000/customer/')
 			.then(res => {
 				this.setState({ documents: res.data });
 			}).finally(() => {
 				if(localStorage.getItem("docid")){
 					let i = this.state.documents.findIndex(i => i._id === localStorage.getItem("docid"))
-					console.log(localStorage.getItem("docid"))
 
 					axios.get(this.state.path + ':5000/customer/' + localStorage.getItem("docid"))
 						.then((res) => {

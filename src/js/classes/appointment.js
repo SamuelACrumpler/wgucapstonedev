@@ -10,6 +10,86 @@ class appointment {
         this._notes = n;
         this._stime = s;
         this._etime = e;
+    }
+    
+    get id() {
+		return this._id;
+	}
+
+	set id(x) {
+		this._id = x;
+	}
+
+	get userid() {
+		return this._userid;
+	}
+
+	set userid(x) {
+		this._userid = x;
+	}
+
+    get custid() {
+		return this._custid;
+	}
+
+	set custid(x) {
+		this._custid = x;
+    }
+    
+    get title() {
+		return this._title;
+	}
+
+	set title(x) {
+		this._title = x;
+    }
+    
+    get overlap() {
+		return this._overlap;
+	}
+
+	set overlap(x) {
+		this._overlap = x;
+    }
+    
+    get hours() {
+		return this._hours;
+	}
+
+	set hours(x) {
+		this._hours = x;
+    }
+    
+    get type() {
+		return this._type;
+	}
+
+	set type(x) {
+		this._type = x;
+    }
+    
+    get notes() {
+		return this._notes;
+	}
+
+	set notes(x) {
+		this._notes = x;
+    }
+    
+    get stime() {
+		return this._stime;
+	}
+
+	set stime(x) {
+		this._stime = x;
+    }
+    
+    get etime() {
+		return this._etime;
+	}
+
+	set etime(x) {
+		this._etime = x;
 	}
 
     exportStartDate(){
@@ -24,11 +104,7 @@ class appointment {
         return new Date(this._stime).getMonth()
     }
 
-	print() {
-		console.log("_id:" + this._id);
-		console.log("_uid:" + this._uid);
 
-	}
 }
 
 
@@ -40,25 +116,36 @@ class routapp extends appointment {
         this._tasks = ta;
     }
 
+    get rate() {
+		return this._rate;
+	}
+
+	set rate(x) {
+		this._rate = x;
+    }
+    
+    get total() {
+		return this._total;
+	}
+
+	set total(x) {
+		this._total = x;
+	}
+
+    get task() {
+		return this._task;
+	}
+
+	set task(x) {
+		this._task = x;
+    }
+    
     getTaskCount(){
-        console.log(this._tasks);
         if(this._tasks === undefined || this._tasks === ""){return;}
         return this._tasks.split(",").length;
     }
 }
 
-
-class consapp extends appointment {
-    constructor(f){
-        this._firsttime = f;
-
-    }
-    getCost(){
-        if(this._firsttime === false){
-            this._total = 20;
-        }
-    }
-}
 
 class specapp extends appointment {
     constructor(i, u, c, t, o, h, ty, n, s, e, r, tl, su){
@@ -69,6 +156,29 @@ class specapp extends appointment {
 
     }
 
+    get rate() {
+		return this._rate;
+	}
+
+	set rate(x) {
+		this._rate = x;
+    }
+    
+    get total() {
+		return this._total;
+	}
+
+	set total(x) {
+		this._total = x;
+	}
+
+    get supply() {
+		return this._supply;
+	}
+
+	set supply(x) {
+		this._supply = x;
+	}
 
 }
 
@@ -76,6 +186,5 @@ class specapp extends appointment {
 export {
     appointment,
     routapp,
-    consapp,
     specapp
 }
