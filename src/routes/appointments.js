@@ -116,6 +116,7 @@ class appointments extends Component {
 			workerid: '',
 			workername: '',
 			cid: '',
+			custid: '',
 			title: '',
 			date: '',
 			stime: '',
@@ -189,7 +190,7 @@ class appointments extends Component {
 					type: this.state.edit.type,
 					tasks: this.state.edit.tasks,
 					notes: this.state.edit.notes,
-					selectedName: "customer" + i,
+					selectedName: "appointment" + i,
 					selectedIndex: i,
 					crudState: 2
 				});
@@ -400,7 +401,7 @@ class appointments extends Component {
 				this.inputReset();
 
 				this.setState({
-					selectedName: this.state.edit.name
+					selectedName: ''
 				});
 
 
@@ -526,7 +527,7 @@ class appointments extends Component {
 								type: this.state.edit.type,
 								tasks: this.state.edit.tasks,
 								notes: this.state.edit.notes,
-								selectedName: "customer" + i,
+								selectedName: "appointment" + i,
 								selectedIndex: i,
 								crudState: 2
 							});
@@ -687,8 +688,8 @@ class appointments extends Component {
 								{
 									this.state.documents.map((document, index) => (
 
-										<label key={'customer' + index} id={'lbluser' + index} className="btn btn-secondary w-100">
-											<input type="radio" name="user" id={'user' + index} value={index} onClick={this.handleEditChange} />{document.title}
+										<label key={'customer' + index} id={'lblappointment' + index} className="btn btn-secondary w-100">
+											<input type="radio" name="appointment" id={'appointment' + index} value={index} onClick={this.handleEditChange} />{document.title}
 										</label>
 									)
 									)

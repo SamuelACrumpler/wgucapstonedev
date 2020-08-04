@@ -385,8 +385,8 @@ class customers extends Component {
 								{
 									this.state.documents.map((document, index) => (
 
-										<label key={'customer'+index} id={'lbluser' + index} className="btn btn-secondary w-100">
-											<input type="radio" name="user" id={'user' + index} value={index} onClick={this.handleEditChange} />{document.name}
+										<label key={'customer'+index} id={'lblcustomer' + index} className="btn btn-secondary w-100">
+											<input type="radio" name="customer" id={'customer' + index} value={index} onClick={this.handleEditChange} />{document.name}
 										</label>
 									)
 									)
