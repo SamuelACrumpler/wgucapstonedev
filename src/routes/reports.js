@@ -36,7 +36,7 @@ class reports extends Component {
 			this.props.history.push('/')
 		}
 
-        let all = ["Month", "Appointments", "Sum", "Average", "Routine Jobs", "Consultations", "Special Orders"]
+        let all = ["Month", "Appointments", "Sum", "Average", "Labor Jobs", "Consultations", "Special Orders"]
         this.setState({
             categories: all
         })
@@ -49,7 +49,7 @@ class reports extends Component {
         switch (event.target.value){
             case "tblall":
                 this.setState({
-                    categories: ["Month", "Appointments", "Sum", "Average", "Routine Jobs", "Consultations", "Special Orders"]
+                    categories: ["Month", "Appointments", "Sum", "Average", "Labor Jobs", "Consultations", "Special Orders"]
                 })
                 document.getElementById("tblall").classList.remove('d-none');
                 document.getElementById("tblrou").classList.add('d-none');
@@ -249,7 +249,7 @@ class reports extends Component {
             s.sum = 0;
             s.avg = 0;
             s.sup = 0;
-            s.avgsup = 0;
+            s.supavg = 0;
 
             table.push(obj)
             rou.push(r)
@@ -322,6 +322,8 @@ class reports extends Component {
 
            if(spe[app.indexMonth()].sup > 0){
             spe[app.indexMonth()].supavg = (spe[app.indexMonth()].sup/spe[app.indexMonth()].count).toFixed(2)
+            } else{
+                spe[app.indexMonth()].supavg = 0;
             }    
 
 
@@ -336,6 +338,8 @@ class reports extends Component {
         this.setState({ tblspe : spe})   
 
         console.log(this.state.tblall)
+        console.log(this.state.tblspe)
+
     }
 
 
@@ -409,8 +413,8 @@ class reports extends Component {
                                             <tr>    
                                                 <th scope="col" key={index}>{this.getMonthName(index)}</th>
                                                 <td>{data.count}</td>
-                                                <td>{data.sum}</td>
-                                                <td>{data.avg}</td>
+                                                <td>{"$"+data.sum}</td>
+                                                <td>{"$"+data.avg}</td>
                                                 <td>{data.rout}</td>
                                                 <td>{data.cons}</td>
                                                 <td>{data.spec}</td>
@@ -428,8 +432,8 @@ class reports extends Component {
                                             <tr>    
                                                 <th scope="col" key={index}>{this.getMonthName(index)}</th>
                                                 <td>{data.count}</td>
-                                                <td>{data.sum}</td>
-                                                <td>{data.avg}</td>
+                                                <td>{"$"+data.sum}</td>
+                                                <td>{"$"+data.avg}</td>
                                                 <td>{data.tasks}</td>
                                                 <td>{data.avgtasks}</td>
 
@@ -459,10 +463,10 @@ class reports extends Component {
                                             <tr>    
                                                 <th scope="col" key={index}>{this.getMonthName(index)}</th>
                                                 <td>{data.count}</td>
-                                                <td>{data.sum}</td>
-                                                <td>{data.avg}</td>
-                                                <td>{data.sup}</td>
-                                                <td>{data.supavg}</td>
+                                                <td>{"$"+data.sum}</td>
+                                                <td>{"$"+data.avg}</td>
+                                                <td>{"$"+data.sup}</td>
+                                                <td>{"$"+data.supavg}</td>
 
                                             </tr>
                                                 )

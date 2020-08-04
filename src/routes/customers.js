@@ -226,7 +226,7 @@ class customers extends Component {
 		this.inputReset();
 
 		this.setState({
-			selectedName: this.state.edit.name
+			selectedName: ''
 		});
 
 
