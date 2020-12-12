@@ -5,11 +5,12 @@ const path = require('path');
 const app = express();
 const cors = require("cors");
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 mongoose.Promise = require('bluebird');
-///3wn0PY0lcSPadEZj
+dotenv.config();
 
-mongoose.connect('mongodb+srv://wgucap:wgucapstone@wgucapstone.hyufr.mongodb.net/wgucapstone?retryWrites=true&w=majority', {promiseLibrary: require('bluebird') })
-	.then(() => console.log('connection succesful'))
+mongoose.connect('mongodb+srv://scrump:'+process.env.MDBP+'@cluster0.gmugj.mongodb.net/wgucapstone?retryWrites=true&w=majority', {promiseLibrary: require('bluebird') })
+	.then(() => console.log('connection successful'+process.env.NODE_ENV + " PORT" + process.env.PORT))
 	.catch((err) => console.error(err));
 
 app.use(express.static(path.join(__dirname, 'src')));
@@ -52,7 +53,9 @@ app.use(function (err, req, res, next) {
 
 
 
-const port = process.env.PORT || 5000;
-app.listen(port);
+port = process.env.PORT || 5000;
+app.listen(port, '0.0.0.0', function(err) {
+	console.log("Started listening on %s", app.url);
+  });
 
 console.log('App is listening on port ' + port);

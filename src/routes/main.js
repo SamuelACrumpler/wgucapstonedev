@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './../routes/nav';
+//import port from '../config';
+require('dotenv').config();
+
 
 
 class main extends Component {
@@ -41,7 +44,11 @@ class main extends Component {
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn")) {
 			this.props.history.push('/')
 		}
+	 	//let { port } = require('../config.js');
 		
+		
+		console.log("This is your port: " + process.env.NODE_ENV)
+		//console.log(port)
 		let d = new Date();
 		
 		this.setState({
@@ -54,11 +61,16 @@ class main extends Component {
 
 	onClickDay(dn){
 		let dc = this.state.year+""+this.state.month+""+dn
+		console.log("onClickDay Clicked: " + dc)
+
 
 		let t = [];
 		this.state.listallapp.forEach(app => {
 			let cd = new Date(app.stime)
+			console.log("date: " +  app.stime)
 			cd = (cd.getFullYear()+''+cd.getMonth()+''+cd.getDate())
+			console.log("date string: " +  cd)
+
 			if (cd == dc){
 				t.push(app)
 				console.log(app)
@@ -110,7 +122,9 @@ class main extends Component {
 		console.log(y+"-"+am);
 		
 		console.log(y+"-"+m);
-		let date = new Date((y+"-"+am+'-1'));
+		//use zulu
+		//let date = new Date((y+"-"+am+'-1'));
+		let date = new Date(y,m,1);
 		console.log(date)
 		console.log(date.getDay());
 		let firstday = date.getDay(); 
@@ -174,13 +188,16 @@ class main extends Component {
 				for (let i=0; i< month.length; i++) {
 
 					let curDate = new Date(month[i].stime);
+					console.log("curDate: " + curDate )
+					// let date = [curDate.getFullYear(),curDate.getMonth(),curDate.getDate()].join("-"); //creates yyyy-mm-dd
 					let date = [curDate.getFullYear(),curDate.getMonth(),curDate.getDate()].join("-"); //creates yyyy-mm-dd
-					results[date] = results[date] || 0; //if results doens't exist, 
+					results[date] = results[date] || 0; //if results doesn't exist, 
 					results[date]++;
 				}
 				for (let i in results) {
 				if (results.hasOwnProperty(i)) {
-					let tdate = new Date(i);
+					let split = i.split("-");
+					let tdate = new Date(split[0],split[1],split[2]);
 					let ind = tdate.getDate()+firstday-1;
 					console.log(ind)
 					days[ind].app = 'Appointments: ' + results[i];
@@ -231,9 +248,11 @@ class main extends Component {
 	}
 
 	changeMonth(val){
-		let y = this.state.year; const m = parseInt(this.state.month)+1;
+		let y = this.state.year; const m = parseInt(this.state.month);
 		console.log(y+'-'+m+'-1')
-		let newdate = new Date(y+'-'+m+'-1')
+		//let newdate = new Date(y+'-'+m+'-1')
+		let newdate = new Date(y,m,1);
+
 		console.log(newdate)
 		newdate.setMonth(newdate.getMonth()+val)
 		
