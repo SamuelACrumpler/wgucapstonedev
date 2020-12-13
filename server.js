@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 mongoose.Promise = require('bluebird');
 dotenv.config();
 
+console.log(process.env.MDBP);
 mongoose.connect('mongodb+srv://scrump:'+process.env.MDBP+'@cluster0.gmugj.mongodb.net/wgucapstone?retryWrites=true&w=majority', {promiseLibrary: require('bluebird') })
 	.then(() => console.log('connection successful'+process.env.NODE_ENV + " PORT" + process.env.PORT))
 	.catch((err) => console.error(err));

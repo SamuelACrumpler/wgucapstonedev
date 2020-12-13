@@ -18,6 +18,7 @@
     "babel-jest": "^24.9.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",
+    "concurrently": "^5.3.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -41,8 +42,10 @@
     }
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"react-scripts start\" \"node server.js\"",
     "build": "react-scripts build",
+    "dev": "concurrently \"node server.js\" \"npm run start\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build",
     "test": "jest",
     "eject": "react-scripts eject"
   },
@@ -68,7 +71,7 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "identity-obj-proxy": "^3.0.0",
-    "mocha": "^8.0.1",
+    "mocha": "^8.2.1",
     "react-test-renderer": "^16.13.1"
   }
 }
