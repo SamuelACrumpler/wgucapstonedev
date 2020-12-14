@@ -1,5 +1,0 @@
-198.54.118.44 - - [11/Dec/2020:13:39:36 -0500] "GET /ncsitebuilder/verify.php?ts=1607711976&sdir=ncsitebuilder HTTP/1.1" 200 25486 "-" "Mozilla/5.0 (compatible; BuilderPublishVerifier)"
-205.169.39.13 - - [11/Dec/2020:15:43:33 -0500] "GET / HTTP/1.1" 301 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.71 Safari/537.36"
-76.127.125.78 - - [11/Dec/2020:15:47:59 -0500] "GET / HTTP/1.1" 301 247 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"
-62.4.14.206 - - [12/Dec/2020:03:24:15 -0500] "GET / HTTP/1.1" 301 251 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
-62.4.14.206 - - [12/Dec/2020:03:41:32 -0500] "GET / HTTP/1.1" 301 247 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
