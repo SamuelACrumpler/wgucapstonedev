@@ -46,6 +46,7 @@
     "backend": "nodemon server/index.js",
     "frontend": "npm run start --prefix client",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "test": "jest",
     "eject": "react-scripts eject"
   },

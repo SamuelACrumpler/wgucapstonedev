@@ -14,7 +14,7 @@ mongoose.connect('mongodb+srv://scrump:'+process.env.MDBP+'@cluster0.gmugj.mongo
 	.then(() => console.log('connection successful'+process.env.NODE_ENV + " PORT" + process.env.PORT))
 	.catch((err) => console.error(err));
 
-app.use(express.static(path.join(__dirname, 'src')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 var user = require("./routes/user");
 var customer = require("./routes/customer");
@@ -53,6 +53,9 @@ app.use(function (err, req, res, next) {
 });
 
 
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
 
 port = process.env.PORT || 5000;
 app.listen(port, '0.0.0.0', function(err) {
