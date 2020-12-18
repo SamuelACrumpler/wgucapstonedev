@@ -42,7 +42,7 @@
     }
   },
   "scripts": {
-    "start": "node server/index.js",
+    "start": "node -r dotenv/config server/index.js",
     "backend": "nodemon server/index.js",
     "frontend": "npm run start --prefix client",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
@@ -75,5 +75,5 @@
     "mocha": "^8.2.1",
     "react-test-renderer": "^16.13.1"
   },
-  "proxy" : "http://localhost:5000"
+  "proxy": "http://localhost:5000"
 }

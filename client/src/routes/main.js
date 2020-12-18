@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './../routes/nav';
 //import port from '../config';
-require('dotenv').config();
+
 
 
 
@@ -47,7 +47,7 @@ class main extends Component {
 	 	//let { port } = require('../config.js');
 		
 		
-		console.log("This is your port: " + process.env.NODE_ENV)
+		console.log("This is your port test: " + process.env.MDBP)
 		//console.log(port)
 		let d = new Date();
 		

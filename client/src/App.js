@@ -8,6 +8,8 @@ import customers from './routes/customers';
 import appointments from './routes/appointments';
 import reports from './routes/reports';
 import search from './routes/search';
+require('dotenv').config();
+
 
 
 function App() {

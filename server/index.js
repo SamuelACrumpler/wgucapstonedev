@@ -14,7 +14,6 @@ mongoose.connect('mongodb+srv://scrump:'+process.env.MDBP+'@cluster0.gmugj.mongo
 	.then(() => console.log('connection successful'+process.env.NODE_ENV + " PORT" + process.env.PORT))
 	.catch((err) => console.error(err));
 
-app.use(express.static(path.join(__dirname, 'client/build')));
 
 var user = require("./routes/user");
 var customer = require("./routes/customer");
@@ -33,28 +32,30 @@ app.use("/appointment", appointment);
 
 
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
-});
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+// 	var err = new Error('Not Found');
+// 	err.status = 404;
+// 	next(err);
+// });
 
-// error handler
-app.use(function (err, req, res, next) {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+// // error handler
+// app.use(function (err, req, res, next) {
+// 	// set locals, only providing error in development
+// 	res.locals.message = err.message;
+// 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-	// render the error page
-	res.status(err.status || 500);
-	//res.render('error');
-	res.json({ error: err })
-});
+// 	// render the error page
+// 	res.status(err.status || 500);
+// 	//res.render('error');
+// 	res.json({ error: err })
+// });
+
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname+'/client/build/index.html'));
+	res.sendFile(path.join(__dirname+'/../client/build/index.html'));
   });
 
 port = process.env.PORT || 5000;
