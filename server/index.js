@@ -26,7 +26,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 'extended': 'false' }));
 
-app.use("/user", user);
+app.use("/usertest", user);
 app.use("/customer", customer);
 app.use("/appointment", appointment);
 
