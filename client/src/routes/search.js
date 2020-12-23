@@ -51,20 +51,20 @@ class search extends Component {
             return;
         }
 
-        console.log('test: ' + this.state.path + ':5000/user/s/' + q)
+        console.log('test: ' + this.state.path + '/api/user/s/' + q)
 
-        axios.get(this.state.path + ':5000/user/s/' + q)
+        axios.get(this.state.path + '/api/user/s/' + q)
         .then((res) => {
             this.setState({ tbluse: res.data });
             
         })
 
-        axios.get(this.state.path + ':5000/customer/s/' + q)
+        axios.get(this.state.path + '/api/customer/s/' + q)
         .then((res) => {
             this.setState({ tblcus: res.data });
         })
 
-        axios.get(this.state.path + ':5000/appointment/s/' + q)
+        axios.get(this.state.path + '/api/appointment/s/' + q)
 					.then((res) => {
                         this.setState({ tblapp: res.data });
                         console.log(res.data)

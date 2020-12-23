@@ -38,7 +38,7 @@ class login extends Component {
 	onSubmit(e) {
 		e.preventDefault();
 
-		axios.get(this.state.path + ':5000/user/u/' + this.state.username)
+		axios.get(this.state.path + '/api/user/u/' + this.state.username)
 			.then(res => {
 				this.setState({ user: res.data });
 				console.log(this.state.user); //pulls the user if it exists
@@ -73,7 +73,7 @@ class login extends Component {
 
 	checkUserCount() {
 		let count = 0;
-		axios.get(this.state.path + ':5000/user/count')
+		axios.get(this.state.path + '/api/user/count')
 			.then(res => {
 				this.setState({ count: res.data });
 				count = res.data
@@ -95,7 +95,7 @@ class login extends Component {
 					const createdDate = new Date();
 
 
-					axios.post(this.state.path + ':5000/user', { username, type, password, updatedBy, createdBy, updatedDate, createdDate })
+					axios.post(this.state.path + '/api/user', { username, type, password, updatedBy, createdBy, updatedDate, createdDate })
 						.then((result) => {
 						});
 				}

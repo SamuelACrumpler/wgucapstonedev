@@ -26,9 +26,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ 'extended': 'false' }));
 
-app.use("/usertest", user);
-app.use("/customer", customer);
-app.use("/appointment", appointment);
+app.use("/api/user", user);
+app.use("/api/customer", customer);
+app.use("/api/appointment", appointment);
 
 
 

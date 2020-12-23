@@ -165,7 +165,7 @@ class appointments extends Component {
 			document.getElementById('customer').selectedIndex = "0";
 		}
 
-		axios.get(this.state.path + ':5000/appointment/' + this.state.documents[i]._id)
+		axios.get(this.state.path + '/api/appointment/' + this.state.documents[i]._id)
 			.then((res) => {
 
 				this.setState({ edit: res.data });
@@ -371,7 +371,7 @@ class appointments extends Component {
 
 	
 		let eflag = false;
-		axios.get(this.state.path + ':5000/appointment/d/' + stime.getFullYear() + '/' + (parseInt(stime.getMonth())+1) + '/' + stime.getDate())
+		axios.get(this.state.path + '/api/appointment/d/' + stime.getFullYear() + '/' + (parseInt(stime.getMonth())+1) + '/' + stime.getDate())
 			.then((res) => {
 				res.data.forEach(app => {
 					
@@ -497,14 +497,14 @@ class appointments extends Component {
 
 	//[CRUD Functions] - User
 	getAllDocuments() {
-		axios.get(this.state.path + ':5000/appointment/' )
+		axios.get(this.state.path + '/api/appointment/' )
 			.then(res => {
 				this.setState({ documents: res.data });
 			}).finally(() => {
 				if(localStorage.getItem("docid")){
 					let i = this.state.documents.findIndex(i => i._id === localStorage.getItem("docid"))
 
-					axios.get(this.state.path + ':5000/appointment/' + localStorage.getItem("docid"))
+					axios.get(this.state.path + '/api/appointment/' + localStorage.getItem("docid"))
 						.then((res) => {
 		
 							this.setState({ edit: res.data });
@@ -565,7 +565,7 @@ class appointments extends Component {
 	}
 
 	getAllCustomers() {
-		axios.get(this.state.path + ':5000/customer/')
+		axios.get(this.state.path + '/api/customer/')
 			.then(res => {
 				this.setState({ customers: res.data });
 			});
@@ -573,7 +573,7 @@ class appointments extends Component {
 
 	getAllWorkers(){
 		let tempworkers = []
-		axios.get(this.state.path + ':5000/user/')
+		axios.get(this.state.path + '/api/user/')
 			.then(res => {
 				
 				res.data.forEach(user => {
@@ -612,7 +612,7 @@ class appointments extends Component {
 			case 0: //create
 				//created then updated
 
-				axios.post(this.state.path + ':5000/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, tasks, notes, stime, etime, createdBy, updatedBy, createdDate, updatedDate })
+				axios.post(this.state.path + '/api/appointment/', { userid, custid, title, rate, supply, total, hours, overlap, type, tasks, notes, stime, etime, createdBy, updatedBy, createdDate, updatedDate })
 					.then((result) => {
 					}).finally(() => {
 						//call refresh function
@@ -624,7 +624,7 @@ class appointments extends Component {
 				break;
 			case 1: //read
 
-				axios.get(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id)
+				axios.get(this.state.path + '/api/appointment/' + this.state.documents[this.state.selectedIndex]._id)
 					.then((res) => {
 
 						this.state({ edit: res.data });
@@ -632,14 +632,14 @@ class appointments extends Component {
 				break;
 			case 2: //update
 
-				axios.get(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id)
+				axios.get(this.state.path + '/api/appointment/' + this.state.documents[this.state.selectedIndex]._id)
 					.then((res) => {
 
 						createdBy = res.data.createdBy;
 						createdDate = res.data.createdDate;
 					}).finally(() => {
 
-						axios.put(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id, { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, createdDate, updatedDate  })
+						axios.put(this.state.path + '/api/appointment/' + this.state.documents[this.state.selectedIndex]._id, { userid, custid, title, rate, supply, total, hours, overlap, type, notes, stime, etime, createdBy, updatedBy, createdDate, updatedDate  })
 							.then(() => {
 							}).finally(() => {
 
@@ -654,7 +654,7 @@ class appointments extends Component {
 
 				break;
 			case 3: //delete
-				axios.delete(this.state.path + ':5000/appointment/' + this.state.documents[this.state.selectedIndex]._id)
+				axios.delete(this.state.path + '/api/appointment/' + this.state.documents[this.state.selectedIndex]._id)
 					.then((result) => {
 
 					}).finally(() => {

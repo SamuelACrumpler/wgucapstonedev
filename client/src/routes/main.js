@@ -174,7 +174,7 @@ class main extends Component {
 
 
 
-		axios.get(this.state.path + ':5000/appointment/m/' + y + '/' + am + '/' + 1)
+		axios.get(this.state.path + '/api/appointment/m/' + y + '/' + am + '/' + 1)
 			.then((res) => {
 				this.setState({ listallapp: res.data})
 				month = res.data
@@ -210,7 +210,7 @@ class main extends Component {
 				let custs = {};
 
 
-				axios.get(this.state.path + ':5000/customer/')
+				axios.get(this.state.path + '/api/customer/')
 					.then((res) => {
 						res.data.forEach(cust => {
 							custs[cust._id] = cust.name;
@@ -225,7 +225,7 @@ class main extends Component {
 					})
 
 				let workers = {}
-				axios.get(this.state.path + ':5000/user/')
+				axios.get(this.state.path + '/api/user/')
 					.then((res) => {
 						res.data.forEach(work => {
 							if(work.type === 'Field Worker'){

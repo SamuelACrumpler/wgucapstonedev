@@ -114,7 +114,7 @@ class customers extends Component {
 			});
 		}
 
-		axios.get(this.state.path + ':5000/customer/' + this.state.documents[i]._id)
+		axios.get(this.state.path + '/api/customer/' + this.state.documents[i]._id)
 			.then((res) => {
 				this.setState({ edit: res.data });
 			}).finally(() => {
@@ -269,14 +269,14 @@ class customers extends Component {
 
 	//[CRUD Functions] - User
 	getAllDocuments() {
-		axios.get(this.state.path + ':5000/customer/')
+		axios.get(this.state.path + '/api/customer/')
 			.then(res => {
 				this.setState({ documents: res.data });
 			}).finally(() => {
 				if(localStorage.getItem("docid")){
 					let i = this.state.documents.findIndex(i => i._id === localStorage.getItem("docid"))
 
-					axios.get(this.state.path + ':5000/customer/' + localStorage.getItem("docid"))
+					axios.get(this.state.path + '/api/customer/' + localStorage.getItem("docid"))
 						.then((res) => {
 		
 							this.setState({ edit: res.data });
@@ -321,7 +321,7 @@ class customers extends Component {
 			case 0: //create
 				//created then updated
 
-				axios.post(this.state.path + ':5000/customer/', { uid, name, address, address2, city, zip, phone, createdBy, updatedBy, createdDate, updatedDate })
+				axios.post(this.state.path + '/api/customer/', { uid, name, address, address2, city, zip, phone, createdBy, updatedBy, createdDate, updatedDate })
 					.then((result) => {
 					}).finally(() => {
 						//call refresh function
@@ -331,7 +331,7 @@ class customers extends Component {
 				break;
 			case 1: //read
 
-				axios.get(this.state.path + ':5000/customer/' + this.state.documents[this.state.selectedIndex]._id)
+				axios.get(this.state.path + '/api/customer/' + this.state.documents[this.state.selectedIndex]._id)
 					.then((res) => {
 
 						this.state({ edit: res.data });
@@ -339,14 +339,14 @@ class customers extends Component {
 				break;
 			case 2: //update
 
-				axios.get(this.state.path + ':5000/customer/' + this.state.documents[this.state.selectedIndex]._id)
+				axios.get(this.state.path + '/api/customer/' + this.state.documents[this.state.selectedIndex]._id)
 					.then((res) => {
 
 						createdBy = res.data.createdBy;
 						createdDate = res.data.createdDate;
 					}).finally(() => {
 
-						axios.put(this.state.path + ':5000/customer/' + this.state.documents[this.state.selectedIndex]._id, {uid, name, address, address2, city, zip, phone, createdBy, updatedBy, createdDate, updatedDate })
+						axios.put(this.state.path + '/api/customer/' + this.state.documents[this.state.selectedIndex]._id, {uid, name, address, address2, city, zip, phone, createdBy, updatedBy, createdDate, updatedDate })
 							.then(() => {
 							}).finally(() => {
 
@@ -357,7 +357,7 @@ class customers extends Component {
 
 				break;
 			case 3: //delete
-				axios.delete(this.state.path + ':5000/customer/' + this.state.documents[this.state.selectedIndex]._id)
+				axios.delete(this.state.path + '/api/customer/' + this.state.documents[this.state.selectedIndex]._id)
 					.then((result) => {
 
 					}).finally(() => {

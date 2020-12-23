@@ -86,7 +86,7 @@ class users extends Component {
 		//needs to read from database and put in the information 
 
 
-		axios.get(this.state.path + ':5000/user/' + this.state.users[i]._id)
+		axios.get(this.state.path + '/api/user/' + this.state.users[i]._id)
 			.then((res) => {
 
 				this.setState({ editUser: res.data });
@@ -110,7 +110,7 @@ class users extends Component {
 	handleTestReset(){
 		let check = ""
 		let flag = false
-		axios.get(this.state.path + ':5000/user/u/TestDataDeleteMe')
+		axios.get(this.state.path + '/api/user/u/TestDataDeleteMe')
 					.then(res => {
 						if (res.data !== null) {// as long as something is there
 							check = res.data._id;
@@ -120,7 +120,7 @@ class users extends Component {
 
 					}).finally(() => { 
 						if(flag === true){return}
-						axios.delete(this.state.path + ':5000/user/' + check)
+						axios.delete(this.state.path + '/api/user/' + check)
 							.then(() => {
 
 							}).finally(() => {
@@ -281,7 +281,7 @@ class users extends Component {
 		//this.setState({ users: [] })
 
 
-		axios.get(this.state.path + ':5000/user/')
+		axios.get(this.state.path + '/api/user/')
 			.then(res => {
 				this.setState({ users: res.data });
 			}).finally(()=>{
@@ -289,7 +289,7 @@ class users extends Component {
 					console.log(this.state.users.findIndex(i => i._id === localStorage.getItem("docid")))
 					let i = this.state.users.findIndex(i => i._id === localStorage.getItem("docid"))
 					console.log(localStorage.getItem("docid"))
-					axios.get(this.state.path + ':5000/user/' + localStorage.getItem("docid"))
+					axios.get(this.state.path + '/api/user/' + localStorage.getItem("docid"))
 							.then((res) => {
 								this.setState({ editUser: res.data });
 							}).finally(()=>{
@@ -329,7 +329,7 @@ class users extends Component {
 				//created then updated
 				let check;
 				
-				axios.get(this.state.path + ':5000/user/u/' + username)
+				axios.get(this.state.path + '/api/user/u/' + username)
 					.then(res => {
 						if (res.data !== null) {// as long as something is there
 							check = res.data.username;
@@ -342,7 +342,7 @@ class users extends Component {
 							return;
 						}
 						
-						axios.post(this.state.path + ':5000/user/', { username, type, password, createdBy, updatedBy, createdDate, updatedDate })
+						axios.post(this.state.path + '/api/user/', { username, type, password, createdBy, updatedBy, createdDate, updatedDate })
 							.then((result) => {
 							}).finally(() => {
 								//call refresh function
@@ -354,7 +354,7 @@ class users extends Component {
 				break;
 			case 1: //read
 
-				axios.get(this.state.path + ':5000/user/' + this.state.users[this.state.selectedIndex]._id)
+				axios.get(this.state.path + '/api/user/' + this.state.users[this.state.selectedIndex]._id)
 					.then((res) => {
 
 						this.state({ editUser: res.data });
@@ -364,7 +364,7 @@ class users extends Component {
 					createdBy = this.state.editUser.createdBy
 					createdDate = this.state.editUser.createdDate
 				
-				axios.put(this.state.path + ':5000/user/' + this.state.users[this.state.selectedIndex]._id, { username, type, password, createdBy, updatedBy, createdDate, updatedDate })
+				axios.put(this.state.path + '/api/user/' + this.state.users[this.state.selectedIndex]._id, { username, type, password, createdBy, updatedBy, createdDate, updatedDate })
 					.then(() => {
 					}).finally(() => {
 						//call refresh func
@@ -372,7 +372,7 @@ class users extends Component {
 					});
 				break;
 			case 3: //delete
-				axios.delete(this.state.path + ':5000/user/' + this.state.users[this.state.selectedIndex]._id)
+				axios.delete(this.state.path + '/api/user/' + this.state.users[this.state.selectedIndex]._id)
 					.then((result) => {
 
 					}).finally(() => {
