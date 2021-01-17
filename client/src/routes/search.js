@@ -7,9 +7,11 @@ import Navbar from './../routes/nav';
 class search extends Component {
 	constructor() {
         super();
-        
+        let url = window.location.href;
+        let arr = url.split("/");
+        let result = arr[0] + "//" + arr[2]
         this.state = {
-			path: window.location.protocol + '//' + window.location.hostname,
+			path: result,
 			crudState: '',
 			selected: '',
             cUser: '',
@@ -45,13 +47,10 @@ class search extends Component {
     }
 
     onSubmit(){
-        console.log(this.state.search)
         const q = this.state.search
         if(this.state.search = ''){
             return;
         }
-
-        console.log('test: ' + this.state.path + '/api/user/s/' + q)
 
         axios.get(this.state.path + '/api/user/s/' + q)
         .then((res) => {
@@ -67,20 +66,17 @@ class search extends Component {
         axios.get(this.state.path + '/api/appointment/s/' + q)
 					.then((res) => {
                         this.setState({ tblapp: res.data });
-                        console.log(res.data)
 					})
 
     }
 
     onChange(event) {
-		console.log("eventname: " + event.target.name);
 		const state = this.state
 		state[event.target.name] = event.target.value;
 		this.setState(state);
 	}
 
     handleTypeChange(event){
-        console.log(event.target.value)
         switch (event.target.value){
             case 'option1':
                 document.getElementById("tbluse").classList.remove('d-none');
@@ -131,7 +127,7 @@ class search extends Component {
 									<span className="input-group-text" id="basic-addon3">Title</span>
 								</div>
 								<input type="text" name="search" value={this.state.search} onChange={this.onChange} disabled={this.state.disabled} className="form-control" id="basic-url" aria-describedby="basic-addon3" />
-                                <button type="button" className="btn btn-primary m-0" onClick={this.onSubmit}>Submit</button>
+                                <button type="button" className="btn btn-success m-0" onClick={this.onSubmit}>Submit</button>
 
 							</div>
                             
@@ -141,17 +137,17 @@ class search extends Component {
                     <div className="row border">
                         <div className="col-lg">
                         <div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
-								<label id="lbloption1" className="btn btn-secondary active">
+								<label id="lbloption1" className="btn btn-success active">
 									<input type="radio" name="options" id="option1" value="option1" onClick={this.handleTypeChange} /> All
 								</label>
 
-								<label id="lbloption2" className="btn btn-secondary">
+								<label id="lbloption2" className="btn btn-success">
 									<input type="radio" name="options" id="option2" value="option2" onClick={this.handleTypeChange} /> Users
 								</label>
-								<label id="lbloption3" className="btn btn-secondary">
+								<label id="lbloption3" className="btn btn-success">
 									<input type="radio" name="options" id="option3" value="option3" onClick={this.handleTypeChange} /> Customers
 								</label>
-                                <label id="lbloption3" className="btn btn-secondary">
+                                <label id="lbloption3" className="btn btn-success">
 									<input type="radio" name="options" id="option4" value="option4" onClick={this.handleTypeChange} /> Appointments
 								</label>
 							</div>

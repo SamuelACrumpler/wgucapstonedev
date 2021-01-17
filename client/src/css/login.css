@@ -27,8 +27,19 @@ html, body{
 	height: 100%;
 }
 
-body {
+
+body, .bg-ws, .row {
 	background-color: whitesmoke;
+}
+
+.bg-isley, .table .thead-dark th {
+	background-color: #234b2a!important;
+}
+
+.btn-isley{
+	background-color: #309D44!important;
+	border-color: #309D44!important;
+	color: white;
 }
 
 .full-height {
@@ -37,6 +48,7 @@ body {
 
 .main {
 	min-height: 100%;
+	background-image: url(../css/leaves-pattern.png);
 }
 
 
@@ -47,7 +59,7 @@ body {
 	}
 
 	.day h5 {
-		background-color: #f8f9fa;
+		background-color: #d8e5db;
 		padding: 3px 5px 5px;
 		margin: -8px -8px 8px -8px;
 	}
@@ -101,12 +113,8 @@ myauto {
 
 
 .highlight {
-	background-color: cornflowerblue;
+	background-color: #309D44;
 }
-
-
-
-
 
 .square {
 	float: left;
@@ -168,16 +176,12 @@ myauto {
 	flex: 1
 }
 
-.filled-square {
-	background-color: lightblue;
+.filled-square, .no-day-square, .table-striped tbody tr:nth-of-type(odd), .input-group-text {
+	background-color: #d8e5db!important;
 }
 
 .empty-square {
 	background-color: ghostwhite;
-}
-
-.no-day-square {
-	background-color: lightgrey;
 }
 
 .app-list-label {

@@ -62,7 +62,7 @@ router.get('/s/:name', function (req, res, next) {
 
 
 
-/* Get user by id*/
+/* Get user by username*/
 router.get('/u/:username', async function (req, res, next) {
 
 	User.findOne({ username: req.params.username }, function (err, post) {

@@ -385,7 +385,7 @@ class customers extends Component {
 								{
 									this.state.documents.map((document, index) => (
 
-										<label key={'customer'+index} id={'lblcustomer' + index} className="btn btn-secondary w-100">
+										<label key={'customer'+index} id={'lblcustomer' + index} className="btn btn-success w-100">
 											<input type="radio" name="customer" id={'customer' + index} value={index} onClick={this.handleEditChange} />{document.name}
 										</label>
 									)
@@ -396,14 +396,14 @@ class customers extends Component {
 						</div>
 						<div className="col-lg-9 border input-col ">
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
-								<label id="lbloption1" className="btn btn-secondary active">
+								<label id="lbloption1" className="btn btn-success active">
 									<input type="radio" name="options" id="option1" value="option1"  onClick={this.handleCrudChange} /> New
 								</label>
 
-								<label id="lbloption2" className="btn btn-secondary">
+								<label id="lbloption2" className="btn btn-success">
 									<input type="radio" name="options" id="option2" value="option2"  onClick={this.handleCrudChange} /> Save
 								</label>
-								<label id="lbloption3" className="btn btn-secondary">
+								<label id="lbloption3" className="btn btn-success">
 									<input type="radio" name="options" id="option3" value="option3"  onClick={this.handleCrudChange} /> Delete
 								</label>
 							</div>
@@ -458,7 +458,7 @@ class customers extends Component {
 							</div>
 
 
-							<button type="button" className="btn btn-primary" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-primary" onClick={this.onCancel}>{this.state.rbutton}</button>
+							<button type="button" className="btn btn-success" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-success" onClick={this.onCancel}>{this.state.rbutton}</button>
 						</div>
 
 						<div className="col border user d-lg-none ">
@@ -467,7 +467,7 @@ class customers extends Component {
 
 
 										<div className="row namelist" key={index}>
-											<button type="button" className="btn btn-secondary btn-lg btn-block">{document.name}</button>
+											<button type="button" className="btn btn-success btn-lg btn-block">{document.name}</button>
 										</div>
 									)
 								)

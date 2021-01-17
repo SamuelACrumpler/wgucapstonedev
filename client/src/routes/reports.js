@@ -6,9 +6,11 @@ import Navbar from './../routes/nav';
 class reports extends Component {
 	constructor() {
         super();
-        
+        let url = window.location.href;
+        let arr = url.split("/");
+        let result = arr[0] + "//" + arr[2]
         this.state = {
-			path: window.location.protocol + '//' + window.location.hostname,
+			path: result,
 			crudState: '',
 			selected: '',
             cUser: '',
@@ -95,7 +97,6 @@ class reports extends Component {
         axios.get(this.state.path + '/api/appointment/y/' + this.state.year)
         .then(res => {
             res.data.forEach(app => {
-                console.log("  ---" + new Date(app.stime).getFullYear())
                 let newapp = {};
                 switch (app.type){
                     case 'rout':
@@ -132,7 +133,6 @@ class reports extends Component {
                 let newapp = {};
                 switch (app.type){
                     case 'rout':
-                        console.log(app.stime)
                         newapp = new routapp(app._id, app.userid, app.custid, app.title, app.overlap, app.hours, app.type, app.notes, app.stime, app.etime, app.rate, app.total, app.tasks )
                         routs.push(newapp)
                         break;
@@ -170,7 +170,6 @@ class reports extends Component {
         this.setState({
             year: this.state.year + i
         })
-        console.log(this.state.year)
     }
     
     getMonthName(i){
@@ -261,8 +260,6 @@ class reports extends Component {
 
         }
         this.state.listrout.forEach(app => {
-            console.log(app._stime)
-            console.log(app.indexMonth())
            table[app.indexMonth()].count++
            table[app.indexMonth()].rout++
 
@@ -337,8 +334,6 @@ class reports extends Component {
         this.setState({ tblcon : con})   
         this.setState({ tblspe : spe})   
 
-        console.log(this.state.tblall)
-        console.log(this.state.tblspe)
 
     }
 
@@ -350,10 +345,10 @@ class reports extends Component {
 				<div className="container">
 					<div className="row">
                         
-                        <div className="col-lg border input-col p-0 h-100">
+                        <div className="col-lg border input-col h-100">
                         <div className="row">
 								<div className="col-2 ">
-									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeYear(-1)}>
+									<button type="button" class="btn btn-success  w-100 h-100 m-0" onClick={() => this.changeYear(-1)}>
 										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left" fill="currentColor" xmlns="http://www.w3.org/2000/svg" >
 											<path fill-rule="evenodd" d="M5.854 4.646a.5.5 0 0 1 0 .708L3.207 8l2.647 2.646a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z"/>
 											<path fill-rule="evenodd" d="M2.5 8a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
@@ -364,7 +359,7 @@ class reports extends Component {
                                 <h4 className="display-4 mb-4 text-center">Current Year: {this.state.year}</h4>
 								</div>
 								<div className="col-2 ">
-									<button type="button" class="btn btn-secondary  w-100 h-100 m-0" onClick={() => this.changeYear(1)}>
+									<button type="button" class="btn btn-success  w-100 h-100 m-0" onClick={() => this.changeYear(1)}>
 										<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 											<path fill-rule="evenodd" d="M10.146 4.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 8l-2.647-2.646a.5.5 0 0 1 0-.708z"/>
 											<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8z"/>
@@ -372,25 +367,25 @@ class reports extends Component {
 									</button>	
 								</div>
 							</div>
-                            <div className="col-lg border  recent p-0">
+                            <div className="col-lg border p-0 recent">
                                 <div className="btn-group btn-group-toggle w-100 w-100 m-0 " data-toggle="buttons">
 
-                                    <label className="btn btn-secondary w-100 active">
+                                    <label className="btn btn-success w-100 active">
                                         <input type="radio" name="type" id="allApps" value='tblall' onClick={this.handleTypeChange} /> All Appointments
                                     </label>
-                                    <label className="btn btn-secondary w-100">
+                                    <label className="btn btn-success w-100">
                                         <input type="radio" name="type" id="allLabor" value='tblrou' onClick={this.handleTypeChange} /> All Labor
                                     </label>
-                                    <label className="btn btn-secondary w-100">
+                                    <label className="btn btn-success w-100">
                                         <input type="radio" name="type" id="allCons" value='tblcon' onClick={this.handleTypeChange} /> All Consultations
                                     </label>
-                                    <label className="btn btn-secondary w-100">
+                                    <label className="btn btn-success w-100">
                                         <input type="radio" name="type" id="allSpec" value='tblspe' onClick={this.handleTypeChange} /> All Special Orders
                                     </label>
                 
                                 </div>
                             </div>
-							<div className="col-lg ">
+							<div className="col-lg p-0">
 
                                 <table className="table table-striped table-fix">
                                     <thead className="thead-dark">

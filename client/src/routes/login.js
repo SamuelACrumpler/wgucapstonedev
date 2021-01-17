@@ -6,7 +6,9 @@ class login extends Component {
 
 	constructor(props) {
 		super(props);
-
+		let url = window.location.href;
+        let arr = url.split("/");
+        let result = arr[0] + "//" + arr[2]
 		this.state = {
 			username: '',
 			password: '',
@@ -14,7 +16,7 @@ class login extends Component {
 			created_date: '',
 			count: '',
 			error: '',
-			path: window.location.protocol + '//' + window.location.hostname
+			path: result
 		};
 
 		this.onChange = this.onChange.bind(this);
@@ -41,7 +43,6 @@ class login extends Component {
 		axios.get(this.state.path + '/api/user/u/' + this.state.username)
 			.then(res => {
 				this.setState({ user: res.data });
-				console.log(this.state.user); //pulls the user if it exists
 			}).finally(() => {
 
 
@@ -77,7 +78,6 @@ class login extends Component {
 			.then(res => {
 				this.setState({ count: res.data });
 				count = res.data
-				console.log("user count: " + count); //pulls the user if it exists
 			}).finally(() => {
 				if (count <= 0) {
 					//logic here for creating user;
@@ -113,7 +113,6 @@ class login extends Component {
 	}
 
 	createLoginSession() {
-		console.log(this.state.user._id);
 		localStorage.setItem("userId", this.state.user._id);
 		localStorage.setItem("username", this.state.user.username);
 		localStorage.setItem("userType", this.state.user.type);
@@ -136,7 +135,7 @@ class login extends Component {
 				</div>
 				<div className="container">
 					<div className="col">
-						<button className="btn btn-lg btn-primary btn-block">Sign in</button>
+						<button className="btn btn-lg btn-success btn-block">Sign in</button>
 					</div>
 				</div>
 			</form>

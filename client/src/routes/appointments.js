@@ -688,7 +688,7 @@ class appointments extends Component {
 								{
 									this.state.documents.map((document, index) => (
 
-										<label key={'customer' + index} id={'lblappointment' + index} className="btn btn-secondary w-100">
+										<label key={'customer' + index} id={'lblappointment' + index} className="btn btn-success w-100">
 											<input type="radio" name="appointment" id={'appointment' + index} value={index} onClick={this.handleEditChange} />{document.title}
 										</label>
 									)
@@ -700,14 +700,14 @@ class appointments extends Component {
 						<div className="col-lg-9 border input-col ">
 						
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
-								<label id="lbloption1" className="btn btn-secondary active">
+								<label id="lbloption1" className="btn btn-success active">
 									<input type="radio" name="options" id="option1" value="option1" onClick={this.handleCrudChange} /> New
 								</label>
 
-								<label id="lbloption2" className="btn btn-secondary">
+								<label id="lbloption2" className="btn btn-success">
 									<input type="radio" name="options" id="option2" value="option2" onClick={this.handleCrudChange} /> Save
 								</label>
-								<label id="lbloption3" className="btn btn-secondary">
+								<label id="lbloption3" className="btn btn-success">
 									<input type="radio" name="options" id="option3" value="option3" onClick={this.handleCrudChange} /> Delete
 								</label>
 							</div>
@@ -721,16 +721,16 @@ class appointments extends Component {
 							
 
 							<div className="btn-group btn-group-toggle w-100 mb-4" data-toggle="buttons" >
-								<label id="lbltype1" className="btn btn-secondary active focus">
+								<label id="lbltype1" className="btn btn-success active focus">
 									<input type="radio" name="apptype" id="apptype1" value="apptype1" onClick={this.handleAppChange} /> Labor
 								</label>
 
 								
 
-								<label id="lbltype2" className="btn btn-secondary">
+								<label id="lbltype2" className="btn btn-success">
 									<input type="radio" name="apptype" id="apptype2" value="apptype2" onClick={this.handleAppChange} /> Consultation
 								</label>
-								<label id="lbltype3" className="btn btn-secondary">
+								<label id="lbltype3" className="btn btn-success">
 									<input type="radio" name="apptype" id="apptype3" value="apptype3" onClick={this.handleAppChange} /> Special Order
 								</label>
 							</div>
@@ -825,7 +825,7 @@ class appointments extends Component {
 							<h5>Notes</h5>
 							<textarea className="form-control" aria-label="With textarea" onChange={this.onChange} name="notes" value={this.state.notes}></textarea>
 
-							<button type="button" className="btn btn-primary" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-primary" onClick={this.onCancel}>{this.state.rbutton}</button>
+							<button type="button" className="btn btn-success" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-success" onClick={this.onCancel}>{this.state.rbutton}</button>
 						</div>
 
 						<div className="col border user d-lg-none ">
@@ -833,7 +833,7 @@ class appointments extends Component {
 								{
 									this.state.documents.map((document, index) => (
 
-										<label key={'customer' + index} id={'lbluser' + index} className="btn btn-secondary w-100">
+										<label key={'customer' + index} id={'lbluser' + index} className="btn btn-success w-100">
 											<input type="radio" name="user" id={'user' + index} value={index} onClick={this.handleEditChange} />{document.title}
 										</label>
 

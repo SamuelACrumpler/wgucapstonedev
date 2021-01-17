@@ -37,7 +37,7 @@ class Navbar extends Component {
 
 	render() {
 		return (
-			<nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+			<nav className="navbar navbar-expand-lg navbar-dark bg-isley static-top">
 				<div className="container">
 					<a className="navbar-brand" href="#">Isley Scheduler</a>
 					<button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">

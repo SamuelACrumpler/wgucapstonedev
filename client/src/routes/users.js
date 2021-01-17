@@ -9,9 +9,11 @@ class users extends Component {
 
 	constructor(props) {
 		super(props);
-
+		let url = window.location.href
+        let arr = url.split("/");
+        let result = arr[0] + "//" + arr[2]
 		this.state = {
-			path: window.location.protocol + '//' + window.location.hostname,
+			path: result,
 			crudState: 0,
 			selected: '',
 			user: '',
@@ -47,8 +49,6 @@ class users extends Component {
 		if (localStorage.getItem("isLoggedIn") === 'false' || !localStorage.getItem("isLoggedIn") || localStorage.getItem("userType") !== "Admin") {
 			if(this.props.history !== undefined){this.props.history.push('/')}
 		}
-
-		
 
 		this.getAllUsers();
 	}
@@ -132,14 +132,10 @@ class users extends Component {
 		}
 
 	handleCrudChange(event) {
-		console.log("current select:" + event.target.value)
 
 		if (event.target.value === 'option1') {
 
-			console.log('save time')
 			document.getElementById("error").classList.add('d-none');
-
-			
 
 			this.setState({
 				user: '',
@@ -166,7 +162,6 @@ class users extends Component {
 				return;
 			}
 
-			console.log('save time')
 			this.setState({
 				lbutton: 'Save',
 				disabled: false,
@@ -187,7 +182,6 @@ class users extends Component {
 				return;
 			}
 
-			console.log('sdel time')
 			this.setState({
 				lbutton: 'Delete',
 				disabled: true,
@@ -238,7 +232,6 @@ class users extends Component {
 	}
 
 	onCancel() {
-		console.log("Cancel called: lbl" + this.state.selectedName);
 		if (this.state.selectedName !== '') {
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('focus');
 			document.getElementById("lbl" + this.state.selectedName).classList.remove('active');
@@ -264,13 +257,11 @@ class users extends Component {
 			cPass: '',
 			selectedName: ''
 		});
-		console.log(document.getElementById("error"))
 		document.getElementById("error").classList.add('d-none');
 
 	}
 
 	onChange(event) {
-		console.log("eventname: " + event.target.name);
 		const state = this.state
 		state[event.target.name] = event.target.value;
 		this.setState(state);
@@ -286,9 +277,7 @@ class users extends Component {
 				this.setState({ users: res.data });
 			}).finally(()=>{
 				if(localStorage.getItem("docid")){
-					console.log(this.state.users.findIndex(i => i._id === localStorage.getItem("docid")))
 					let i = this.state.users.findIndex(i => i._id === localStorage.getItem("docid"))
-					console.log(localStorage.getItem("docid"))
 					axios.get(this.state.path + '/api/user/' + localStorage.getItem("docid"))
 							.then((res) => {
 								this.setState({ editUser: res.data });
@@ -396,12 +385,12 @@ class users extends Component {
 				<Top />
 				<div className="container">
 					<div className="row">
-						<div className="col-lg-3 border d-none d-lg-block recent height-cap">
+						<div className="col-lg-3 border d-none d-lg-block recent bg-ws height-cap">
 							<div className="row btn-group btn-group-toggle btn-group-special btn-group-vertical force-scroll" data-toggle="buttons">
 							{
 								this.state.users.map((user, index) => (
 									
-										<label id={'lbluser' + index} className="btn btn-secondary w-100">
+										<label id={'lbluser' + index} className="btn btn-success w-100">
 											<input  type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange}  />
 											<div>{user.username}</div>
 									</label>
@@ -413,17 +402,17 @@ class users extends Component {
 							}
 							</div>
 						</div>
-						<div className="col-lg-9 border calendar ">
+						<div className="col-lg-9 border calendar bg-ws">
 							
 							<div className="btn-group btn-group-toggle w-100" data-toggle="buttons" >
-								<label id="lbloption1" className="btn btn-secondary active">
+								<label id="lbloption1" className="btn btn-success active">
 									<input type="radio" name="options" id="option1" value="option1" checked={this.state.selCrud === 'option1'} onClick={this.handleCrudChange} /> New
 								</label>
 								
-								<label id="lbloption2" className="btn btn-secondary">
+								<label id="lbloption2" className="btn btn-success">
 									<input type="radio" name="options" id="option2" value="option2" checked={this.state.selCrud === 'option2'} onClick={this.handleCrudChange}/> Save
 								</label>
-								<label id="lbloption3" className="btn btn-secondary">
+								<label id="lbloption3" className="btn btn-success">
 									<input type="radio" name="options" id="option3" value="option3" checked={this.state.selCrud === 'option3'} onClick={this.handleCrudChange}/> Delete
 								</label>
 							</div>
@@ -465,7 +454,7 @@ class users extends Component {
 								</div>
 								<input type="password" name="cPass" value={this.state.cPass} onChange={this.onChange} disabled={this.state.disabled} className="form-control" id="basic-url" aria-describedby="basic-addon3" />
 							</div>
-							<button type="button" className="btn btn-primary" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-primary" onClick={this.onCancel}>{this.state.rbutton}</button>
+							<button type="button" className="btn btn-success" onClick={this.onSubmit}>{this.state.lbutton}</button> <button type="button" className="btn btn-success" onClick={this.onCancel}>{this.state.rbutton}</button>
 							
 							</div>
 					
@@ -474,7 +463,7 @@ class users extends Component {
 								{
 									this.state.users.map((user, index) => (
 										
-											<label id={'lbluser' + index} className="btn btn-secondary w-100">
+											<label id={'lbluser' + index} className="btn btn-success w-100">
 												<input  type="radio" name="user" id={'user' + index} value={index} onClick={this.handleUserChange}  />
 												<div>{user.username}</div>
 										</label>
