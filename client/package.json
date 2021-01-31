@@ -71,6 +71,6 @@
     "identity-obj-proxy": "^3.0.0",
     "mocha": "^8.2.1",
     "react-test-renderer": "^16.13.1"
-  }, 
-  "proxy" : "http://localhost:5000"
+  },
+  "proxy": "http://localhost:5000"
 }
